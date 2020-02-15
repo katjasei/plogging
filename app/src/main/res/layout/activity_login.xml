@@ -1,6 +1,77 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:orientation="vertical" android:layout_width="match_parent"
-    android:layout_height="match_parent">
+<androidx.constraintlayout.widget.ConstraintLayout
 
-</LinearLayout>
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical">
+
+    <ImageView
+        android:id="@+id/background_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:alpha="0.51"
+        android:scaleType="centerCrop"
+        android:src="@drawable/roskajuoksu"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <EditText
+        android:id="@+id/value_user_name"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="100dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.7"
+        android:background="@drawable/rounded_edittext"
+        android:ems="10"
+        android:gravity="start|center"
+        android:hint="@string/txt_user_name"
+        android:inputType="textMultiLine"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <EditText
+        android:id="@+id/value_password"
+        android:layout_width="300dp"
+        android:layout_height="50dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="16dp"
+        android:layout_marginEnd="32dp"
+        android:alpha="0.7"
+        android:background="@drawable/rounded_edittext"
+        android:ems="10"
+        android:gravity="start|center"
+        android:hint="@string/txt_password"
+        android:inputType="textMultiLine"
+        android:textSize="20sp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/value_user_name" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_sign_in"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginTop="32dp"
+        android:layout_marginEnd="32dp"
+        android:text="@string/txt_log_in"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.47"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/value_password" />
+</androidx.constraintlayout.widget.ConstraintLayout>

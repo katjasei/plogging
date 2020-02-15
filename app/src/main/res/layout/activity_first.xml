@@ -1,8 +1,55 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout
+
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/roskajuoksu"
     android:orientation="vertical">
 
-</LinearLayout>
+    <ImageView
+        android:id="@+id/background_picture"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        android:scaleType="centerCrop"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.0"
+        android:src="@drawable/roskajuoksu" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/txt_sign_up"
+        style="@style/Widget.MaterialComponents.Button.OutlinedButton"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="105dp"
+        android:textColor="#FFFFFF"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:strokeColor="@color/colorPrimary"
+        app:strokeWidth="3dp"
+        android:text="@string/txt_sign_up" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_sign_in"
+        style="@style/Widget.MaterialComponents.Button"
+        android:layout_width="300dp"
+        android:layout_height="60dp"
+        android:layout_marginStart="64dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="40dp"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        android:text="@string/txt_log_in" />
+</androidx.constraintlayout.widget.ConstraintLayout>
