@@ -1,3 +1,8 @@
 <resources>
     <string name="app_name">Plogging</string>
+    <string name="txt_sign_up">SIGN UP</string>
+    <string name="txt_log_in">LOGIN</string>
+    <string name="txt_user_name"> user name</string>
+    <string name="txt_password"> password</string>
+    <string name="txt_confirm_password"> confirm password</string>
 </resources>
