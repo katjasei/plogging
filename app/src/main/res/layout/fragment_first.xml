@@ -21,7 +21,7 @@
         android:src="@drawable/roskajuoksu" />
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/txt_sign_up"
+        android:id="@+id/btn_sign_up"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="300dp"
         android:layout_height="60dp"

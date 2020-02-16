@@ -24,6 +24,9 @@ android {
 
 apply plugin: "kotlin-kapt"
 dependencies {
+    
+    implementation "org.jetbrains.anko:anko:0.10.8"
+
     def room_version = "2.2.3"
     implementation "androidx.room:room-runtime:$room_version"
     kapt "androidx.room:room-compiler:$room_version"
