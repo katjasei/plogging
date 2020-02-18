@@ -8,4 +8,10 @@
     <string name="txt_plogging">Are you ready for plogging?</string>
     <string name="txt_welcome">Welcome to our application Plogging! Together we can keep our earth clean!</string>
     <string name="txt_start_plogging">START PLOGGING</string>
+    <string name="txt_email">email</string>
+    <!--strings for validation, validation is implemented with AwesomeValidation-->
+    <string name="invalid_name">User name must not be empty</string>
+    <string name="invalid_email">Please enter a valid email</string>
+    <string name="invalid_password">Minimum eight characters, at least one uppercase letter, one lowercase letter, one number and one special character</string>
+    <string name="invalid_confirm_password">Password does not match</string>
 </resources>

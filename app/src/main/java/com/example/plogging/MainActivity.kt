@@ -18,7 +18,7 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener {
         setContentView(R.layout.activity_main)
         supportFragmentManager
             .beginTransaction()
-            .add(R.id. fragment_container, welcomeFragment)
+            .add(R.id. fragment_container, firstFragment)
             .commit()
     }
 
