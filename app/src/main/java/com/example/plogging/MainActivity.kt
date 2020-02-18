@@ -11,13 +11,14 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener {
     private val firstFragment = FirstFragment()
     private val loginFragment = LoginFragment()
     private val registrationFragment = RegistrationFragment()
+    private val welcomeFragment = WelcomeFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
         supportFragmentManager
             .beginTransaction()
-            .add(R.id. fragment_container, firstFragment)
+            .add(R.id. fragment_container, welcomeFragment)
             .commit()
     }
 

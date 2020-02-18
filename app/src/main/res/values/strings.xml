@@ -5,4 +5,7 @@
     <string name="txt_user_name"> user name</string>
     <string name="txt_password"> password</string>
     <string name="txt_confirm_password"> confirm password</string>
+    <string name="txt_plogging">Are you ready for plogging?</string>
+    <string name="txt_welcome">Welcome to our application Plogging! Together we can keep our earth clean!</string>
+    <string name="txt_start_plogging">START PLOGGING</string>
 </resources>

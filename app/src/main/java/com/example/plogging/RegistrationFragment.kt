@@ -30,11 +30,10 @@ class RegistrationFragment: Fragment() {
                 db.userDao().insert(User( 0,value_user_name.text.toString(), value_password.text.toString()))
 
                 val data = db.userDao().getAll()
-                for(i in 0..(data.size-1))
-                Log.d("Data base data", data[i].username)
+                /*for(i in 0..(data.size-1))
+                Log.d("Data base data", data[i].username)*/
 
             }
-
         }
     }
 }
