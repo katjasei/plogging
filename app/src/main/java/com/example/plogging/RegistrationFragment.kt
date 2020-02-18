@@ -1,6 +1,7 @@
 package com.example.plogging
 
 
+import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
 import android.util.Log
@@ -16,6 +17,17 @@ import kotlinx.android.synthetic.main.fragment_registration.*
 import org.jetbrains.anko.doAsync
 
 class RegistrationFragment: Fragment() {
+
+    private var activityCallBack: RegistrationFragmentListener? = null
+
+    interface RegistrationFragmentListener {
+        fun onButtonSignUpClickFromRegistration()
+    }
+
+    override fun onAttach(context: Context)   {
+        super.onAttach(context)
+        activityCallBack =  context as RegistrationFragmentListener
+    }
 
     //AwesomeValidation - implement validation for Android
     private var mAwesomeValidation = AwesomeValidation(ValidationStyle.COLORATION)
@@ -61,7 +73,11 @@ class RegistrationFragment: Fragment() {
                     /*for(i in 0..(data.size-1))
                 Log.d("Data base data", data[i].username)*/
                 }
+                
+                activityCallBack!!.onButtonSignUpClickFromRegistration()
             }
+
+
         }
     }
 }

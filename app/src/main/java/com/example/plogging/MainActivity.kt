@@ -4,7 +4,8 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.util.Log
 
-class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener {
+class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, RegistrationFragment.RegistrationFragmentListener
+{
 
 
     //Create a new Fragment to be placed in the activity layout
@@ -21,17 +22,27 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener {
             .add(R.id. fragment_container, firstFragment)
             .commit()
     }
-
+    //FirstFragment listeners:
+    //when button "sign up" clicked from FirstFragment
     override fun onButtonSignUpClick() {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
             registrationFragment)
             .addToBackStack(null )
             .commit()
     }
-
+    //when button "sign in" clicked from FirstFragment
     override fun onButtonSignInClick() {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
             loginFragment)
+            .addToBackStack(null )
+            .commit()
+    }
+
+    //RegistrationFragment listener
+    //when button "sign up" clicked from RegistrationFragment
+    override fun onButtonSignUpClickFromRegistration() {
+        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+            welcomeFragment)
             .addToBackStack(null )
             .commit()
     }
