@@ -28,7 +28,7 @@ class RegistrationFragment: Fragment() {
     private var activityCallBack: RegistrationFragmentListener? = null
 
     interface RegistrationFragmentListener {
-        fun onButtonSignUpClickFromRegistration()
+        fun onButtonSignUpClickFromRegistration(username: String)
     }
 
     override fun onAttach(context: Context)   {
@@ -64,7 +64,7 @@ class RegistrationFragment: Fragment() {
         //when user enters username -> onFocusChange event
         value_user_name.setOnFocusChangeListener { v, hasFocus ->
             txt_duplicate_name.visibility = View.INVISIBLE
-            txt_duplicate_name.text = ""
+
             if(!hasFocus && value_user_name.text.toString()!=""){
                 doAsync {
                     if (db.userDao().checkIfUserNameExist(value_user_name.text.toString()).isNotEmpty()) {
@@ -73,9 +73,8 @@ class RegistrationFragment: Fragment() {
                         uiThread {
                             txt_duplicate_name.visibility = View.VISIBLE
                             txt_duplicate_name.text = "User name $userNameExist already in use"
-
                         }
-                    }
+                     } else {txt_duplicate_name.text = ""}
                 }
 
             }
@@ -84,7 +83,7 @@ class RegistrationFragment: Fragment() {
         //when user enters email -> onFocusChange event
         value_email.setOnFocusChangeListener { v, hasFocus ->
             txt_duplicate_email.visibility = View.INVISIBLE
-            txt_duplicate_email.text = ""
+
             if(!hasFocus && value_email.text.toString()!=""){
                 doAsync {
                     if (db.userDao().checkIfUserEmailExist(value_email.text.toString()).isNotEmpty()) {
@@ -94,7 +93,7 @@ class RegistrationFragment: Fragment() {
                             txt_duplicate_email.visibility = View.VISIBLE
                             txt_duplicate_email.text = "Email $userEmailExist already in use"
                         }
-                    }
+                    } else {txt_duplicate_email.text = ""}
                 }
 
             }
@@ -104,7 +103,7 @@ class RegistrationFragment: Fragment() {
         btn_sign_up.setOnClickListener {
             Log.d("Duplicate email",txt_duplicate_email.text.toString() )
 
-            if (mAwesomeValidation.validate() && txt_duplicate_email.text.isBlank() && txt_duplicate_name.text.isBlank()) {
+            if (mAwesomeValidation.validate() && txt_duplicate_email.text == "" && txt_duplicate_name.text == "") {
                 doAsync {
                     db.userDao().insert(
                         User(
@@ -118,7 +117,7 @@ class RegistrationFragment: Fragment() {
                     for(i in 0..(data.size-1))
                 Log.d("Data base data", data[i].username)
                 }
-                activityCallBack!!.onButtonSignUpClickFromRegistration()
+                activityCallBack!!.onButtonSignUpClickFromRegistration(value_user_name.text.toString())
             } else
 
             {
@@ -128,9 +127,7 @@ class RegistrationFragment: Fragment() {
                     Snackbar.LENGTH_LONG
                 ).show()
             }
-
         }
-
     }
 
 }

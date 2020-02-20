@@ -14,6 +14,9 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
     private val registrationFragment = RegistrationFragment()
     private val welcomeFragment = WelcomeFragment()
 
+    // bundle needs for communication between two fragments
+    private val bundle = Bundle()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
@@ -40,10 +43,14 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
 
     //RegistrationFragment listener
     //when button "sign up" clicked from RegistrationFragment
-    override fun onButtonSignUpClickFromRegistration() {
+    override fun onButtonSignUpClickFromRegistration(username: String) {
         supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
             welcomeFragment)
             .addToBackStack(null )
             .commit()
+
+        bundle.putCharSequence("username" , username)
+        welcomeFragment.arguments = bundle
+
     }
 }
