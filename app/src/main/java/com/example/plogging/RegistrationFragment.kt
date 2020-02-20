@@ -9,15 +9,22 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.google.android.material.snackbar.Snackbar
 import kotlinx.android.synthetic.main.fragment_registration.*
 import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.sdk27.coroutines.onFocusChange
+import org.jetbrains.anko.uiThread
 
 class RegistrationFragment: Fragment() {
 
+    private lateinit var db: UserDB
+
+    //callback
     private var activityCallBack: RegistrationFragmentListener? = null
 
     interface RegistrationFragmentListener {
@@ -40,6 +47,7 @@ class RegistrationFragment: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        //validation for all fields
         mAwesomeValidation.setColor(Color.parseColor("#52C7B8"))
         //check if the name has an empty value
         mAwesomeValidation.addValidation(this.activity, R.id.value_user_name, RegexTemplate.NOT_EMPTY, R.string.invalid_name)
@@ -51,15 +59,53 @@ class RegistrationFragment: Fragment() {
         //password confirmation
         mAwesomeValidation.addValidation(this.activity, R.id.value_confirm_password, R.id.value_password, R.string.invalid_confirm_password)
 
+        db = UserDB.get(context!!)
+
+        //when user enters username -> onFocusChange event
+        value_user_name.setOnFocusChangeListener { v, hasFocus ->
+            txt_duplicate_name.visibility = View.INVISIBLE
+            txt_duplicate_name.text = ""
+            if(!hasFocus && value_user_name.text.toString()!=""){
+                doAsync {
+                    if (db.userDao().checkIfUserNameExist(value_user_name.text.toString()).isNotEmpty()) {
+                        var userNameExist =
+                            db.userDao().checkIfUserNameExist(value_user_name.text.toString())[0].username
+                        uiThread {
+                            txt_duplicate_name.visibility = View.VISIBLE
+                            txt_duplicate_name.text = "User name $userNameExist already in use"
+
+                        }
+                    }
+                }
+
+            }
+        }
+
+        //when user enters email -> onFocusChange event
+        value_email.setOnFocusChangeListener { v, hasFocus ->
+            txt_duplicate_email.visibility = View.INVISIBLE
+            txt_duplicate_email.text = ""
+            if(!hasFocus && value_email.text.toString()!=""){
+                doAsync {
+                    if (db.userDao().checkIfUserEmailExist(value_email.text.toString()).isNotEmpty()) {
+                        var userEmailExist =
+                            db.userDao().checkIfUserEmailExist(value_email.text.toString())[0].email
+                        uiThread {
+                            txt_duplicate_email.visibility = View.VISIBLE
+                            txt_duplicate_email.text = "Email $userEmailExist already in use"
+                        }
+                    }
+                }
+
+            }
+        }
+
         //new user registration, user data saves in database "User"
         btn_sign_up.setOnClickListener {
-            val db = UserDB.get(context!!)
+            Log.d("Duplicate email",txt_duplicate_email.text.toString() )
 
-            if (mAwesomeValidation.validate()) {
-
+            if (mAwesomeValidation.validate() && txt_duplicate_email.text.isBlank() && txt_duplicate_name.text.isBlank()) {
                 doAsync {
-
-                    Log.d("Work", "work")
                     db.userDao().insert(
                         User(
                             0,
@@ -68,17 +114,24 @@ class RegistrationFragment: Fragment() {
                             value_password.text.toString()
                         )
                     )
-
                     val data = db.userDao().getAll()
-                    /*for(i in 0..(data.size-1))
-                Log.d("Data base data", data[i].username)*/
+                    for(i in 0..(data.size-1))
+                Log.d("Data base data", data[i].username)
                 }
-                
                 activityCallBack!!.onButtonSignUpClickFromRegistration()
+            } else
+
+            {
+                Snackbar.make(
+                    view!!,
+                    "You need to change registration information",
+                    Snackbar.LENGTH_LONG
+                ).show()
             }
 
-
         }
+
     }
+
 }
 

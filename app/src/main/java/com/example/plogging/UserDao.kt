@@ -7,7 +7,7 @@ import androidx.room.*
 interface UserDao {
 
     @Query("SELECT * FROM user")
-    fun getAll(): LiveData<List<User>>
+    fun getAll(): List<User>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(user: User): Long
@@ -20,5 +20,14 @@ interface UserDao {
 
     @Query("SELECT * FROM user WHERE user.uid = :id")
     fun getById(id:Long): User
+
+    @Query("SELECT * FROM user WHERE username = :username AND password = :password")
+    fun getByUserNameAndPassword(username: String, password:String): List<User>
+
+    @Query("SELECT * FROM user WHERE username = :username")
+    fun checkIfUserNameExist(username: String): List<User>
+
+    @Query("SELECT * FROM user WHERE email = :email")
+    fun checkIfUserEmailExist(email: String): List<User>
 
 }
