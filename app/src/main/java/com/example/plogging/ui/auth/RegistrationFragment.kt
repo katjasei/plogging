@@ -1,4 +1,4 @@
-package com.example.plogging
+package com.example.plogging.ui.auth
 
 
 import android.annotation.SuppressLint
@@ -14,6 +14,8 @@ import androidx.fragment.app.Fragment
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
+import com.example.plogging.R
+import com.example.plogging.data.model.ClassUser
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -59,14 +61,27 @@ class RegistrationFragment: Fragment() {
         //validation for all fields
         mAwesomeValidation.setColor(Color.parseColor("#52C7B8"))
         //check if the name has an empty value
-        mAwesomeValidation.addValidation(this.activity, R.id.value_user_name, RegexTemplate.NOT_EMPTY, R.string.invalid_name)
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_user_name, RegexTemplate.NOT_EMPTY,
+            R.string.invalid_name
+        )
         //check that email is valid
-        mAwesomeValidation.addValidation(this.activity,R.id.value_email, Patterns.EMAIL_ADDRESS,R.string.invalid_email)
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_email, Patterns.EMAIL_ADDRESS,
+            R.string.invalid_email
+        )
         //check that password is valid
         val regexPassword ="(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}"
-        mAwesomeValidation.addValidation(this.activity, R.id.value_password,regexPassword, R.string.invalid_password )
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_password,regexPassword,
+            R.string.invalid_password
+        )
         //password confirmation
-        mAwesomeValidation.addValidation(this.activity, R.id.value_confirm_password, R.id.value_password, R.string.invalid_confirm_password)
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_confirm_password,
+            R.id.value_password,
+            R.string.invalid_confirm_password
+        )
 
         //when user enters username -> onFocusChange event
         value_user_name.setOnFocusChangeListener { _, hasFocus ->
@@ -129,7 +144,7 @@ class RegistrationFragment: Fragment() {
        val email = userFromRegistration.email
        val userId = userFromRegistration.uid
 
-       val user =  ClassUser(username,email!!)
+       val user = ClassUser(username, email!!)
 
          mFirebaseDB.child("users")
              .child(userId)

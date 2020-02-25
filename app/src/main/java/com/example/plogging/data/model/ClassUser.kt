@@ -1,4 +1,4 @@
-package com.example.plogging
+package com.example.plogging.data.model
 
 class ClassUser (username:String, email:String) {
 

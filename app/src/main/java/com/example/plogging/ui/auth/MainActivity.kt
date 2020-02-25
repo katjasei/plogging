@@ -1,13 +1,15 @@
-package com.example.plogging
+package com.example.plogging.ui.auth
 
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
+import com.example.plogging.*
+import com.example.plogging.ui.home.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 
-class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, RegistrationFragment.RegistrationFragmentListener
+class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
+    RegistrationFragment.RegistrationFragmentListener
 {
     //Create a new Fragment to be placed in the activity layout
     private val firstFragment = FirstFragment()
@@ -28,7 +30,7 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
 
         supportFragmentManager
             .beginTransaction()
-            .add(R.id. fragment_container, splashScreenFragment)
+            .add(R.id.fragment_container, splashScreenFragment)
             .commit()
 
         mFirebaseAuth = FirebaseAuth.getInstance()
@@ -45,7 +47,8 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
             handler.postDelayed({
                 run {
                     //go to FirstFragment, if user not logged in
-                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+                    supportFragmentManager.beginTransaction().replace(
+                        R.id.fragment_container,
                         firstFragment)
                         .addToBackStack(null )
                         .commit()
@@ -55,14 +58,16 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
     //FirstFragment listeners:
     //when button "sign up" clicked from FirstFragment
     override fun onButtonSignUpClick() {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragment_container,
             registrationFragment)
             .addToBackStack(null )
             .commit()
     }
     //when button "sign in" clicked from FirstFragment
     override fun onButtonSignInClick() {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragment_container,
             loginFragment)
             .addToBackStack(null )
             .commit()
@@ -71,7 +76,8 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
     //RegistrationFragment listener
     //when button "sign up" clicked from RegistrationFragment
     override fun onButtonSignUpClickFromRegistration(username: String) {
-        supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragment_container,
             welcomeFragment)
             .addToBackStack(null )
             .commit()

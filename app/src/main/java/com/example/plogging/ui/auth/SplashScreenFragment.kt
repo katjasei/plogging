@@ -1,4 +1,4 @@
-package com.example.plogging
+package com.example.plogging.ui.auth
 
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -6,6 +6,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
 import androidx.fragment.app.DialogFragment
+import com.example.plogging.R
 import kotlinx.android.synthetic.main.fragment_splash_screen.*
 
 class SplashScreenFragment: DialogFragment() {
@@ -18,7 +19,9 @@ class SplashScreenFragment: DialogFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         activity?.actionBar?.hide()
-        val animation = AnimationUtils.loadAnimation(this.context,R.anim.fade_in)
+        val animation = AnimationUtils.loadAnimation(this.context,
+            R.anim.fade_in
+        )
 
         //set the animation for imageView
         background_image.startAnimation(animation)
