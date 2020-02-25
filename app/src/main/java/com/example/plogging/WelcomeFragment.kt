@@ -17,10 +17,8 @@ class WelcomeFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         // get username from bundle
         val username = arguments!!.getCharSequence("username")
-
         value_welcome_username.text = username
     }
 }

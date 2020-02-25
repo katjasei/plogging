@@ -1,8 +1,12 @@
 package com.example.plogging
 
+import android.content.Context
+import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
+import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, RegistrationFragment.RegistrationFragmentListener
 {
@@ -13,6 +17,10 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
     private val loginFragment = LoginFragment()
     private val registrationFragment = RegistrationFragment()
     private val welcomeFragment = WelcomeFragment()
+    private val splashScreenFragment = SplashScreenFragment()
+
+    //firebase auth object
+    lateinit var mFirebaseAuth: FirebaseAuth
 
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
@@ -20,10 +28,32 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
         supportFragmentManager
             .beginTransaction()
-            .add(R.id. fragment_container, firstFragment)
+            .add(R.id. fragment_container, splashScreenFragment)
             .commit()
+
+        mFirebaseAuth = FirebaseAuth.getInstance()
+
+        //if the objects getcurrentuser is not null
+        //means u
+        // ser is already logged in
+        if(mFirebaseAuth.currentUser != null){
+            //if user is logged in go to HomeActvity - "Home or Map Screen"
+            val intent = Intent(this, HomeActivity::class.java)
+            startActivity(intent)
+        } else {
+            val handler = Handler()
+            handler.postDelayed({
+                run {
+                    //go to FirstFragment, if user not logged in
+                    supportFragmentManager.beginTransaction().replace(R.id.fragment_container,
+                        firstFragment)
+                        .addToBackStack(null )
+                        .commit()
+                }
+            },4000)}
     }
     //FirstFragment listeners:
     //when button "sign up" clicked from FirstFragment
@@ -48,6 +78,7 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, R
             welcomeFragment)
             .addToBackStack(null )
             .commit()
+
 
         bundle.putCharSequence("username" , username)
         welcomeFragment.arguments = bundle

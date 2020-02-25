@@ -6,7 +6,7 @@
     <string name="txt_password"> password</string>
     <string name="txt_confirm_password"> confirm password</string>
     <string name="txt_plogging">Are you ready for plogging?</string>
-    <string name="txt_welcome">Welcome to our application Plogging! Together we can keep our earth clean!</string>
+    <string name="txt_welcome">Welcome to our application Plogging! Together we can keep our Earth clean!</string>
     <string name="txt_start_plogging">START PLOGGING</string>
     <string name="txt_email">email</string>
     <!--strings for validation, validation is implemented with AwesomeValidation-->
@@ -17,4 +17,6 @@
     <string name="invalid_confirm_password">Password does not match</string>
     <string name="empty_string" />
     <string name="txt_empty" />
+    <string name="txt_current_user">Current user</string>
+    <string name="txt_btn_logout">LOGOUT</string>
 </resources>

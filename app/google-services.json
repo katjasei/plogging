@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "382414836347",
+    "firebase_url": "https://plogging-b8df5.firebaseio.com",
+    "project_id": "plogging-b8df5",
+    "storage_bucket": "plogging-b8df5.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:382414836347:android:ecf806225678ab840f48de",
+        "android_client_info": {
+          "package_name": "com.example.plogging"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "382414836347-i8c022h5l30tr69036t6qm58qpurtvts.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBr5SYHrdPoKzOPZrSvAqVDh3F7Hw5Ltq4"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "382414836347-i8c022h5l30tr69036t6qm58qpurtvts.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

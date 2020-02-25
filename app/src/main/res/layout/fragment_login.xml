@@ -22,7 +22,7 @@
         app:layout_constraintVertical_bias="0.0" />
 
     <EditText
-        android:id="@+id/value_user_name"
+        android:id="@+id/value_email"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -32,7 +32,7 @@
         android:background="@drawable/rounded_edittext"
         android:ems="10"
         android:gravity="start|center"
-        android:hint="@string/txt_user_name"
+        android:hint="@string/txt_email"
         android:inputType="textMultiLine"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
@@ -55,7 +55,7 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/value_user_name" />
+        app:layout_constraintTop_toBottomOf="@+id/value_email" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_in"
