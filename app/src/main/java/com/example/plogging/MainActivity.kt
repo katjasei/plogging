@@ -1,6 +1,5 @@
 package com.example.plogging
 
-import android.content.Context
 import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
@@ -10,8 +9,6 @@ import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener, RegistrationFragment.RegistrationFragmentListener
 {
-
-
     //Create a new Fragment to be placed in the activity layout
     private val firstFragment = FirstFragment()
     private val loginFragment = LoginFragment()
