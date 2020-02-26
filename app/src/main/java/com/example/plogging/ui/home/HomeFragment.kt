@@ -39,6 +39,7 @@ class HomeFragment: Fragment() {
 
     interface HomeFragmentListener {
         fun onButtonLogOutClick()
+        fun onButtonStartActivityClick()
     }
 
     override fun onAttach(context: Context)   {
@@ -78,6 +79,12 @@ class HomeFragment: Fragment() {
         btn_logout.setOnClickListener {
             activityCallBack!!.onButtonLogOutClick()
         }
+
+        //if user click button "StartActivity"
+        btn_start_activity.setOnClickListener {
+            activityCallBack!!.onButtonStartActivityClick()
+        }
+
 
         //homeActivity.setActionBarTitle("My jogging record")
 

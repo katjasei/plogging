@@ -14,6 +14,7 @@ class HomeActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
     lateinit var mFirebaseAuth: FirebaseAuth
     //Create a new Fragment to be placed in the activity layout
     private val homeFragment = HomeFragment()
+    private val ploggingActivityFragment = PloggingActivityFragment()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -24,15 +25,23 @@ class HomeActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
             .commit()
 
     }
-
-
-
+    //when user click button LOGOUT
     override fun onButtonLogOutClick() {
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseAuth.signOut()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
     }
+
+    //when user click button StartActivity
+    override fun onButtonStartActivityClick() {
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragment_container,
+            ploggingActivityFragment)
+            .addToBackStack(null )
+            .commit()
+    }
+
 
     fun setActionBarTitle(title:String){
         supportActionBar!!.title = title

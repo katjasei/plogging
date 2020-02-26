@@ -24,4 +24,5 @@
     <string name="txt_value_distance">0.00</string>
     <string name="txt_distance">distance km</string>
     <string name="txt_btn_start_activity">START ACTIVITY</string>
+    <string name="txt_btn_stop_activity">STOP ACTIVITY</string>
 </resources>
