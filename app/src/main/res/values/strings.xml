@@ -25,4 +25,11 @@
     <string name="txt_distance">distance km</string>
     <string name="txt_btn_start_activity">START ACTIVITY</string>
     <string name="txt_btn_stop_activity">STOP ACTIVITY</string>
+    <string name="txt_pet_bottle">PET Bottles</string>
+    <string name="txt_iron_cans">Iron Cans</string>
+    <string name="txt_cigarettes">Cigarette</string>
+    <string name="txt_cardboard">Cardboard</string>
+    <string name="txt_other">Other</string>
+    <string name="txt_btn_upload">UPLOAD</string>
+    <string name="default_value_trash">0</string>
 </resources>
