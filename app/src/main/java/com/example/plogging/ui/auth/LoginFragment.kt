@@ -30,6 +30,8 @@ class LoginFragment: Fragment() {
         btn_sign_in.setOnClickListener {
             userLogin(value_email.text.toString(), value_password.text.toString())
         }
+
+        activity?.actionBar?.hide()
     }
 
     private fun userLogin(email:String, password:String){

@@ -22,13 +22,20 @@ class HomeActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
             .beginTransaction()
             .add(R.id.fragment_container, homeFragment)
             .commit()
+
     }
+
+
 
     override fun onButtonLogOutClick() {
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseAuth.signOut()
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    fun setActionBarTitle(title:String){
+        supportActionBar!!.title = title
     }
 
 }
