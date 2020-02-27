@@ -41,8 +41,10 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="center"
+            android:hint="@string/default_value_trash"
             android:inputType="textMultiLine"
             android:textColor="@android:color/tertiary_text_light"
+            android:textColorHint="@android:color/tertiary_text_light"
             android:textSize="24sp"
             tools:text="@string/default_value_trash" />
 
@@ -96,8 +98,10 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="center"
+            android:hint="@string/default_value_trash"
             android:inputType="textMultiLine"
             android:textColor="@android:color/tertiary_text_light"
+            android:textColorHint="@android:color/tertiary_text_light"
             android:textSize="24sp"
             tools:text="@string/default_value_trash" />
 
@@ -150,8 +154,10 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="center"
+            android:hint="@string/default_value_trash"
             android:inputType="textMultiLine"
             android:textColor="@android:color/tertiary_text_light"
+            android:textColorHint="@android:color/tertiary_text_light"
             android:textSize="24sp"
             tools:text="@string/default_value_trash" />
 
@@ -204,8 +210,10 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="center"
+            android:hint="@string/default_value_trash"
             android:inputType="textMultiLine"
             android:textColor="@android:color/tertiary_text_light"
+            android:textColorHint="@android:color/tertiary_text_light"
             android:textSize="24sp"
             tools:text="@string/default_value_trash" />
 
@@ -259,8 +267,10 @@
             android:background="@android:color/transparent"
             android:ems="10"
             android:gravity="center"
+            android:hint="@string/default_value_trash"
             android:inputType="textMultiLine"
             android:textColor="@android:color/tertiary_text_light"
+            android:textColorHint="@android:color/tertiary_text_light"
             android:textSize="24sp"
             tools:text="@string/default_value_trash" />
 

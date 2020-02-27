@@ -1,20 +1,21 @@
 package com.example.plogging.ui.home
 
 import android.annotation.SuppressLint
+import android.content.ContentValues.TAG
 import android.content.Context
-import android.content.pm.PackageManager
-import android.os.Build
+import android.content.res.Resources
+import android.location.Location
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.appcompat.content.res.AppCompatResources.getDrawable
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.google.android.gms.location.*
+import com.google.android.gms.maps.CameraUpdateFactory
+import com.google.android.gms.maps.GoogleMap
+import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -22,20 +23,20 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.jetbrains.anko.activityManager
-import org.osmdroid.tileprovider.tilesource.TileSourceFactory
-import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
+import com.google.android.gms.maps.OnMapReadyCallback
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MapStyleOptions
+import com.google.android.gms.maps.model.MarkerOptions
 
-class HomeFragment: Fragment() {
+class HomeFragment: Fragment(), OnMapReadyCallback  {
 
     var mFirebaseDB =  FirebaseDatabase.getInstance().reference
     private var activityCallBack: HomeFragmentListener? = null
 
-    private lateinit var currentLocationMarker: Marker
-    private lateinit var fusedLocationClient: FusedLocationProviderClient
-    private lateinit var locationRequest: LocationRequest
-    private lateinit var locationCallback: LocationCallback
+    private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
+    //private lateinit var map: GoogleMap
 
     interface HomeFragmentListener {
         fun onButtonLogOutClick()
@@ -86,82 +87,41 @@ class HomeFragment: Fragment() {
             activityCallBack!!.onButtonStartActivityClick()
         }
 
-        map.setTileSource(TileSourceFactory.MAPNIK)
-        map.zoomController
-        map.setMultiTouchControls(true)
-        map.controller.setZoom(18.0)
-
-        currentLocationMarker = Marker(map)
-
-        //create FusionProviderClient
-
-        fusedLocationClient =
-            LocationServices.getFusedLocationProviderClient(activity!!)
-
-        buildLocationRequest()
-
-        locationCallback = object : LocationCallback() {
-
-            override fun onLocationResult(locationResult: LocationResult?) {
-
-                locationResult ?: return
-                // Update UI with location data
-                // ...
-
-                Log.d(
-                    "GEOLOCATION",
-                    "latitude: ${locationResult.lastLocation?.latitude} and longitude: ${locationResult.lastLocation?.longitude}"
-                )
-
-                Log.d("Location", locationResult.lastLocation.toString())
-                map.controller.setCenter(GeoPoint(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude))
-                //textView2.text = "Latitude:" + locationResult.lastLocation?.latitude + ", Longitude:" + locationResult.lastLocation?.longitude
-                currentLocationMarker.position = GeoPoint(locationResult.lastLocation.latitude, locationResult.lastLocation.longitude)
-                currentLocationMarker.title = "Latitude: ${locationResult.lastLocation.latitude}\nLongitude: ${locationResult.lastLocation.longitude}"
-                currentLocationMarker.icon = getDrawable(context!!, R.drawable.ic_person_pin_circle_blue_a700_24dp)
-                if(map.overlays.isNotEmpty()) {
-                    map.overlays.clear()
-                }
-                map.overlays.add(currentLocationMarker)
-
-            }
-        }
-
     }
 
-    private fun buildLocationRequest(){
-        locationRequest = LocationRequest().apply {
-            priority = LocationRequest.PRIORITY_HIGH_ACCURACY
-            interval = 5000
-            fastestInterval = 3000
-            //smallestDisplacement = 10f
-
-        }
-    }
 
     override fun onStart() {
         super.onStart()
-        startLocationUpdates()
+        fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
+        val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+        mapFragment.getMapAsync(this)
     }
 
-    private fun startLocationUpdates() {
-        if ((Build.VERSION.SDK_INT >= 23 &&
-                    ContextCompat.checkSelfPermission(
-                        this.context!!,
-                        android.Manifest.permission.ACCESS_FINE_LOCATION
-                    ) !=
-                    PackageManager.PERMISSION_GRANTED)
-        ) {
-            ActivityCompat.requestPermissions(
-                activity!!,
-                arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION),
-                0
+    override fun onMapReady(map: GoogleMap) {
+        fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
+            val currentLocation = LatLng(location.latitude, location.longitude)
+            /* try {
+                 val success = map.setMapStyle(
+                     MapStyleOptions.loadRawResourceStyle(context,
+                         R.raw.style_json
+                     )
+                 )
+                 if (!success) Log.d(TAG, "Style parsing failed.")
+             } catch (e: Resources.NotFoundException) {
+                 Log.d(TAG, "Can't find style. Error: $e")
+             }
+ */
+            map.addMarker(
+                MarkerOptions()
+                    .position(currentLocation)
+                    .title("Your current location")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
         }
-        fusedLocationClient.requestLocationUpdates(locationRequest,
-            locationCallback,
-            null)
     }
+
+
 
 
 
