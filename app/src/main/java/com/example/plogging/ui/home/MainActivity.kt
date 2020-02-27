@@ -33,6 +33,16 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
                 replaceFragment(LeaderboardFragment())
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.home -> {
+                Log.i("TAG", "${item.title} pressed")
+                replaceFragment(HomeFragment())
+                return@OnNavigationItemSelectedListener true
+            }
+            R.id.profile -> {
+                Log.i("TAG", "${item.title} pressed")
+                replaceFragment(ProfileFragment())
+                return@OnNavigationItemSelectedListener true
+            }
         }
         false
     }
