@@ -21,6 +21,13 @@
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
 
+        <meta-data
+            android:name="com.google.android.geo.API_KEY"
+            android:value="AIzaSyBr5SYHrdPoKzOPZrSvAqVDh3F7Hw5Ltq4"/>
+        <meta-data
+            android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version" />
+
         <activity android:name=".ui.auth.AuthActivity"
             android:theme="@style/AppTheme2">
             <intent-filter>

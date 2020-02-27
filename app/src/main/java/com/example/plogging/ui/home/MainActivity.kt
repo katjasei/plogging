@@ -3,6 +3,7 @@ package com.example.plogging.ui.home
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
@@ -33,6 +34,12 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
                 replaceFragment(LeaderboardFragment())
                 return@OnNavigationItemSelectedListener true
             }
+            R.id.home ->{
+                Log.i("TAG", "${item.title} pressed")
+                replaceFragment(homeFragment)
+                return@OnNavigationItemSelectedListener true
+            }
+
         }
         false
     }
@@ -40,6 +47,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
@@ -72,5 +82,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
         val manager = supportFragmentManager.beginTransaction()
         manager.replace(R.id.fragment_container, fragment)
         manager.commit()
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 }
