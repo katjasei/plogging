@@ -32,4 +32,6 @@
     <string name="txt_other">Other</string>
     <string name="txt_btn_upload">UPLOAD</string>
     <string name="default_value_trash">0</string>
+    <string name="txt_points">+ 5 Points</string>
+    <string name="txt_go_to_profile">GO TO PROFILE</string>
 </resources>

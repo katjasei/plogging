@@ -15,11 +15,10 @@ import kotlinx.android.synthetic.main.fragment_login.*
 
 class LoginFragment: Fragment() {
 
-    //firebase ajuth object
+    //firebase auth object
     lateinit var mFirebaseAuth: FirebaseAuth
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_login, container, false)
     }
