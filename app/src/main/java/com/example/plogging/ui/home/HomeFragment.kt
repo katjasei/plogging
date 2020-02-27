@@ -115,7 +115,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
                 MarkerOptions()
                     .position(currentLocation)
                     .title("Your current location")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
         }

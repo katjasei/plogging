@@ -1,6 +1,7 @@
 package com.example.plogging.ui.home
 
 
+import android.content.Context
 import android.location.Location
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -17,11 +18,12 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback {
 
-    /*
+
     private var activityCallBack: PloggingActivityListener? = null
 
     interface PloggingActivityListener {
@@ -32,9 +34,11 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback {
         super.onAttach(context)
         activityCallBack =  context as PloggingActivityListener
     }
-*/
+
 
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
+    private lateinit var currentLocation: LatLng
+    //private lateinit var mMap: GoogleMap
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -43,12 +47,15 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-/*
+
         btn_stop_activity.setOnClickListener {
             activityCallBack!!.onButtonStopActivityClick()
         }
 
- */
+
+        floating_action_button.setOnClickListener {
+
+        }
     }
 
     override fun onStart() {
@@ -60,7 +67,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback {
 
     override fun onMapReady(map: GoogleMap) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
-            val currentLocation = LatLng(location.latitude, location.longitude)
+             currentLocation = LatLng(location.latitude, location.longitude)
+
             /* try {
                  val success = map.setMapStyle(
                      MapStyleOptions.loadRawResourceStyle(context,
@@ -76,7 +84,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback {
                 MarkerOptions()
                     .position(currentLocation)
                     .title("Your current location")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_BLUE))
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
         }

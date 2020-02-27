@@ -15,13 +15,14 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
+class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener {
 
     //firebase auth object
     lateinit var mFirebaseAuth: FirebaseAuth
     //Create a new Fragment to be placed in the activity layout
     private val homeFragment = HomeFragment()
     private val ploggingActivityFragment = PloggingActivityFragment()
+    private val afterStopActivityFragment = AfterStopActivityFragment()
 
     //Bottom navigation click listener
     //TODO maybe take this logic to a new file
@@ -70,6 +71,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
             .add(R.id.fragment_container, homeFragment)
             .commit()
     }
+    
     //when user click button LOGOUT
     override fun onButtonLogOutClick() {
         mFirebaseAuth = FirebaseAuth.getInstance()
@@ -77,15 +79,24 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
     }
-
-    //when user click button StartActivity
+    //HomeFragment listener
+    //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {
         supportFragmentManager.beginTransaction().replace(
             R.id.fragment_container,
             ploggingActivityFragment)
             .addToBackStack(null )
             .commit()
+    }
 
+    //PloggingActivityFragment listener
+    //when button "Stop activity" clicked from PloggingActivityFragment
+    override fun onButtonStopActivityClick() {
+        supportFragmentManager.beginTransaction().replace(
+            R.id.fragment_container,
+            afterStopActivityFragment)
+            .addToBackStack(null )
+            .commit()
     }
 
     private fun replaceFragment(fragment: Fragment){

@@ -26,7 +26,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     private val splashScreenFragment = SplashScreenFragment()
 
     //firebase auth object
-    lateinit var mFirebaseAuth: FirebaseAuth
+    private lateinit var mFirebaseAuth: FirebaseAuth
 
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
@@ -34,7 +34,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-        // Hide the status bar.
+
+        // Hide the status bar
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
 
         askPermissions()
@@ -136,5 +137,10 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                 }
             }
         }
+    }
+    override fun onResume() {
+        super.onResume()
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 }

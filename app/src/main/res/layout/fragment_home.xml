@@ -38,8 +38,9 @@
                 android:layout_gravity="center_horizontal"
                 android:layout_marginTop="225dp"
                 android:layout_marginEnd="20dp"
+                android:tint="@color/white"
                 app:backgroundTint="@color/colorPrimary"
-                app:srcCompat="@drawable/ic_radio_button_checked_black_24dp" />
+                app:srcCompat="@drawable/ic_my_location_white_24dp" />
         </RelativeLayout>
 
         <TextView
