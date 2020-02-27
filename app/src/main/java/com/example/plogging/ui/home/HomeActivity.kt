@@ -23,7 +23,6 @@ class HomeActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
             .beginTransaction()
             .add(R.id.fragment_container, homeFragment)
             .commit()
-
     }
     //when user click button LOGOUT
     override fun onButtonLogOutClick() {
@@ -40,11 +39,10 @@ class HomeActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
             ploggingActivityFragment)
             .addToBackStack(null )
             .commit()
+
     }
 
 
-    fun setActionBarTitle(title:String){
-        supportActionBar!!.title = title
-    }
+
 
 }

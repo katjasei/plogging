@@ -22,6 +22,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home.*
+import org.jetbrains.anko.activityManager
 import org.osmdroid.tileprovider.tilesource.TileSourceFactory
 import org.osmdroid.util.GeoPoint
 import org.osmdroid.views.overlay.Marker
@@ -29,7 +30,6 @@ import org.osmdroid.views.overlay.Marker
 class HomeFragment: Fragment() {
 
     var mFirebaseDB =  FirebaseDatabase.getInstance().reference
-//    var homeActivity = HomeActivity()
     private var activityCallBack: HomeFragmentListener? = null
 
     private lateinit var currentLocationMarker: Marker
@@ -49,6 +49,7 @@ class HomeFragment: Fragment() {
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+//        HomeActivity().actionBar?.title =  "My jogging record"
         return inflater.inflate(R.layout.fragment_home, container, false)
     }
 
@@ -84,9 +85,6 @@ class HomeFragment: Fragment() {
         btn_start_activity.setOnClickListener {
             activityCallBack!!.onButtonStartActivityClick()
         }
-
-
-        //homeActivity.setActionBarTitle("My jogging record")
 
         map.setTileSource(TileSourceFactory.MAPNIK)
         map.zoomController

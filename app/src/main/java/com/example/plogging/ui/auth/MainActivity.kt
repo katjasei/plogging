@@ -10,7 +10,7 @@ import com.example.plogging.ui.home.HomeActivity
 import com.google.firebase.auth.FirebaseAuth
 
 class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
-    RegistrationFragment.RegistrationFragmentListener
+    RegistrationFragment.RegistrationFragmentListener, WelcomeFragment.WelcomeFragmentListener
 {
     //Create a new Fragment to be placed in the activity layout
     private val firstFragment = FirstFragment()
@@ -85,10 +85,15 @@ class MainActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             welcomeFragment)
             .addToBackStack(null )
             .commit()
-
-
         bundle.putCharSequence("username" , username)
         welcomeFragment.arguments = bundle
 
+    }
+
+    //WelcomeFragment listener
+    //when button "Start plogging" clicked from WelcomeFragment
+    override fun onButtonStartPloggingClick() {
+        val intent = Intent(this, HomeActivity::class.java)
+        startActivity(intent)
     }
 }
