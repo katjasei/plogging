@@ -1,6 +1,8 @@
 package com.example.plogging.ui.home
 
+import android.content.Context
 import android.content.Intent
+import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
@@ -21,11 +23,16 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
     private val ploggingActivityFragment = PloggingActivityFragment()
 
     //Bottom navigation click listener
+    //TODO maybe take this logic to a new file
     private val bottomNavigationOnClickListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.weather -> {
                 Log.i("TAG", "${item.title} pressed")
-                replaceFragment(WeatherFragment())
+                if (isNetworkAvailable()) {
+                replaceFragment(WeatherFragment()) }
+                else {
+                    //TODO No network connection screen
+                }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.leaderboard -> {
@@ -78,9 +85,16 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
     }
 
     private fun replaceFragment(fragment: Fragment){
-        Log.i("TAG", fragment.toString())
         val manager = supportFragmentManager.beginTransaction()
         manager.replace(R.id.fragment_container, fragment)
         manager.commit()
+    }
+
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = this.getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        //if activeNetworkInfo == false -> if isConnected == false -> return false
+        return connectivityManager.activeNetworkInfo?.isConnected?:false
     }
 }
