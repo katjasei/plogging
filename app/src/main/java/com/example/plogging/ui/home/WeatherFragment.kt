@@ -28,7 +28,7 @@ class WeatherFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
 
-        val weatherConnection = Connection(handler)
+        val weatherConnection = WeatherApiConnection(handler)
         val weatherThread = Thread(weatherConnection)
         weatherThread.start()
 

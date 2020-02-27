@@ -7,9 +7,12 @@ import java.lang.StringBuilder
 import java.net.HttpURLConnection
 import java.net.URL
 
-class Connection(mHand: Handler): Runnable {
+//Makes api request and sends string result to handler to be used
+
+class WeatherApiConnection(mHand: Handler): Runnable {
     private val myHandler = mHand
-    private val url = URL("https://api.weather.gov/points/39.7456,-97.0892")
+    //this api is not really reliable, 50% of time returns wrong city info but does not require api key
+    private val url = URL(" https://fcc-weather-api.glitch.me/api/current?lat=60.1&lon=24.9")
 
     override fun run() {
         try {
@@ -20,6 +23,8 @@ class Connection(mHand: Handler): Runnable {
             }
             val result = StringBuilder()
                 result.append(inputText)
+
+            Log.i("TAG", result.toString())
 
             //construct message sent to handler
             val message = myHandler.obtainMessage()
