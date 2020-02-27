@@ -7,7 +7,7 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
 import androidx.fragment.app.Fragment
-import com.example.plogging.ui.home.HomeActivity
+import com.example.plogging.ui.home.MainActivity
 import com.example.plogging.R
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
@@ -48,7 +48,7 @@ class LoginFragment: Fragment() {
             .addOnCompleteListener{task ->
                 if(task.isSuccessful) {
                     activity!!.finish()
-                    val intent = Intent(this.context, HomeActivity::class.java)
+                    val intent = Intent(this.context, MainActivity::class.java)
                     startActivity(intent)
                 } else {
                     Toast.makeText(this.context,"Email or password is incorrect", Toast.LENGTH_LONG).show()
