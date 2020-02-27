@@ -11,7 +11,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_gravity="bottom"
-        android:background="@color/cardview_dark_background"
+        android:background="@color/white"
         app:itemIconTint="@color/colorPrimary"
         app:labelVisibilityMode="unlabeled"
         app:menu="@menu/menu" />

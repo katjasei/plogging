@@ -5,6 +5,7 @@ import android.content.Intent
 import android.net.ConnectivityManager
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
@@ -58,6 +59,9 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
 
@@ -85,6 +89,7 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
     }
 
     private fun replaceFragment(fragment: Fragment){
+        Log.i("TAG", fragment.toString())
         val manager = supportFragmentManager.beginTransaction()
         manager.replace(R.id.fragment_container, fragment)
         manager.commit()
@@ -96,5 +101,11 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener {
         ) as ConnectivityManager
         //if activeNetworkInfo == false -> if isConnected == false -> return false
         return connectivityManager.activeNetworkInfo?.isConnected?:false
+    }
+
+    override fun onResume() {
+        super.onResume()
+        // Hide the status bar.
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 }
