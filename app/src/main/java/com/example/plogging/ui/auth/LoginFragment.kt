@@ -1,5 +1,6 @@
 package com.example.plogging.ui.auth
 
+import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.LayoutInflater
@@ -33,6 +34,7 @@ class LoginFragment: Fragment() {
         activity?.actionBar?.hide()
     }
 
+    @SuppressLint("SetTextI18n")
     private fun userLogin(email:String, password:String){
 
         if (value_email.text.toString().isEmpty()){
@@ -51,7 +53,10 @@ class LoginFragment: Fragment() {
                     val intent = Intent(this.context, MainActivity::class.java)
                     startActivity(intent)
                 } else {
-                    Toast.makeText(this.context,"Email or password is incorrect", Toast.LENGTH_LONG).show()
+                    txt_login_fail.visibility = View.VISIBLE
+                    txt_login_fail.text = "Email or password is incorrect"
+
+                    ///Toast.makeText(this.context,"Email or password is incorrect", Toast.LENGTH_LONG).show()
                 }
             }
     }
