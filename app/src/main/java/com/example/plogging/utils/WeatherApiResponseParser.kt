@@ -5,7 +5,7 @@ import com.google.gson.Gson
 
 object WeatherApiResponseParser {
 
-    fun parse(apiResponse: String): Weather {
-        return Gson().fromJson(apiResponse, Weather::class.java)
+    fun parse(apiResponse: String): Weather.Base {
+        return Gson().fromJson(apiResponse, Weather.Base::class.java)
     }
 }

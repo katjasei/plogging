@@ -20,8 +20,10 @@ class WeatherFragment: Fragment(){
     Handler(Looper.getMainLooper()) {
         override fun handleMessage(inputMessage: Message) {
             if (inputMessage.what == 0) {
-                var weatherObject = WeatherApiResponseParser.parse(inputMessage.obj.toString())
-                weatherText.text = inputMessage.obj.toString()
+                //parse response
+                val weatherObject = WeatherApiResponseParser.parse(inputMessage.obj.toString())
+                //set to a textview
+                weatherText.text = weatherObject.main.temp.toString()
             }
         }
     }
