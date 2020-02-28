@@ -4,11 +4,14 @@ import android.os.Bundle
 import android.os.Handler
 import android.os.Looper
 import android.os.Message
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
+import com.example.plogging.utils.WeatherApiConnection
+import com.example.plogging.utils.WeatherApiResponseParser
 import kotlinx.android.synthetic.main.fragment_weather.*
 
 class WeatherFragment: Fragment(){
@@ -17,6 +20,7 @@ class WeatherFragment: Fragment(){
     Handler(Looper.getMainLooper()) {
         override fun handleMessage(inputMessage: Message) {
             if (inputMessage.what == 0) {
+                var weatherObject = WeatherApiResponseParser.parse(inputMessage.obj.toString())
                 weatherText.text = inputMessage.obj.toString()
             }
         }
@@ -28,7 +32,8 @@ class WeatherFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
 
-        val weatherConnection = WeatherApiConnection(handler)
+        val weatherConnection =
+            WeatherApiConnection(handler)
         val weatherThread = Thread(weatherConnection)
         weatherThread.start()
 

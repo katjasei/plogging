@@ -1,4 +1,4 @@
-package com.example.plogging.ui.home
+package com.example.plogging.utils
 
 import android.os.Handler
 import android.util.Log
