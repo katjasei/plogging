@@ -54,7 +54,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             //if user is logged in go to HomeActvity - "Home or Map Screen"
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        } else {
+        }
+        else {
             val handler = Handler()
             handler.postDelayed({
                 run {

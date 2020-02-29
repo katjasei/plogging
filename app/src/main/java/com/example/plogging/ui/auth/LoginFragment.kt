@@ -37,27 +37,31 @@ class LoginFragment: Fragment() {
     @SuppressLint("SetTextI18n")
     private fun userLogin(email:String, password:String){
 
-        if (value_email.text.toString().isEmpty()){
-            Toast.makeText(this.context,"Please enter email", Toast.LENGTH_LONG).show()
-        }
 
-        if(value_password.text.toString().isEmpty()){
-            Toast.makeText(this.context,"Please enter password", Toast.LENGTH_LONG).show()
-        }
-        mFirebaseAuth = FirebaseAuth.getInstance()
-        //logging in the user
-        mFirebaseAuth.signInWithEmailAndPassword(email, password)
-            .addOnCompleteListener{task ->
-                if(task.isSuccessful) {
-                    activity!!.finish()
-                    val intent = Intent(this.context, MainActivity::class.java)
-                    startActivity(intent)
-                } else {
-                    txt_login_fail.visibility = View.VISIBLE
-                    txt_login_fail.text = "Email or password is incorrect"
+        if (value_email.text.toString().isNotEmpty() && value_password.text.toString().isNotEmpty()) {
+            mFirebaseAuth = FirebaseAuth.getInstance()
+            //logging in the user
+            mFirebaseAuth.signInWithEmailAndPassword(email, password)
+                .addOnCompleteListener { task ->
+                    if (task.isSuccessful) {
+                        activity!!.finish()
+                        val intent = Intent(this.context, MainActivity::class.java)
+                        startActivity(intent)
+                    } else {
+                        txt_login_fail.visibility = View.VISIBLE
+                        txt_login_fail.text = "Email or password is incorrect"
 
-                    ///Toast.makeText(this.context,"Email or password is incorrect", Toast.LENGTH_LONG).show()
+                        ///Toast.makeText(this.context,"Email or password is incorrect", Toast.LENGTH_LONG).show()
+                    }
                 }
+        } else {
+            if (value_email.text.toString().isEmpty()){
+                Toast.makeText(this.context,"Please enter email", Toast.LENGTH_LONG).show()
             }
+
+            if(value_password.text.toString().isEmpty()){
+                Toast.makeText(this.context,"Please enter password", Toast.LENGTH_LONG).show()
+            }
+        }
     }
 }
