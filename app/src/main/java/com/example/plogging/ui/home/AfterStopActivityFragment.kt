@@ -9,11 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
+import com.example.plogging.data.model.ClassTrash
+import com.example.plogging.data.model.ClassUser
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
 import java.lang.Integer.parseInt
 
 
 class AfterStopActivityFragment: Fragment(){
+
+    //firebase db
+    private var mFirebaseDB = FirebaseDatabase.getInstance().reference
 
     private var activityCallBack: AfterStopActivityListener? = null
 
@@ -25,7 +32,6 @@ class AfterStopActivityFragment: Fragment(){
         super.onAttach(context)
         activityCallBack = context as AfterStopActivityListener
     }
-
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -42,6 +48,7 @@ class AfterStopActivityFragment: Fragment(){
         btn_upload.setOnClickListener {
             val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
+            addTrashToDB(points)
         }
     }
 
@@ -52,5 +59,22 @@ class AfterStopActivityFragment: Fragment(){
         value_cardboard.setText("0")
         value_cigarettes.setText("0")
         value_other.setText("0")
+    }
+
+    private fun addTrashToDB(points:Int){
+        val userID = FirebaseAuth.getInstance().currentUser?.uid
+        val trash = ClassTrash(
+            parseInt(value_pet_bottles.text.toString()),
+            parseInt(value_iron_cans.text.toString()),
+            parseInt(value_cardboard.text.toString()),
+            parseInt(value_cigarettes.text.toString()),
+            parseInt(value_other.text.toString()),
+            points
+        )
+
+        mFirebaseDB.child("trash")
+            .child(userID!!)
+            .push()
+            .setValue(trash)
     }
 }
