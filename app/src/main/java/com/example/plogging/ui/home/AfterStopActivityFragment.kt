@@ -3,12 +3,14 @@ package com.example.plogging.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
+import java.lang.Integer.parseInt
 
 
 class AfterStopActivityFragment: Fragment(){
@@ -16,7 +18,7 @@ class AfterStopActivityFragment: Fragment(){
     private var activityCallBack: AfterStopActivityListener? = null
 
     interface AfterStopActivityListener {
-        fun onButtonUploadClick()
+        fun onButtonUploadClick(points:String)
     }
 
     override fun onAttach(context: Context) {
@@ -38,12 +40,13 @@ class AfterStopActivityFragment: Fragment(){
         super.onActivityCreated(savedInstanceState)
 
         btn_upload.setOnClickListener {
-            activityCallBack!!.onButtonUploadClick()
+
+            val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
+            activityCallBack!!.onButtonUploadClick("+ $points Points")
+
         }
 
 
-
-//        var points = value_pet_bottles.text.toString().toInt()+value_iron_cans.text.toString().toInt()+value_cardboard.text.toString().toInt()+value_cigarettes.text.toString().toInt()+value_other.text.toString().toInt()
 
     }
 }

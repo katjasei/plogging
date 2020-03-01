@@ -26,6 +26,9 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     private val afterStopActivityFragment = AfterStopActivityFragment()
     private val pointFragment = PointFragment()
 
+    // bundle needs for communication between two fragments
+    private val bundle = Bundle()
+
     //Bottom navigation click listener
     //TODO maybe take this logic to a new file
     private val bottomNavigationOnClickListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
@@ -78,6 +81,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     override fun onButtonLogOutClick() {
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseAuth.signOut()
+        //start new Activity - go to FirstScreen/LogIn, SighUp screen
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
     }
@@ -95,8 +99,10 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
 
     //AfterStopActivityFragment listener
     //when button "Upload" clicked from AfterStopActivityFragment
-    override fun onButtonUploadClick() {
+    override fun onButtonUploadClick(points:String) {
         replaceFragment(pointFragment)
+        bundle.putCharSequence("points" , points)
+        pointFragment.arguments = bundle
     }
 
     private fun replaceFragment(fragment: Fragment){
