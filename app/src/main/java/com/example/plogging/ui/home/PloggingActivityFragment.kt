@@ -54,7 +54,9 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback {
 
 
         floating_action_button.setOnClickListener {
-
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
+            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
         }
     }
 

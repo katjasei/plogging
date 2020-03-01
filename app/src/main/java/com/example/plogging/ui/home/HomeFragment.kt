@@ -36,7 +36,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
     private var activityCallBack: HomeFragmentListener? = null
 
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
-    //private lateinit var map: GoogleMap
+    private lateinit var mMap: GoogleMap
 
     interface HomeFragmentListener {
         fun onButtonLogOutClick()
@@ -85,6 +85,13 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
         //if user click button "StartActivity"
         btn_start_activity.setOnClickListener {
             activityCallBack!!.onButtonStartActivityClick()
+        }
+
+        //
+        floating_action_button.setOnClickListener {
+            fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
+            val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
+            mapFragment.getMapAsync(this)
         }
 
     }

@@ -3,14 +3,12 @@ package com.example.plogging.data.model
 
 class ClassTrash (pet_bottles:Int, iron_cans:Int, cardboard:Int, cigarettes:Int,other:Int, total:Int) {
 
-
     var pet_bottles=0
     var iron_cans=0
     var cardboard =0
     var cigarettes=0
     var other= 0
     var total = 0
-
 
     init{
 

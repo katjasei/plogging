@@ -3,14 +3,12 @@ package com.example.plogging.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.example.plogging.data.model.ClassTrash
-import com.example.plogging.data.model.ClassUser
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
@@ -50,6 +48,7 @@ class AfterStopActivityFragment: Fragment(){
             activityCallBack!!.onButtonUploadClick("+ $points Points")
             addTrashToDB(points)
         }
+
     }
 
     override fun onResume() {
