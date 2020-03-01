@@ -33,20 +33,24 @@ class AfterStopActivityFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
+
         return inflater.inflate(R.layout.fragment_after_stop_activity, container, false)
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         btn_upload.setOnClickListener {
-
             val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
-
         }
+    }
 
-
-
+    override fun onResume() {
+        super.onResume()
+        value_pet_bottles.setText("0")
+        value_iron_cans.setText("0")
+        value_cardboard.setText("0")
+        value_cigarettes.setText("0")
+        value_other.setText("0")
     }
 }
