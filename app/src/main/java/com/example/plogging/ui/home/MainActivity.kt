@@ -15,7 +15,8 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
 
 
-class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener {
+class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopActivityListener,
+    HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener {
 
     //firebase auth object
     lateinit var mFirebaseAuth: FirebaseAuth
@@ -23,6 +24,10 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener, Plo
     private val homeFragment = HomeFragment()
     private val ploggingActivityFragment = PloggingActivityFragment()
     private val afterStopActivityFragment = AfterStopActivityFragment()
+    private val pointFragment = PointFragment()
+
+    // bundle needs for communication between two fragments
+    private val bundle = Bundle()
 
     //Bottom navigation click listener
     //TODO maybe take this logic to a new file
@@ -76,34 +81,36 @@ class MainActivity : AppCompatActivity(), HomeFragment.HomeFragmentListener, Plo
     override fun onButtonLogOutClick() {
         mFirebaseAuth = FirebaseAuth.getInstance()
         mFirebaseAuth.signOut()
+        //start new Activity - go to FirstScreen/LogIn, SighUp screen
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
     }
     //HomeFragment listener
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            ploggingActivityFragment)
-            .addToBackStack(null )
-            .commit()
+        replaceFragment(ploggingActivityFragment)
     }
 
     //PloggingActivityFragment listener
     //when button "Stop activity" clicked from PloggingActivityFragment
     override fun onButtonStopActivityClick() {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            afterStopActivityFragment)
-            .addToBackStack(null )
-            .commit()
+        replaceFragment(afterStopActivityFragment)
+    }
+
+    //AfterStopActivityFragment listener
+    //when button "Upload" clicked from AfterStopActivityFragment
+    override fun onButtonUploadClick(points:String) {
+        replaceFragment(pointFragment)
+        bundle.putCharSequence("points" , points)
+        pointFragment.arguments = bundle
     }
 
     private fun replaceFragment(fragment: Fragment){
         Log.i("TAG", fragment.toString())
-        val manager = supportFragmentManager.beginTransaction()
-        manager.replace(R.id.fragment_container, fragment)
-        manager.commit()
+        supportFragmentManager.beginTransaction()
+        .replace(R.id.fragment_container, fragment)
+        .addToBackStack(null)
+        .commit()
     }
 
     private fun isNetworkAvailable(): Boolean {

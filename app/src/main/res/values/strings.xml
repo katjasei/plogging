@@ -34,4 +34,7 @@
     <string name="default_value_trash">0</string>
     <string name="txt_points">+ 5 Points</string>
     <string name="txt_go_to_profile">GO TO PROFILE</string>
+    <string name="txt_login_fail">Login fail</string>
+    <string name="txt_default_number">1</string>
+    <string name="txt_default_points">0</string>
 </resources>

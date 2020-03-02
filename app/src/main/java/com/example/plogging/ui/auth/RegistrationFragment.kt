@@ -140,6 +140,7 @@ class RegistrationFragment: Fragment() {
     }
 
      private fun addUserNameToUser(userFromRegistration: FirebaseUser){
+
        val username = value_user_name.text.toString()
        val email = userFromRegistration.email
        val userId = userFromRegistration.uid
@@ -149,7 +150,6 @@ class RegistrationFragment: Fragment() {
          mFirebaseDB.child("users")
              .child(userId)
              .setValue(user)
-
      }
 
     private fun userEmailExists(email:String){

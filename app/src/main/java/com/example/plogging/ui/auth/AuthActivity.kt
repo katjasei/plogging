@@ -5,9 +5,11 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
+import androidx.fragment.app.Fragment
 import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
 import com.google.firebase.auth.FirebaseAuth
@@ -54,7 +56,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             //if user is logged in go to HomeActvity - "Home or Map Screen"
             val intent = Intent(this, MainActivity::class.java)
             startActivity(intent)
-        } else {
+        }
+        else {
             val handler = Handler()
             handler.postDelayed({
                 run {
@@ -70,29 +73,17 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     //FirstFragment listeners:
     //when button "sign up" clicked from FirstFragment
     override fun onButtonSignUpClick() {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            registrationFragment)
-            .addToBackStack(null )
-            .commit()
+        replaceFragment(registrationFragment)
     }
     //when button "sign in" clicked from FirstFragment
     override fun onButtonSignInClick() {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            loginFragment)
-            .addToBackStack(null )
-            .commit()
+       replaceFragment(loginFragment)
     }
 
     //RegistrationFragment listener
     //when button "sign up" clicked from RegistrationFragment
     override fun onButtonSignUpClickFromRegistration(username: String) {
-        supportFragmentManager.beginTransaction().replace(
-            R.id.fragment_container,
-            welcomeFragment)
-            .addToBackStack(null )
-            .commit()
+        replaceFragment(welcomeFragment)
         bundle.putCharSequence("username" , username)
         welcomeFragment.arguments = bundle
 
@@ -103,6 +94,14 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     override fun onButtonStartPloggingClick() {
         val intent = Intent(this, MainActivity::class.java)
         startActivity(intent)
+    }
+
+    private fun replaceFragment(fragment: Fragment){
+        Log.i("TAG", fragment.toString())
+        supportFragmentManager.beginTransaction()
+            .replace(R.id.fragment_container, fragment)
+            .addToBackStack(null)
+            .commit()
     }
 
     //Location, (TODO) step sensor
