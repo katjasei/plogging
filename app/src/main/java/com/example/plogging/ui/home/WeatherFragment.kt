@@ -78,8 +78,6 @@ class WeatherFragment: Fragment(){
 
         override fun doInBackground(vararg urlParams: URL): Bitmap {
 
-            //var result = Bitmap.createBitmap(1,1,Bitmap.Config.ARGB_8888)
-
             try {
                 val imageConnection =  urlParams[0].openConnection() as HttpURLConnection
                 val inputStream = imageConnection.inputStream

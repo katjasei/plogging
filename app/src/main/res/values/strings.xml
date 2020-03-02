@@ -40,4 +40,5 @@
     <string name="loading_weather">Loading weather data</string>
     <string name="location_loading">Loading location</string>
     <string name="temperature">0°C</string>
+    <string name="steps">Steps</string>
 </resources>
