@@ -37,4 +37,7 @@
     <string name="txt_login_fail">Login fail</string>
     <string name="txt_default_number">1</string>
     <string name="txt_default_points">0</string>
+    <string name="loading_weather">Loading weather data</string>
+    <string name="location_loading">Loading location</string>
+    <string name="temperature">0°C</string>
 </resources>
