@@ -13,6 +13,7 @@
         android:layout_marginTop="16dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/location_loading"
+        android:textSize="24sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
@@ -37,6 +38,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/temperature"
+        android:textSize="50sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/weatherImageView" />
@@ -48,6 +50,7 @@
         android:layout_marginTop="20dp"
         android:gravity="center_vertical|center_horizontal"
         android:text="@string/loading_weather"
+        android:textSize="24sp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
