@@ -63,7 +63,7 @@ class LeaderBoardFragment: Fragment(){
                             total = 0
                         }
 
-                        val leaderBoardAdapter = LeaderBoardAdapter(listOfTrash1)
+                        val leaderBoardAdapter = LeaderBoardAdapter(listOfTrash1.sortedByDescending{ it.trashTotal })
                         recyclerView.layoutManager = LinearLayoutManager(context)
                         recyclerView.adapter = leaderBoardAdapter
                         leaderBoardAdapter.notifyDataSetChanged()
