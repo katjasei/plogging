@@ -44,7 +44,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             }
             R.id.leaderboard -> {
                 Log.i("TAG", "${item.title} pressed")
-                replaceFragment(LeaderboardFragment())
+                replaceFragment(LeaderBoardFragment())
                 return@OnNavigationItemSelectedListener true
             }
             R.id.home -> {
