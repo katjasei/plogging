@@ -14,7 +14,7 @@
 
 
         <ImageView
-            android:id="@+id/imageView4"
+            android:id="@+id/profile_image"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginStart="130dp"
@@ -40,7 +40,7 @@
             app:layout_constraintBottom_toTopOf="@+id/linearLayout3"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/imageView4" />
+            app:layout_constraintTop_toBottomOf="@+id/profile_image" />
 
         <LinearLayout
             android:id="@+id/linearLayout3"

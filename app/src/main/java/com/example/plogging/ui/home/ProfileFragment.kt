@@ -1,6 +1,9 @@
 package com.example.plogging.ui.home
 
 import android.annotation.SuppressLint
+import android.app.Activity.RESULT_OK
+import android.content.Intent
+import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,19 +11,21 @@ import android.view.View
 import android.view.ViewGroup
 import android.widget.TextView
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.plogging.R
-import com.example.plogging.adapters.LeaderBoardAdapter
-import com.example.plogging.data.model.ClassUserTrash
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.fragment_profile.*
+import java.net.URI
+
 
 class ProfileFragment: Fragment(){
 
     var mFirebaseDB =  FirebaseDatabase.getInstance().reference
+     val REQUESTCODE = 1
+    lateinit var pickedImageURI: Uri
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -29,6 +34,7 @@ class ProfileFragment: Fragment(){
     ): View? {
 
         // Inflate the layout for this fragment
+        //val REQUEST_IMAGE_CAPTURE = 100
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
         val usernameTextView = view.findViewById<TextView>(R.id.value_user_name_profile)
         val totalPoints = view.findViewById<TextView>(R.id.value_points_profile)
@@ -86,4 +92,35 @@ class ProfileFragment: Fragment(){
 
         return view
     }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        profile_image.setOnClickListener {
+            openGallery()
+        }
+    }
+
+    private fun openGallery(){
+        //open gallery intent and wait for user to pick an image
+        val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
+        galleryIntent.type = "image/*"
+        startActivityForResult(galleryIntent, REQUESTCODE)
+
+    }
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+
+        if(resultCode == RESULT_OK && requestCode ==REQUESTCODE && data != null ){
+
+            //the user has successfully picked an image
+            //we need to save its reference to a URI variable
+            pickedImageURI = data.data!!
+
+            profile_image.setImageURI(pickedImageURI)
+
+        }
+
+    }
+
 }
