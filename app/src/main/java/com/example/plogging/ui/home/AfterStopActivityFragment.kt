@@ -71,8 +71,9 @@ class AfterStopActivityFragment: Fragment(){
             points
         )
 
-        mFirebaseDB.child("trash")
+        mFirebaseDB.child("users")
             .child(userID!!)
+            .child("trash")
             .push()
             .setValue(trash)
     }

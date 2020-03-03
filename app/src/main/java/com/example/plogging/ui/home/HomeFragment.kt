@@ -36,8 +36,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
     private var activityCallBack: HomeFragmentListener? = null
 
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
-    private lateinit var mMap: GoogleMap
-
     interface HomeFragmentListener {
         fun onButtonLogOutClick()
         fun onButtonStartActivityClick()
@@ -51,11 +49,8 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
 //        HomeActivity().actionBar?.title =  "My jogging record"
-        return inflater.inflate(R.layout.fragment_home, container, false)
-    }
+        val view = inflater.inflate(R.layout.fragment_home, container, false)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
         val userID = FirebaseAuth.getInstance().currentUser?.uid
 
         mFirebaseDB.child("users")
@@ -63,13 +58,14 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
             .addValueEventListener(object: ValueEventListener {
                 @SuppressLint("SetTextI18n")
                 override fun onDataChange(p0: DataSnapshot) {
+                    Log.d("p0", p0.child("username").value.toString())
                     //val user = p0.getValue(ClassUser::class.java)
                     val username = p0.child("username").value.toString()
-                    Snackbar.make(
-                        view!!,
-                        "Welcome, $username",
-                        Snackbar.LENGTH_LONG
-                    ).show()
+                    /*Snackbar.make(
+                        view,
+                     "Welcome, $username",
+                     Snackbar.LENGTH_SHORT
+                    ).show()*/
                 }
                 override fun onCancelled(p0: DatabaseError) {
                     // Failed to read value
@@ -77,6 +73,11 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
                 }
             })
 
+        return view
+    }
+
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
         //if user click button "LogOut" they moved to FirstScreen
         btn_logout.setOnClickListener {
             activityCallBack!!.onButtonLogOutClick()
