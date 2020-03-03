@@ -88,6 +88,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     //HomeFragment listener
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {
+        hideBottomNavigation()
         replaceFragment(ploggingActivityFragment)
     }
 
@@ -105,7 +106,13 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         pointFragment.arguments = bundle
     }
 
-    private fun replaceFragment(fragment: Fragment){
+    private fun replaceFragment(fragment: Fragment) {
+
+        //if fragment is homeFragment, display bottom navigation
+        if (fragment == homeFragment) {
+            showBottomnNavigation()
+        }
+
         Log.i("TAG", fragment.toString())
         supportFragmentManager.beginTransaction()
         .replace(R.id.fragment_container, fragment)
@@ -125,5 +132,13 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         super.onResume()
         // Hide the status bar.
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+    }
+
+    private fun showBottomnNavigation() {
+        bottom_navigation.visibility = View.VISIBLE
+    }
+
+    private fun hideBottomNavigation() {
+        bottom_navigation.visibility = View.GONE
     }
 }
