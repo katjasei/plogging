@@ -2,11 +2,14 @@ package com.example.plogging.ui.home
 
 
 import android.content.Context
+
 import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
 import android.hardware.SensorManager
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -24,9 +27,10 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
-
+import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
@@ -91,6 +95,13 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         btn_stop_activity.setOnClickListener {
             activityCallBack!!.onButtonStopActivityClick()
         }
+
+
+        //FAB - set white tint for icon
+        val myFabSrc = resources.getDrawable(R.drawable.ic_my_location_white_24dp,null)
+        val willBeWhite = myFabSrc?.constantState?.newDrawable()
+        willBeWhite?.mutate()?.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY)
+        floating_action_button.setImageDrawable(willBeWhite)
 
         floating_action_button.setOnClickListener {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
