@@ -2,6 +2,7 @@ package com.example.plogging.ui.home
 
 
 import android.content.Context
+import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -12,11 +13,10 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.content.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
-import com.google.android.gms.location.FusedLocationProviderClient
-import com.google.android.gms.location.LocationServices
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
@@ -25,11 +25,15 @@ import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
+import java.lang.Error
 
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
-
+    private lateinit var lastLocation: Location
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
+    private var locationUpdateState = false
     private lateinit var sensorManager: SensorManager
     private var stepCounterSensor: Sensor? = null
     private var activityCallBack: PloggingActivityListener? = null
@@ -43,6 +47,21 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as PloggingActivityListener
+    }
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+
+        //setup location callback
+        locationCallback = object : LocationCallback() {
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+                lastLocation = p0.lastLocation
+                Log.i("route", "Last location: "+lastLocation)
+            }
+        }
+
+        createLocationRequest()
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -73,6 +92,10 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+
+        //start location updates
+        locationUpdateState = true
+        startLocationUpdates()
     }
 
     override fun onMapReady(map: GoogleMap) {
@@ -101,15 +124,23 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     override fun onResume() {
         super.onResume()
+        //register sensor listener
         stepCounterSensor?.also {
             sensorManager.registerListener(this, it,
                 SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        //start location updates if not already on
+        if (!locationUpdateState) {
+            startLocationUpdates()
         }
     }
 
     override fun onPause() {
         super.onPause()
+        //unregister sensor listener
         sensorManager.unregisterListener(this)
+        //remove location updates
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
     private fun checkForStepCounterSensor() {
@@ -122,4 +153,41 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         }
     }
 
+
+    private fun startLocationUpdates() {
+        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest()
+        locationRequest.interval = 10000
+        locationRequest.fastestInterval = 5000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+        Log.i("route", "Location request created")
+
+        try {
+            //ohjeessa (this)
+            val client = LocationServices.getSettingsClient(this.requireActivity())
+            val task = client.checkLocationSettings(builder.build())
+
+            //On success
+            task.addOnSuccessListener {
+                locationUpdateState = true
+                startLocationUpdates()
+            }
+
+            //On failure
+            task.addOnFailureListener { e ->
+                if (e is ResolvableApiException) {
+                    Log.i("route", "Error in location settings")
+                } else {
+                    Log.e("route", "CheckLocationSettings task failed: "+e.message)
+                }
+            }
+        } catch (e: Error){
+            Log.e("route", "Error getting location updates: ${e.message}")
+        }
+    }
 }
