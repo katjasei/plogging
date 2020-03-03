@@ -107,5 +107,4 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
         }
     }
-
 }

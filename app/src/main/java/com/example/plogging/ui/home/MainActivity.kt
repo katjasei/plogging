@@ -65,8 +65,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        // Hide the status bar.
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        hideSystemUI()
 
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
@@ -140,5 +139,14 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
 
     private fun hideBottomNavigation() {
         bottom_navigation.visibility = View.GONE
+    }
+
+    private fun hideSystemUI() {
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
 }
