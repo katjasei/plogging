@@ -104,7 +104,6 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             .commit()
     }
 
-    //Location, (TODO) step sensor
     private fun askPermissions() {
         val permissionsRequired = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE)
 

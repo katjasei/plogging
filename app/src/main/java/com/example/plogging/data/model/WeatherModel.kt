@@ -1,9 +1,8 @@
 package com.example.plogging.data.model
 
-import android.media.MicrophoneInfo
-import com.google.gson.annotations.SerializedName
+//Created with https://www.json2kotlin.com/
 
-class Weather {
+class WeatherModel {
 
     data class Sys (
         val type : Int,
@@ -25,15 +24,24 @@ class Weather {
 
     data class Main (
         val temp : Double,
+        val feels_like : Double,
+        val temp_min : Double,
+        val temp_max : Double,
         val pressure : Int,
-        val humidity : Int,
-        val temp_min : Int,
-        val temp_max : Int
+        val humidity : Int
     )
 
     data class Coord(
-        val lon : Int,
-        val lat : Int
+        val lon : Double,
+        val lat : Double
+    )
+
+    data class Weather (
+
+        val id : Int,
+        val main : String,
+        val description : String,
+        val icon : String
     )
 
     data class Base(

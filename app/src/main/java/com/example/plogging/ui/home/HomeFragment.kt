@@ -1,7 +1,6 @@
 package com.example.plogging.ui.home
 
 import android.annotation.SuppressLint
-import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.res.Resources
 import android.graphics.Color
@@ -18,26 +17,23 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_home.*
-import org.osmdroid.views.overlay.Marker
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MapStyleOptions
 import com.google.android.gms.maps.model.MarkerOptions
 
 class HomeFragment: Fragment(), OnMapReadyCallback  {
 
     var mFirebaseDB =  FirebaseDatabase.getInstance().reference
     private var activityCallBack: HomeFragmentListener? = null
-
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
+
     interface HomeFragmentListener {
         fun onButtonLogOutClick()
         fun onButtonStartActivityClick()
@@ -63,11 +59,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
                     Log.d("p0", p0.child("username").value.toString())
                     //val user = p0.getValue(ClassUser::class.java)
                     val username = p0.child("username").value.toString()
-                    /*Snackbar.make(
-                        view,
-                     "Welcome, $username",
-                     Snackbar.LENGTH_SHORT
-                    ).show()*/
                 }
                 override fun onCancelled(p0: DatabaseError) {
                     // Failed to read value
@@ -104,7 +95,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
         floating_action_button.setImageDrawable(willBeWhite)
     }
 
-
     override fun onStart() {
         super.onStart()
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
@@ -115,17 +105,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
     override fun onMapReady(map: GoogleMap) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
             val currentLocation = LatLng(location.latitude, location.longitude)
-            /* try {
-                 val success = map.setMapStyle(
-                     MapStyleOptions.loadRawResourceStyle(context,
-                         R.raw.style_json
-                     )
-                 )
-                 if (!success) Log.d(TAG, "Style parsing failed.")
-             } catch (e: Resources.NotFoundException) {
-                 Log.d(TAG, "Can't find style. Error: $e")
-             }
- */
+
             map.addMarker(
                 MarkerOptions()
                     .position(currentLocation)
@@ -135,10 +115,4 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
         }
     }
-
-
-
-
-
-
 }
