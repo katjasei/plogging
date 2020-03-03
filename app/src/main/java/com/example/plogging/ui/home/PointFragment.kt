@@ -23,7 +23,7 @@ class PointFragment: Fragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val points = arguments!!.getCharSequence("points")
-        value_points.text = points
+        value_points_profile.text = points
 
     }
 }

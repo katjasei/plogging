@@ -16,7 +16,7 @@
         app:srcCompat="@drawable/prize" />
 
     <TextView
-        android:id="@+id/value_points"
+        android:id="@+id/value_points_profile"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_marginStart="32dp"
@@ -46,5 +46,5 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.594"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/value_points" />
+        app:layout_constraintTop_toBottomOf="@+id/value_points_profile" />
 </androidx.constraintlayout.widget.ConstraintLayout>

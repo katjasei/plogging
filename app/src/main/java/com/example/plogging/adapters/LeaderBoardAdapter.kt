@@ -39,7 +39,7 @@ class LeaderBoardAdapter (private val myDataset: List<ClassUserTrash>) :
         val userTrash = myDataset[position]
         holder.itemView.value_number.text = "    " + (position + 1).toString() + "."
         holder.itemView.value_username.text = userTrash.username
-        holder.itemView.value_points.text = userTrash.trashTotal.toString() + " pts"
+        holder.itemView.value_points_profile.text = userTrash.trashTotal.toString() + " pts"
 
         // holder.itemView.value_number.text = meal.meal!!.mealName
         //holder.itemView.value_username.text = meal.type?.type
