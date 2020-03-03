@@ -4,6 +4,8 @@ import android.annotation.SuppressLint
 import android.content.ContentValues.TAG
 import android.content.Context
 import android.content.res.Resources
+import android.graphics.Color
+import android.graphics.PorterDuff
 import android.location.Location
 import android.os.Bundle
 import android.util.Log
@@ -95,6 +97,11 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
             mapFragment.getMapAsync(this)
         }
 
+        //FAB - set white tint for icon
+        val myFabSrc = resources.getDrawable(R.drawable.ic_my_location_white_24dp,null)
+        val willBeWhite = myFabSrc?.constantState?.newDrawable()
+        willBeWhite?.mutate()?.setColorFilter(Color.WHITE, PorterDuff.Mode.MULTIPLY)
+        floating_action_button.setImageDrawable(willBeWhite)
     }
 
 
@@ -128,6 +135,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
         }
     }
+
 
 
 

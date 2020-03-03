@@ -51,8 +51,8 @@ class ProfileFragment: Fragment(){
                     var totalCB = 0
                     var totalC = 0
                     var totalO = 0
-
                     var username = ""
+
                         Log.d("p0.value", p0.value.toString())
 
                             username = p0.child("username").value.toString()
@@ -75,19 +75,14 @@ class ProfileFragment: Fragment(){
                             totalCardBoard.text = totalCB.toString()
                             totalCigarettes.text = totalC.toString()
                             totalOther.text = totalO.toString()
-
-
                     }
-
                 }
-
                 override fun onCancelled(p0: DatabaseError) {
                     // Failed to read value
                     Log.d("Failed to read value.", "")
                 }
             }
             )
-
 
         return view
     }
