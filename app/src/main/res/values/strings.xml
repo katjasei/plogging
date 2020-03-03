@@ -37,4 +37,9 @@
     <string name="txt_login_fail">Login fail</string>
     <string name="txt_default_number">1</string>
     <string name="txt_default_points">0</string>
+    <string name="txt_points_profile">points</string>
+    <string name="txt_default_kilometers">0</string>
+    <string name="txt_total_kilometers">total kilometers</string>
+    <string name="txt_default_time">0</string>
+    <string name="txt_total_time">total time</string>
 </resources>
