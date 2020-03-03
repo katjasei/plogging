@@ -30,6 +30,7 @@ import java.lang.Error
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
+    private lateinit var locationMap: GoogleMap
     private lateinit var lastLocation: Location
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
@@ -57,7 +58,18 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
+
+                //Log last known location
                 Log.i("route", "Last location: "+lastLocation)
+                //Add marker to new location
+                locationMap.addMarker(
+                    MarkerOptions()
+                        .position(LatLng(lastLocation.latitude, lastLocation.longitude))
+                        .title("Your current location")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+                )
+                //move camera according to location update
+                locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
             }
         }
 
@@ -108,6 +120,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+            locationMap = map
         }
     }
 
