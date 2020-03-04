@@ -67,7 +67,8 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        hideSystemUI()
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        //hideSystemUI()
 
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
@@ -77,7 +78,13 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             .add(R.id.fragment_container, homeFragment)
             .commit()
     }
-    
+
+    override fun onStart() {
+        super.onStart()
+        //hide status bar
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+    }
+
     //when user click button LOGOUT
     override fun onButtonLogOutClick() {
         mFirebaseAuth = FirebaseAuth.getInstance()
@@ -135,11 +142,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         return connectivityManager.activeNetworkInfo?.isConnected?:false
     }
 
-    override fun onResume() {
-        super.onResume()
-        // Hide the status bar.
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
 
     private fun showBottomnNavigation() {
         bottom_navigation.visibility = View.VISIBLE
@@ -157,4 +159,5 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
     }
+
 }

@@ -1,14 +1,9 @@
 <resources>
 
     <!-- Base application theme. -->
-    <style name="AppTheme" parent="Theme.MaterialComponents.Light.DarkActionBar">
+    <style name="AppTheme" parent="Theme.MaterialComponents.Light.NoActionBar">
         <!-- Customize your theme here. -->
-        <item name="colorPrimary">#009688</item>
-        <item name="colorPrimaryDark">#52c7b8</item>
-        <item name="colorAccent">#00675b</item>
-    </style>
-    <style name="AppTheme2" parent="Theme.MaterialComponents.Light.NoActionBar">
-        <!-- Customize your theme here. -->
+        <item name="android:windowNoTitle">true</item>
         <item name="colorPrimary">#009688</item>
         <item name="colorPrimaryDark">#52c7b8</item>
         <item name="colorAccent">#00675b</item>

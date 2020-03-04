@@ -32,7 +32,7 @@
             android:value="@integer/google_play_services_version" />
 
         <activity android:name=".ui.auth.AuthActivity"
-            android:theme="@style/AppTheme2">
+            android:theme="@style/AppTheme">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />

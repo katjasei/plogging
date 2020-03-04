@@ -31,7 +31,6 @@ class LoginFragment: Fragment() {
             userLogin(value_email.text.toString(), value_password.text.toString())
         }
 
-        activity?.actionBar?.hide()
     }
 
     @SuppressLint("SetTextI18n")

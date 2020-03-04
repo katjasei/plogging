@@ -39,7 +39,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
 
         // Hide the status bar
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-
+       // hideSystemUI()
         askPermissions()
 
         supportFragmentManager
@@ -139,9 +139,11 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             }
         }
     }
-    override fun onResume() {
-        super.onResume()
-        // Hide the status bar.
+
+    override fun onStart() {
+        super.onStart()
+        //hide status bar
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
+
 }
