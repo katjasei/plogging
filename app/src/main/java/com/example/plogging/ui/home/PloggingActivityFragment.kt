@@ -95,8 +95,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         btn_stop_activity.setOnClickListener {
             activityCallBack!!.onButtonStopActivityClick()
         }
-
-
         //FAB - set white tint for icon
         val myFabSrc = resources.getDrawable(R.drawable.ic_my_location_white_24dp,null)
         val willBeWhite = myFabSrc?.constantState?.newDrawable()
@@ -168,15 +166,14 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     }
 
     private fun checkForStepCounterSensor() {
-        if (sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY) != null) {
-            stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_PROXIMITY)
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
             Log.i("TAG", "Sensor found")
         } else {
             Log.i("TAG", "No sensor available")
             //TODO disable sensor activity
         }
     }
-
 
     private fun startLocationUpdates() {
         fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)

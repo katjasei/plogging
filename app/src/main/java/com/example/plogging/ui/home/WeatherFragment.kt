@@ -1,5 +1,6 @@
 package com.example.plogging.ui.home
 
+import android.annotation.SuppressLint
 import android.graphics.Bitmap
 import android.graphics.BitmapFactory
 import android.os.*
@@ -23,6 +24,7 @@ class WeatherFragment: Fragment(){
 
         Handler(Looper.getMainLooper()) {
 
+        @SuppressLint("SetTextI18n")
         override fun handleMessage(inputMessage: Message) {
 
             if (inputMessage.what == 0) {
@@ -72,6 +74,7 @@ class WeatherFragment: Fragment(){
 
 
 
+    @SuppressLint("StaticFieldLeak")
     inner class WeatherApiConnectionForImage : AsyncTask<URL, Unit, Bitmap>()  {
 
         private lateinit var result: Bitmap

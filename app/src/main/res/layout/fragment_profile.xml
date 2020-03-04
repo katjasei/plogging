@@ -3,13 +3,13 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
-    android:layout_height="550dp">
+    android:layout_height="600dp">
 
 
     <androidx.constraintlayout.widget.ConstraintLayout
 
         android:layout_width="match_parent"
-        android:layout_height="match_parent"
+        android:layout_height="wrap_content"
         android:orientation="vertical">
 
 
@@ -21,6 +21,8 @@
             android:layout_marginTop="16dp"
             android:layout_marginEnd="130dp"
             android:src="@drawable/profile"
+            app:civ_border_color="#000000"
+            app:civ_border_width="2dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent" />
@@ -395,12 +397,13 @@
             android:layout_marginEnd="32dp"
             android:text="@string/txt_btn_logout"
             android:textColor="@color/colorPrimary"
-            app:strokeColor="@color/colorPrimary"
             app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.54"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+            app:layout_constraintTop_toBottomOf="@+id/linearLayout2"
+            app:strokeColor="@color/colorPrimary"
+            app:strokeWidth="3dp" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

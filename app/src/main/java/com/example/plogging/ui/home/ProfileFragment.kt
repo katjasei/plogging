@@ -72,8 +72,7 @@ class ProfileFragment: Fragment(){
             return result
         }
         override fun onPostExecute(result: FinalBitmap) {
-            profile_image.setImageBitmap(result.bitmap)
-
+                profile_image.setImageBitmap(result.bitmap)
         }
     }
 
