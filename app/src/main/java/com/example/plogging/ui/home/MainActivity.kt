@@ -16,7 +16,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopActivityListener,
-    HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener {
+    HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener,
+    PointFragment.PointActivityListener, ProfileFragment.ProfileFragmentListener{
 
     //firebase auth object
     lateinit var mFirebaseAuth: FirebaseAuth
@@ -25,6 +26,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     private val ploggingActivityFragment = PloggingActivityFragment()
     private val afterStopActivityFragment = AfterStopActivityFragment()
     private val pointFragment = PointFragment()
+    private val profileFragment = ProfileFragment()
 
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
@@ -95,6 +97,12 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     //when button "Stop activity" clicked from PloggingActivityFragment
     override fun onButtonStopActivityClick() {
         replaceFragment(afterStopActivityFragment)
+    }
+
+    //PointActivityFragment listener
+    //when button "GoToProfile" clicked from PointFragment
+    override fun onButtonGoToProfileClick() {
+        replaceFragment(profileFragment)
     }
 
     //AfterStopActivityFragment listener

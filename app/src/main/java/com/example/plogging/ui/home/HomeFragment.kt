@@ -35,7 +35,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
 
     interface HomeFragmentListener {
-        fun onButtonLogOutClick()
         fun onButtonStartActivityClick()
     }
 
@@ -71,10 +70,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        //if user click button "LogOut" they moved to FirstScreen
-        btn_logout.setOnClickListener {
-            activityCallBack!!.onButtonLogOutClick()
-        }
 
         //if user click button "StartActivity"
         btn_start_activity.setOnClickListener {

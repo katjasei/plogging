@@ -42,6 +42,17 @@ class ProfileFragment: Fragment(){
     val REQUESTCODE = 1
     lateinit var pickedImageURI: Uri
     val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
+    private var activityCallBack: ProfileFragmentListener? = null
+
+    interface ProfileFragmentListener {
+        fun onButtonLogOutClick()
+
+    }
+
+    override fun onAttach(context: Context)   {
+        super.onAttach(context)
+        activityCallBack =  context as ProfileFragmentListener
+    }
 
     data class  URLparams(val url: URL)
     data class FinalBitmap(val bitmap: Bitmap)
@@ -142,6 +153,10 @@ class ProfileFragment: Fragment(){
         super.onViewCreated(view, savedInstanceState)
         profile_image.setOnClickListener {
             openGallery()
+        }
+        //if user click button "LogOut" they move to FirstScreen
+        btn_logout.setOnClickListener{
+            activityCallBack!!.onButtonLogOutClick()
         }
     }
 
