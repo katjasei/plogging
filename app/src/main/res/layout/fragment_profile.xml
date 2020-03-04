@@ -13,7 +13,7 @@
         android:orientation="vertical">
 
 
-        <ImageView
+        <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
             android:layout_width="0dp"
             android:layout_height="150dp"
@@ -23,7 +23,7 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            app:srcCompat="@drawable/profile" />
+            android:src="@drawable/profile" />
 
         <TextView
             android:id="@+id/value_user_name_profile"
