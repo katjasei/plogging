@@ -12,11 +12,9 @@ import kotlinx.android.synthetic.main.fragment_welcome.*
 class WelcomeFragment: Fragment() {
 
     private var activityCallBack: WelcomeFragmentListener? = null
-
     interface WelcomeFragmentListener {
         fun onButtonStartPloggingClick()
     }
-
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as WelcomeFragmentListener

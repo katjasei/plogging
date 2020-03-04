@@ -11,7 +11,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-
     //VARIABLES:
     //firebase db
     var mFirebaseDB = FirebaseDatabase.getInstance().reference
@@ -49,3 +48,4 @@ import com.google.firebase.database.ValueEventListener
         .child(userId)
         .setValue(user)
 }
+

@@ -18,11 +18,9 @@ class SplashScreenFragment: DialogFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        activity?.actionBar?.hide()
         val animation = AnimationUtils.loadAnimation(this.context,
             R.anim.fade_in
         )
-
         //set the animation for imageView
         background_image.startAnimation(animation)
     }

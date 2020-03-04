@@ -12,46 +12,41 @@ import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
+import com.example.plogging.utils.askPermissions
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     RegistrationFragment.RegistrationFragmentListener, WelcomeFragment.WelcomeFragmentListener
 {
+    //VARIABLES:
     // Permission code
     private val PERMISSIONS = 1
-
     //Create a new Fragment to be placed in the activity layout
     private val firstFragment = FirstFragment()
     private val loginFragment = LoginFragment()
     private val registrationFragment = RegistrationFragment()
     private val welcomeFragment = WelcomeFragment()
     private val splashScreenFragment = SplashScreenFragment()
-
     //firebase auth object
-    private lateinit var mFirebaseAuth: FirebaseAuth
-
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
 
+    //FUNCTIONS:
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-
         // Hide the status bar
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-       // hideSystemUI()
-        askPermissions()
-
+        //permissions
+        askPermissions(this,this)
+        // fragment manager can help when switching to the other fragment is needed
         supportFragmentManager
             .beginTransaction()
             .add(R.id.fragment_container, splashScreenFragment)
             .commit()
-
-        mFirebaseAuth = FirebaseAuth.getInstance()
-
-        //if the objects getcurrentuser is not null
-        //means u
-        // ser is already logged in
+        //if the objects getCurrentUser is not null
+        //means user is already logged in
         if(mFirebaseAuth.currentUser != null){
             //if user is logged in go to HomeActvity - "Home or Map Screen"
             val intent = Intent(this, MainActivity::class.java)
@@ -68,8 +63,9 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                         .addToBackStack(null )
                         .commit()
                 }
-            },4000)}
+            },3000)}
     }
+
     //FirstFragment listeners:
     //when button "sign up" clicked from FirstFragment
     override fun onButtonSignUpClick() {
@@ -86,7 +82,6 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         replaceFragment(welcomeFragment)
         bundle.putCharSequence("username" , username)
         welcomeFragment.arguments = bundle
-
     }
 
     //WelcomeFragment listener
@@ -102,24 +97,6 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
-    }
-
-    private fun askPermissions() {
-        val permissionsRequired = arrayOf(android.Manifest.permission.ACCESS_FINE_LOCATION, android.Manifest.permission.CAMERA, android.Manifest.permission.READ_EXTERNAL_STORAGE)
-
-        if (ContextCompat.checkSelfPermission(this, android.Manifest.permission.ACCESS_FINE_LOCATION) == PackageManager.PERMISSION_GRANTED
-            &&
-            ContextCompat.checkSelfPermission(this, android.Manifest.permission.CAMERA) == PackageManager.PERMISSION_GRANTED
-            &&
-            ContextCompat.checkSelfPermission(this, android.Manifest.permission.READ_EXTERNAL_STORAGE) == PackageManager.PERMISSION_GRANTED)
-        {
-            //permission was already granted
-        }
-        else{
-            //permission not granted, request
-            ActivityCompat.requestPermissions(this, permissionsRequired,
-                PERMISSIONS)
-        }
     }
 
     override fun onRequestPermissionsResult(
