@@ -1,7 +1,5 @@
 package com.example.plogging.ui.auth
 
-
-import android.annotation.SuppressLint
 import android.content.Context
 import android.graphics.Color
 import android.os.Bundle
@@ -10,43 +8,37 @@ import android.util.Patterns
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.example.plogging.R
-import com.example.plogging.data.model.ClassUser
+import com.example.plogging.utils.addUserNameToUser
+import com.example.plogging.utils.checkIfParameterExistInFirebaseDB
 import com.google.android.material.snackbar.Snackbar
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.FirebaseUser
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_registration.*
 
 
 class RegistrationFragment: Fragment() {
 
+    //VARIABLES:
     //firebase auth object
-    private lateinit var mAuth: FirebaseAuth
-    //firebase db
-    private var mFirebaseDB = FirebaseDatabase.getInstance().reference
-
-    //callback
+    private  var mAuth = FirebaseAuth.getInstance()
+    //AwesomeValidation - implement validation for Android
+    private var mAwesomeValidation = AwesomeValidation(ValidationStyle.COLORATION)
+    //callback variable, interface and onAttach fun
     private var activityCallBack: RegistrationFragmentListener? = null
 
+    //INTERFACES AND FUNCTIONS:
     interface RegistrationFragmentListener {
         fun onButtonSignUpClickFromRegistration(username: String)
     }
-
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as RegistrationFragmentListener
     }
-
-    //AwesomeValidation - implement validation for Android
-    private var mAwesomeValidation = AwesomeValidation(ValidationStyle.COLORATION)
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -56,9 +48,7 @@ class RegistrationFragment: Fragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
-        mAuth = FirebaseAuth.getInstance()
-
-        //validation for all fields
+        //VALIDATION for all fields
         mAwesomeValidation.setColor(Color.parseColor("#52C7B8"))
         //check if the name has an empty value
         mAwesomeValidation.addValidation(this.activity,
@@ -82,36 +72,19 @@ class RegistrationFragment: Fragment() {
             R.id.value_password,
             R.string.invalid_confirm_password
         )
-
         //when user enters username -> onFocusChange event
-        value_user_name.setOnFocusChangeListener { _, hasFocus ->
-            txt_duplicate_name.visibility = View.INVISIBLE
-            if(!hasFocus && value_user_name.text.toString()!=""){
-            userNameExists(value_user_name.text.toString())
-
-            }
-        }
-
+        onFocusChangedListener(value_user_name,txt_duplicate_name)
         //when user enters email -> onFocusChange event
-        value_email.setOnFocusChangeListener { _, hasFocus ->
-            txt_duplicate_email.visibility = View.INVISIBLE
-            if(!hasFocus && value_email.text.toString()!=""){
-                userEmailExists(value_email.text.toString())
-            }
-        }
+        onFocusChangedListener(value_email,txt_duplicate_email)
 
         btn_sign_up.setOnClickListener {
-
             //check if all fields are valid
             if (mAwesomeValidation.validate()) {
-
             //create user in Firebase
                 createUserAccount(
                     value_email.text.toString(),
                     value_password.text.toString()
-                )}else
-
-            {
+                )} else {
                 Snackbar.make(
                     view!!,
                     "You need to change registration information",
@@ -121,15 +94,13 @@ class RegistrationFragment: Fragment() {
         }
     }
 
+    //this method create user account in Firebase with specific email and password
     private fun createUserAccount(email:String, password:String){
-
-        //this method create user account with specific email and password
         mAuth.createUserWithEmailAndPassword(email,password)
             .addOnCompleteListener{task ->
                 if(task.isSuccessful) {
                     //user account created successfully
-                    Log.d("Account", "created")
-                    addUserNameToUser(task.result?.user!!)
+                    addUserNameToUser(task.result?.user!!, value_user_name)
                     activityCallBack!!.onButtonSignUpClickFromRegistration(value_user_name.text.toString())
                 }
                 else {
@@ -139,61 +110,29 @@ class RegistrationFragment: Fragment() {
             }
     }
 
-     private fun addUserNameToUser(userFromRegistration: FirebaseUser){
-
-       val username = value_user_name.text.toString()
-       val email = userFromRegistration.email
-       val userId = userFromRegistration.uid
-
-       val user = ClassUser(username, email!!)
-
-         mFirebaseDB.child("users")
-             .child(userId)
-             .setValue(user)
-     }
-
     private fun userEmailExists(email:String){
-        mFirebaseDB.child("users")
-            .orderByChild("email")
-            .equalTo(email)
-            .addListenerForSingleValueEvent(object: ValueEventListener {
-
-                @SuppressLint("SetTextI18n")
-                override fun onDataChange(p0: DataSnapshot) {
-                    Log.d("p0",p0.toString())
-                 if (p0.exists()){
-                         txt_duplicate_email.visibility = View.VISIBLE
-                         txt_duplicate_email.text = "$email already in use"
-
-                 } else {
-                     txt_duplicate_email.text = ""
-                 }
-                }
-                override fun onCancelled(p0: DatabaseError) {
-                }
-            })
+     checkIfParameterExistInFirebaseDB(email, "email", txt_duplicate_email)
     }
 
     private fun userNameExists(username:String){
-        mFirebaseDB.child("users")
-            .orderByChild("username")
-            .equalTo(username)
-            .addListenerForSingleValueEvent(object: ValueEventListener {
-                @SuppressLint("SetTextI18n")
-                override fun onDataChange(p0: DataSnapshot) {
-                    Log.d("p0",p0.toString())
-                    if (p0.exists()){
-                        txt_duplicate_name.visibility = View.VISIBLE
-                        txt_duplicate_name.text = "$username already in use"
-
-                    } else {
-                        txt_duplicate_name.text = ""
-                    }
-                }
-                override fun onCancelled(p0: DatabaseError) {
-                }
-            })
+      checkIfParameterExistInFirebaseDB(username, "username", txt_duplicate_name)
     }
+
+    private fun onFocusChangedListener(textView: TextView, textViewMessage: TextView){
+        textView.setOnFocusChangeListener { _, hasFocus ->
+            textViewMessage.visibility = View.INVISIBLE
+            if(!hasFocus && textView.text.toString()!=""){
+                if (textView==value_user_name){
+                userNameExists(textView.text.toString())}
+                else{
+                userEmailExists(textView.text.toString())
+                }
+
+            }
+        }
+    }
+
+
 
 
 }

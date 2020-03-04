@@ -17,7 +17,7 @@ import kotlinx.android.synthetic.main.fragment_login.*
 class LoginFragment: Fragment() {
 
     //firebase auth object
-    lateinit var mFirebaseAuth: FirebaseAuth
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -26,19 +26,16 @@ class LoginFragment: Fragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
+       // after button sign in is clicked
         btn_sign_in.setOnClickListener {
             userLogin(value_email.text.toString(), value_password.text.toString())
         }
-
     }
 
     @SuppressLint("SetTextI18n")
+    // user login through Firebase
     private fun userLogin(email:String, password:String){
-
-
         if (value_email.text.toString().isNotEmpty() && value_password.text.toString().isNotEmpty()) {
-            mFirebaseAuth = FirebaseAuth.getInstance()
             //logging in the user
             mFirebaseAuth.signInWithEmailAndPassword(email, password)
                 .addOnCompleteListener { task ->
@@ -49,8 +46,6 @@ class LoginFragment: Fragment() {
                     } else {
                         txt_login_fail.visibility = View.VISIBLE
                         txt_login_fail.text = "Email or password is incorrect"
-
-                        ///Toast.makeText(this.context,"Email or password is incorrect", Toast.LENGTH_LONG).show()
                     }
                 }
         } else {
