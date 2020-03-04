@@ -2,30 +2,69 @@ package com.example.plogging.ui.home
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.content.Context
 import android.content.Intent
+import android.graphics.Bitmap
+import android.graphics.BitmapFactory
+import android.net.ConnectivityManager
 import android.net.Uri
+import android.os.AsyncTask
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
+import android.widget.Toast
+import androidx.core.content.ContextCompat.getSystemService
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
+import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile.*
+import java.io.InputStream
+import java.lang.Exception
+import java.net.HttpURLConnection
 import java.net.URI
+import java.net.URL
+import java.util.*
 
 
 class ProfileFragment: Fragment(){
 
     var mFirebaseDB =  FirebaseDatabase.getInstance().reference
-     val REQUESTCODE = 1
+    val REQUESTCODE = 1
     lateinit var pickedImageURI: Uri
+    val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
+
+    data class  URLparams(val url: URL)
+    data class FinalBitmap(val bitmap: Bitmap)
+
+    inner class GetConn : AsyncTask<URLparams, Unit, FinalBitmap>() {
+        override fun doInBackground(vararg params: URLparams): FinalBitmap {
+            lateinit var result: FinalBitmap
+            try {
+                val myConn = params[0].url.openConnection() as HttpURLConnection
+                val istream: InputStream = myConn.inputStream
+                val image = BitmapFactory.decodeStream(istream)
+                result = FinalBitmap(image)
+
+            } catch (e: Exception) {
+                Log.e("Connection", "Reading error", e)
+            }
+            return result
+        }
+        override fun onPostExecute(result: FinalBitmap) {
+            profile_image.setImageBitmap(result.bitmap)
+
+        }
+    }
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -60,6 +99,12 @@ class ProfileFragment: Fragment(){
                     var username = ""
 
                         Log.d("p0.value", p0.value.toString())
+                           if(p0.child("profile_image").value != null){
+                               if (isNetworkAvailable()){
+                                   val myURLparams = URLparams(URL(p0.child("profile_image").value.toString()))
+                                   GetConn().execute(myURLparams)
+                               }
+                           }
 
                             username = p0.child("username").value.toString()
                             usernameTextView.text = username
@@ -112,15 +157,39 @@ class ProfileFragment: Fragment(){
         super.onActivityResult(requestCode, resultCode, data)
 
         if(resultCode == RESULT_OK && requestCode ==REQUESTCODE && data != null ){
-
             //the user has successfully picked an image
             //we need to save its reference to a URI variable
             pickedImageURI = data.data!!
+            profile_image.setImageURI(pickedImageURI)//upload user photo to firebase storage and get url
 
-            profile_image.setImageURI(pickedImageURI)
+            val mStorage = FirebaseStorage.getInstance().reference.child("$currentUserID.jpg")
 
+            val imageFilePath = mStorage.child(pickedImageURI.lastPathSegment!!)
+            imageFilePath
+                .putFile(pickedImageURI)
+                .addOnSuccessListener {
+                    imageFilePath.downloadUrl.addOnSuccessListener {
+                        val downloadURL = it.toString()
+                        mFirebaseDB.child("users")
+                            .child(currentUserID!!)
+                            .child("profile_image")
+                            .setValue(downloadURL)
+                    }
+                    Toast.makeText(activity,"Uploaded",Toast.LENGTH_SHORT).show()
+                }.addOnFailureListener {
+                    Toast.makeText(activity, "Failed$it",Toast.LENGTH_SHORT).show()
+                }
         }
+    }
 
+    private fun isNetworkAvailable(): Boolean {
+        val connectivityManager = activity!!.getSystemService(
+            Context.CONNECTIVITY_SERVICE
+        ) as ConnectivityManager
+        //if activeNetworkInfo == false -> if isConnected == false -> return false
+        return connectivityManager.activeNetworkInfo?.isConnected?:false
     }
 
 }
+
+

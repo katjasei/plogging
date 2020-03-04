@@ -129,7 +129,7 @@ class RegistrationFragment: Fragment() {
                 if(task.isSuccessful) {
                     //user account created successfully
                     Log.d("Account", "created")
-                    addUserNameToUser(task.result!!.user)
+                    addUserNameToUser(task.result?.user!!)
                     activityCallBack!!.onButtonSignUpClickFromRegistration(value_user_name.text.toString())
                 }
                 else {

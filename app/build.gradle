@@ -36,8 +36,8 @@ dependencies {
 
     def room_version = "2.2.3"
     implementation "androidx.room:room-runtime:$room_version"
-    implementation 'com.google.firebase:firebase-storage:16.0.4'
-    implementation 'com.google.firebase:firebase-auth:16.0.5'
+    implementation 'com.google.firebase:firebase-storage:19.1.1'
+    implementation 'com.google.firebase:firebase-auth:19.2.0'
     kapt "androidx.room:room-compiler:$room_version"
 
     def lifecycle_version = "2.1.0"
