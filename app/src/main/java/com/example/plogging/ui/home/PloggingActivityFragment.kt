@@ -25,9 +25,12 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
+import kotlin.math.roundToInt
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
+    private val step = 0.0007 //(km)
+    private var routeLength: Double = 0.0
     private lateinit var startPoint: LatLng
     private var routePoints = mutableListOf<LatLng>()
     private lateinit var marker: MarkerOptions
@@ -172,18 +175,31 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         Log.i("sensor", "Accuracy changed")
     }
 
+    //step count update
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor == stepCounterSensor) {
             if (!firstStep) {
-            Log.i("sensor", "Sensor data: ${event.values[0]}")
-            stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
+                //steps after the first
+
+                Log.i("sensor", "Sensor data: ${event.values[0]}")
+                stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
+                routeLength = (event.values[0] - stepsBeforeStart)*step
+                updateRouteLength()
+
             } else {
-                stepTextView.text = "0"
                 //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
+
+                stepTextView.text = "0"
                 stepsBeforeStart = event.values[0]
                 firstStep = false
+                updateRouteLength()
             }
         }
+    }
+
+    private fun updateRouteLength(){
+        //TODO round route length here
+        value_distance.text = routeLength.toString()
     }
 
     override fun onResume() {
