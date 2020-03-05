@@ -25,6 +25,7 @@ import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
+import kotlin.math.round
 import kotlin.math.roundToInt
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
@@ -32,7 +33,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     private val step = 0.0007 //(km)
     private var routeLength: Double = 0.0
     private lateinit var startPoint: LatLng
-    private var routePoints = mutableListOf<LatLng>()
+    var routePoints = mutableListOf<LatLng>()
     private lateinit var marker: MarkerOptions
     private lateinit var startMarker: MarkerOptions
     private var stepsBeforeStart: Float = 1f
@@ -87,7 +88,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                 locationMap.addMarker(startMarker)
 
                 //move camera according to location update
-                locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20f))
+                locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
 
                 //add point to list
                 routePoints.add(lastLocationLatLng)
@@ -156,18 +157,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
             locationMap = map
-
-            //sample polyline
-/*
-            locationMap.addPolyline(
-                PolylineOptions()
-                    .add(LatLng(60.208957, 24.973649))
-                    .add(LatLng(60.208972, 24.974514))
-                    .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
-            )
-
- */
-
         }
     }
 
@@ -178,17 +167,14 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     //step count update
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor == stepCounterSensor) {
-            if (!firstStep) {
-                //steps after the first
 
+            if (!firstStep) { //steps after the first
                 Log.i("sensor", "Sensor data: ${event.values[0]}")
                 stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
                 routeLength = (event.values[0] - stepsBeforeStart)*step
                 updateRouteLength()
 
-            } else {
-                //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
-
+            } else {  //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
                 stepTextView.text = "0"
                 stepsBeforeStart = event.values[0]
                 firstStep = false
@@ -198,8 +184,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     }
 
     private fun updateRouteLength(){
-        //TODO round route length here
-        value_distance.text = routeLength.toString()
+        val rounded = "%.1f".format(routeLength)
+        value_distance.text = rounded
     }
 
     override fun onResume() {
@@ -244,7 +230,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
-        Log.i("route", "Location request created")
 
         try {
             val client = LocationServices.getSettingsClient(this.requireActivity())

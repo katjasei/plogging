@@ -12,6 +12,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.example.plogging.ui.auth.AuthActivity
+import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.activity_main.*
@@ -127,13 +128,10 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
     private fun replaceFragment(fragment: Fragment) {
-
         //if fragment is homeFragment, display bottom navigation
         if (fragment == homeFragment) {
             showBottomNavigation()
         }
-
-        Log.i("TAG", fragment.toString())
         supportFragmentManager.beginTransaction()
         .replace(R.id.fragment_container, fragment)
         .addToBackStack(null)
@@ -141,14 +139,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {
-
-        val connectivityManager = this.getSystemService(
-            Context.CONNECTIVITY_SERVICE
-        ) as ConnectivityManager
-        //if activeNetworkInfo == false -> if isConnected == false -> return false
-        return connectivityManager.activeNetworkInfo?.isConnected?:false
-
-        /*
         val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
             val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
             if (capabilities != null) {
@@ -162,8 +152,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
                 }
             }
         return false
-
-         */
     }
 
 
@@ -192,4 +180,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         }
     }
 
+    override fun getRoute(): MutableList<LatLng> {
+        return ploggingActivityFragment.routePoints
+    }
 }
