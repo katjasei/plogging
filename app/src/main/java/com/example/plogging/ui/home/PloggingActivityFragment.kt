@@ -91,7 +91,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        // Inflate the layout for this fragment
+
         sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
 
         checkForStepCounterSensor()

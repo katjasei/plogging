@@ -3,6 +3,8 @@ package com.example.plogging.ui.home
 import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
+import android.net.NetworkCapabilities
+import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
@@ -22,6 +24,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     //firebase auth object
     lateinit var mFirebaseAuth: FirebaseAuth
     //Create a new Fragment to be placed in the activity layout
+    private val noInternetFragment = NoInternetFragment()
     private val homeFragment = HomeFragment()
     private val ploggingActivityFragment = PloggingActivityFragment()
     private val afterStopActivityFragment = AfterStopActivityFragment()
@@ -37,10 +40,10 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         when (item.itemId) {
             R.id.weather -> {
                 Log.i("TAG", "${item.title} pressed")
-                if (isNetworkAvailable()) {
+                if (isNetworkAvailable(this)) {
                 replaceFragment(WeatherFragment()) }
                 else {
-                    //TODO No network connection screen
+                    replaceFragment(noInternetFragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
@@ -136,12 +139,30 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         .commit()
     }
 
-    private fun isNetworkAvailable(): Boolean {
+    private fun isNetworkAvailable(context: Context): Boolean {
+
         val connectivityManager = this.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
         //if activeNetworkInfo == false -> if isConnected == false -> return false
         return connectivityManager.activeNetworkInfo?.isConnected?:false
+
+        /*
+        val connectivityManager = context.getSystemService(Context.CONNECTIVITY_SERVICE) as ConnectivityManager
+            val capabilities = connectivityManager.getNetworkCapabilities(connectivityManager.activeNetwork)
+            if (capabilities != null) {
+                when {
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_CELLULAR) -> {
+                        return true
+                    }
+                    capabilities.hasTransport(NetworkCapabilities.TRANSPORT_WIFI) -> {
+                        return true
+                    }
+                }
+            }
+        return false
+
+         */
     }
 
 
