@@ -1,9 +1,6 @@
 package com.example.plogging.ui.home
 
-
 import android.content.Context
-
-import android.content.Intent
 import android.hardware.Sensor
 import android.hardware.SensorEvent
 import android.hardware.SensorEventListener
@@ -27,13 +24,14 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
+    private var stepsBeforeStart: Float = 1f
+    private var firstStep = true
     private lateinit var locationMap: GoogleMap
     private lateinit var lastLocation: Location
     private lateinit var locationCallback: LocationCallback
@@ -62,9 +60,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
-
-                //Log last known location
-                Log.i("route", "Last location: "+lastLocation)
                 //Add marker to new location
                 locationMap.addMarker(
                     MarkerOptions()
@@ -76,7 +71,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                 locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
             }
         }
-
         createLocationRequest()
     }
 
@@ -139,8 +133,15 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor == stepCounterSensor) {
+            if (!firstStep) {
             Log.i("sensor", "Sensor data: ${event.values[0]}")
-            stepTextView.text = event.values[0].toString()
+            stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
+            } else {
+                stepTextView.text = "0"
+                //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
+                stepsBeforeStart = event.values[0]
+                firstStep = false
+            }
         }
     }
 
@@ -189,7 +190,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         Log.i("route", "Location request created")
 
         try {
-            //ohjeessa (this)
             val client = LocationServices.getSettingsClient(this.requireActivity())
             val task = client.checkLocationSettings(builder.build())
 
@@ -210,5 +210,9 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         } catch (e: Error){
             Log.e("route", "Error getting location updates: ${e.message}")
         }
+    }
+
+    fun resetStepCounter() {
+        firstStep = true
     }
 }
