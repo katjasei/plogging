@@ -19,7 +19,8 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopActivityListener,
     HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener,
-    PointFragment.PointActivityListener, ProfileFragment.ProfileFragmentListener{
+    PointFragment.PointActivityListener, ProfileFragment.ProfileFragmentListener,
+    NoInternetFragment.NoInternetFragmentListener{
 
     //firebase auth object
     lateinit var mFirebaseAuth: FirebaseAuth
@@ -181,6 +182,14 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
                 or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
+
+    override fun reloadWeather() {
+        if (isNetworkAvailable(this)) {
+            replaceFragment(WeatherFragment())
+        } else {
+            replaceFragment(NoInternetFragment())
+        }
     }
 
 }
