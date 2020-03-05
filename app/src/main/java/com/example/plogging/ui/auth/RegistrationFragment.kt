@@ -14,6 +14,10 @@ import com.basgeekball.awesomevalidation.AwesomeValidation
 import com.basgeekball.awesomevalidation.ValidationStyle
 import com.basgeekball.awesomevalidation.utility.RegexTemplate
 import com.example.plogging.R
+import com.example.plogging.utils.PreferenceHelper.customPreference
+import com.example.plogging.utils.PreferenceHelper.password
+import com.example.plogging.utils.PreferenceHelper.userEmail
+import com.example.plogging.utils.PreferenceHelper.clearValues
 import com.example.plogging.utils.addUserNameToUser
 import com.example.plogging.utils.checkIfParameterExistInFirebaseDB
 import com.google.android.material.snackbar.Snackbar
@@ -78,9 +82,17 @@ class RegistrationFragment: Fragment() {
         onFocusChangedListener(value_email,txt_duplicate_email)
 
         btn_sign_up.setOnClickListener {
+            //using the preferences from PreferenceHelper
+            val prefs = customPreference(context!!, "prefs")
+
             //check if all fields are valid
             if (mAwesomeValidation.validate()) {
-            //create user in Firebase
+              //clear old values in "prefs"
+              prefs.clearValues
+              //create user in Firebase
+              //save user password and email to SharedPreferences
+                prefs.password = value_password.text.toString()
+                prefs.userEmail = value_email.text.toString()
                 createUserAccount(
                     value_email.text.toString(),
                     value_password.text.toString()

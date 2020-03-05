@@ -10,14 +10,19 @@ import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.plogging.ui.home.MainActivity
 import com.example.plogging.R
+import com.example.plogging.utils.PreferenceHelper
+import com.example.plogging.utils.PreferenceHelper.password
+import com.example.plogging.utils.PreferenceHelper.userEmail
 import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_login.*
 
 
 class LoginFragment: Fragment() {
 
+    //VARIABLES:
     //firebase auth object
     private var mFirebaseAuth = FirebaseAuth.getInstance()
+
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
@@ -30,11 +35,18 @@ class LoginFragment: Fragment() {
         btn_sign_in.setOnClickListener {
             userLogin(value_email.text.toString(), value_password.text.toString())
         }
+        //using the preferences from PreferenceHelper
+        val prefs = PreferenceHelper.customPreference(context!!, "prefs")
+        //get user email and password from Shared Preferences
+        value_email.setText(prefs.userEmail)
+        value_password.setText(prefs.password)
     }
 
     @SuppressLint("SetTextI18n")
     // user login through Firebase
     private fun userLogin(email:String, password:String){
+
+        //check if email and password fields are not empty
         if (value_email.text.toString().isNotEmpty() && value_password.text.toString().isNotEmpty()) {
             //logging in the user
             mFirebaseAuth.signInWithEmailAndPassword(email, password)
