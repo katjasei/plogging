@@ -21,17 +21,17 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.android.gms.maps.model.BitmapDescriptorFactory
-import com.google.android.gms.maps.model.LatLng
-import com.google.android.gms.maps.model.MarkerOptions
-import com.google.android.gms.maps.model.PolylineOptions
+import com.google.android.gms.maps.model.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
+    private lateinit var startPoint: LatLng
     private var routePoints = mutableListOf<LatLng>()
+    private lateinit var marker: MarkerOptions
+    private lateinit var startMarker: MarkerOptions
     private var stepsBeforeStart: Float = 1f
     private var firstStep = true
     private lateinit var locationMap: GoogleMap
@@ -65,13 +65,23 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                 lastLocation = p0.lastLocation
                 lastLocationLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
                 Log.i("location", "Location update: $lastLocationLatLng")
-                //Add marker to new location
-                locationMap.addMarker(
-                    MarkerOptions()
-                        .position(lastLocationLatLng)
-                        .title("Your current location")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                )
+
+                //markers cannot be removed, clear and draw everything again
+                locationMap.clear()
+
+                marker = MarkerOptions()
+                    .position(lastLocationLatLng)
+                    .title("Your current location")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.dot))
+
+                startMarker = MarkerOptions()
+                    .position(startPoint)
+                    .title("Start point")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+
+                //add startMarker and current location marker
+                locationMap.addMarker(marker)
+                locationMap.addMarker(startMarker)
 
                 //move camera according to location update
                 locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20f))
@@ -83,7 +93,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                 locationMap.addPolyline(
                     PolylineOptions()
                         .addAll(routePoints)
-
+                        .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
                 )
             }
         }
@@ -132,23 +142,29 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     override fun onMapReady(map: GoogleMap) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
              currentLocation = LatLng(location.latitude, location.longitude)
+            routePoints.add(currentLocation)
+            startPoint = currentLocation
             map.addMarker(
                 MarkerOptions()
                     .position(currentLocation)
-                    .title("Your current location")
+                    .title("Start location")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
+
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
             locationMap = map
 
             //sample polyline
-            /*
+/*
             locationMap.addPolyline(
                 PolylineOptions()
                     .add(LatLng(60.208957, 24.973649))
                     .add(LatLng(60.208972, 24.974514))
+                    .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
             )
-             */
+
+ */
+
         }
     }
 
