@@ -24,16 +24,19 @@ import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
+    private var routePoints = mutableListOf<LatLng>()
     private var stepsBeforeStart: Float = 1f
     private var firstStep = true
     private lateinit var locationMap: GoogleMap
     private lateinit var lastLocation: Location
+    private lateinit var lastLocationLatLng: LatLng
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
     private var locationUpdateState = false
@@ -55,20 +58,33 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //setup location callback
+        //setup location callback (when location changes, do this)
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
+                lastLocationLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                Log.i("location", "Location update: $lastLocationLatLng")
                 //Add marker to new location
                 locationMap.addMarker(
                     MarkerOptions()
-                        .position(LatLng(lastLocation.latitude, lastLocation.longitude))
+                        .position(lastLocationLatLng)
                         .title("Your current location")
                         .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
                 )
+
                 //move camera according to location update
-                locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+                locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 20f))
+
+                //add point to list
+                routePoints.add(lastLocationLatLng)
+
+                //add polyline between locations
+                locationMap.addPolyline(
+                    PolylineOptions()
+                        .addAll(routePoints)
+
+                )
             }
         }
         createLocationRequest()
@@ -124,6 +140,15 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
             locationMap = map
+
+            //sample polyline
+            /*
+            locationMap.addPolyline(
+                PolylineOptions()
+                    .add(LatLng(60.208957, 24.973649))
+                    .add(LatLng(60.208972, 24.974514))
+            )
+             */
         }
     }
 
