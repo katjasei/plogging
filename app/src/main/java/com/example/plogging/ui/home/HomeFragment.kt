@@ -2,7 +2,6 @@ package com.example.plogging.ui.home
 
 import android.annotation.SuppressLint
 import android.content.Context
-import android.content.res.Resources
 import android.graphics.Color
 import android.graphics.PorterDuff
 import android.location.Location

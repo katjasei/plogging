@@ -118,13 +118,14 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         replaceFragment(pointFragment)
         bundle.putCharSequence("points" , points)
         pointFragment.arguments = bundle
+        showBottomNavigation()
     }
 
     private fun replaceFragment(fragment: Fragment) {
 
         //if fragment is homeFragment, display bottom navigation
         if (fragment == homeFragment) {
-            showBottomnNavigation()
+            showBottomNavigation()
         }
 
         Log.i("TAG", fragment.toString())
@@ -143,7 +144,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
 
-    private fun showBottomnNavigation() {
+    private fun showBottomNavigation() {
         bottom_navigation.visibility = View.VISIBLE
     }
 
