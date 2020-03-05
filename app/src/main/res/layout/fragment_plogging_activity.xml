@@ -43,7 +43,7 @@
         </RelativeLayout>
 
         <TextView
-            android:id="@+id/value_distance"
+            android:id="@+id/value_distance_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
@@ -65,7 +65,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/value_distance" />
+            app:layout_constraintTop_toBottomOf="@+id/value_distance_activity" />
 
         <View
             android:id="@+id/divider"
@@ -76,7 +76,7 @@
             tools:layout_editor_absoluteX="-36dp" />
 
         <TextView
-            android:id="@+id/value_duration"
+            android:id="@+id/value_duration_activity"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/txt_duration"
@@ -97,7 +97,7 @@
             android:textSize="18sp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/value_duration" />
+            app:layout_constraintTop_toBottomOf="@+id/value_duration_activity" />
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_stop_activity"
@@ -113,19 +113,33 @@
             app:backgroundTint="@color/colorPrimary"
             app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.594"
+            app:layout_constraintHorizontal_bias="0.489"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_duration" />
+
+        <Button
+            android:id="@+id/btn_plogging_result"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/txt_plogging_result"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_stop_activity" />
 
         <TextView
             android:id="@+id/stepTextView"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
             android:text="@string/steps"
             android:textSize="24sp"
             app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_stop_activity" />
+            app:layout_constraintTop_toBottomOf="@+id/btn_plogging_result" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

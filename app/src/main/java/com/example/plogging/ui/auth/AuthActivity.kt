@@ -63,6 +63,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                         .addToBackStack(null )
                         .commit()
                 }
+
             },3000)}
     }
 

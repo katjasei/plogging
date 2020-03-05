@@ -19,7 +19,7 @@
     <string name="txt_empty" />
     <string name="txt_current_user">Current user</string>
     <string name="txt_btn_logout">LOGOUT</string>
-    <string name="txt_duration">00:00:00</string>
+    <string name="txt_duration">0:00:00</string>
     <string name="txt_duration2">duration</string>
     <string name="txt_value_distance">0.00</string>
     <string name="txt_distance">distance km</string>
@@ -46,4 +46,5 @@
     <string name="txt_total_kilometers">total kilometers</string>
     <string name="txt_default_time">0</string>
     <string name="txt_total_time">total time</string>
+    <string name="txt_plogging_result">PLOGGING RESULT</string>
 </resources>
