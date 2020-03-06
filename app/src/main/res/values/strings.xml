@@ -19,7 +19,7 @@
     <string name="txt_empty" />
     <string name="txt_current_user">Current user</string>
     <string name="txt_btn_logout">LOGOUT</string>
-    <string name="txt_duration">00:00:00</string>
+    <string name="txt_duration">0:00:00</string>
     <string name="txt_duration2">duration</string>
     <string name="txt_value_distance">0.00</string>
     <string name="txt_distance">distance km</string>
@@ -48,4 +48,5 @@
     <string name="txt_total_time">total time</string>
     <string name="no_internet">No internet connection</string>
     <string name="try_again">Try again</string>
+    <string name="txt_plogging_result">PLOGGING RESULT</string>
 </resources>

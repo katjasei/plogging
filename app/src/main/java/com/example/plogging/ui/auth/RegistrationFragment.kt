@@ -53,29 +53,7 @@ class RegistrationFragment: Fragment() {
         super.onActivityCreated(savedInstanceState)
 
         //VALIDATION for all fields
-        mAwesomeValidation.setColor(Color.parseColor("#52C7B8"))
-        //check if the name has an empty value
-        mAwesomeValidation.addValidation(this.activity,
-            R.id.value_user_name, RegexTemplate.NOT_EMPTY,
-            R.string.invalid_name
-        )
-        //check that email is valid
-        mAwesomeValidation.addValidation(this.activity,
-            R.id.value_email, Patterns.EMAIL_ADDRESS,
-            R.string.invalid_email
-        )
-        //check that password is valid
-        val regexPassword ="(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}"
-        mAwesomeValidation.addValidation(this.activity,
-            R.id.value_password,regexPassword,
-            R.string.invalid_password
-        )
-        //password confirmation
-        mAwesomeValidation.addValidation(this.activity,
-            R.id.value_confirm_password,
-            R.id.value_password,
-            R.string.invalid_confirm_password
-        )
+        awesomeValidation()
         //when user enters username -> onFocusChange event
         onFocusChangedListener(value_user_name,txt_duplicate_name)
         //when user enters email -> onFocusChange event
@@ -144,8 +122,30 @@ class RegistrationFragment: Fragment() {
         }
     }
 
-
-
-
+    private fun awesomeValidation(){
+        mAwesomeValidation.setColor(Color.parseColor("#52C7B8"))
+        //check if the name has an empty value
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_user_name, RegexTemplate.NOT_EMPTY,
+            R.string.invalid_name
+        )
+        //check that email is valid
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_email, Patterns.EMAIL_ADDRESS,
+            R.string.invalid_email
+        )
+        //check that password is valid
+        val regexPassword ="(?=.*[a-z])(?=.*[A-Z])(?=.*[\\d])(?=.*[~`!@#\\$%\\^&\\*\\(\\)\\-_\\+=\\{\\}\\[\\]\\|\\;:\"<>,./\\?]).{8,}"
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_password,regexPassword,
+            R.string.invalid_password
+        )
+        //password confirmation
+        mAwesomeValidation.addValidation(this.activity,
+            R.id.value_confirm_password,
+            R.id.value_password,
+            R.string.invalid_confirm_password
+        )
+    }
 }
 

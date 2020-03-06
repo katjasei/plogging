@@ -43,7 +43,7 @@ class AfterStopActivityFragment: Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        btn_upload.setOnClickListener {
+        btn_plogging_result.setOnClickListener {
             val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
             val route = activityCallBack!!.getRoute()

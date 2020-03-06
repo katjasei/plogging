@@ -9,10 +9,12 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.google.android.gms.common.api.ResolvableApiException
@@ -22,11 +24,18 @@ import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
 import com.google.android.gms.maps.model.*
+import com.google.android.gms.maps.model.BitmapDescriptorFactory
+import com.google.android.gms.maps.model.LatLng
+import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
+import kotlinx.android.synthetic.main.fragment_plogging_activity.btn_plogging_result
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
 import kotlin.math.round
 import kotlin.math.roundToInt
+
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
@@ -49,6 +58,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     private var activityCallBack: PloggingActivityListener? = null
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
+    private var running = true
+    private var seconds = 0
 
     interface PloggingActivityListener {
         fun onButtonStopActivityClick()
@@ -105,19 +116,26 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-
+        // Inflate the layout for this fragment
+        val view = inflater.inflate(R.layout.fragment_plogging_activity, container, false)
+        val duration = view.findViewById<TextView>(R.id.value_duration_activity)
+        runTimer(duration)
         sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
-
         checkForStepCounterSensor()
 
-        return inflater.inflate(R.layout.fragment_plogging_activity, container, false)
+        return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        btn_stop_activity.setOnClickListener {
+        btn_plogging_result.setOnClickListener{
+            seconds = 0
             activityCallBack!!.onButtonStopActivityClick()
+        }
+        btn_stop_activity.setOnClickListener {
+            //stop the stopwatch running
+            running = false
+
         }
         //FAB - set white tint for icon
         val myFabSrc = resources.getDrawable(R.drawable.ic_my_location_white_24dp,null)
@@ -164,7 +182,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         Log.i("sensor", "Accuracy changed")
     }
 
-    //step count update
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor == stepCounterSensor) {
 
@@ -257,4 +274,24 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     fun resetStepCounter() {
         firstStep = true
     }
+
+    //TODO: move this fun to separate file
+    private fun runTimer(textView: TextView){
+        val handler = Handler()
+
+        handler.post ( object : Runnable {
+            override fun run() {
+                val hours = seconds/3600
+                val minutes = (seconds%3600)/60
+                val secs = seconds%60
+                val time = String.format("%d:%02d:%02d", hours,minutes,secs)
+                textView.text = time
+                if(running) {
+                    seconds++
+                }
+                handler.postDelayed(this,1000)
+            }
+        })
+    }
+
 }
