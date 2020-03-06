@@ -202,7 +202,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     private fun updateRouteLength(){
         val rounded = "%.1f".format(routeLength)
-        value_distance.text = rounded
+        value_distance_activity.text = rounded
     }
 
     override fun onResume() {
