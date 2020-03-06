@@ -3,12 +3,14 @@ package com.example.plogging.ui.home
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.example.plogging.data.model.ClassTrash
+import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
@@ -17,13 +19,12 @@ import java.lang.Integer.parseInt
 
 class AfterStopActivityFragment: Fragment(){
 
-    //firebase db
     private var mFirebaseDB = FirebaseDatabase.getInstance().reference
-
     private var activityCallBack: AfterStopActivityListener? = null
 
     interface AfterStopActivityListener {
         fun onButtonUploadClick(points:String)
+        fun getRoute():MutableList<LatLng>
     }
 
     override fun onAttach(context: Context) {
@@ -37,7 +38,6 @@ class AfterStopActivityFragment: Fragment(){
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-
         return inflater.inflate(R.layout.fragment_after_stop_activity, container, false)
     }
 
@@ -46,9 +46,10 @@ class AfterStopActivityFragment: Fragment(){
         btn_plogging_result.setOnClickListener {
             val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
+            val route = activityCallBack!!.getRoute()
             addTrashToDB(points)
+            addRouteToDB(route)
         }
-
     }
 
     override fun onResume() {
@@ -76,5 +77,20 @@ class AfterStopActivityFragment: Fragment(){
             .child("trash")
             .push()
             .setValue(trash)
+    }
+
+    private fun addRouteToDB(route: MutableList<LatLng>){
+        val userID = FirebaseAuth.getInstance().currentUser?.uid
+
+        if (route.size != 0) {
+            mFirebaseDB.child("users")
+                .child(userID!!)
+                .child("routes")
+                .push()
+                .setValue(route)
+            Log.i("database", "Route upload succesful! Uploaded: "+route)
+        } else {
+            Log.e("database", "Route was empty, not saved to database")
+        }
     }
 }

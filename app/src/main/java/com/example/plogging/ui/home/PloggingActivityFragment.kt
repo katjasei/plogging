@@ -1,6 +1,5 @@
 package com.example.plogging.ui.home
 
-
 import android.content.Context
 import android.hardware.Sensor
 import android.hardware.SensorEvent
@@ -24,21 +23,33 @@ import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
 import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.btn_plogging_result
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
+import kotlin.math.round
+import kotlin.math.roundToInt
 
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
-    //VARIABLES:
+    private val step = 0.0007 //(km)
+    private var routeLength: Double = 0.0
+    private lateinit var startPoint: LatLng
+    var routePoints = mutableListOf<LatLng>()
+    private lateinit var marker: MarkerOptions
+    private lateinit var startMarker: MarkerOptions
+    private var stepsBeforeStart: Float = 1f
+    private var firstStep = true
     private lateinit var locationMap: GoogleMap
     private lateinit var lastLocation: Location
+    private lateinit var lastLocationLatLng: LatLng
     private lateinit var locationCallback: LocationCallback
     private lateinit var locationRequest: LocationRequest
     private var locationUpdateState = false
@@ -62,23 +73,43 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        //setup location callback
+        //setup location callback (when location changes, do this)
         locationCallback = object : LocationCallback() {
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
+                lastLocationLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                Log.i("location", "Location update: $lastLocationLatLng")
 
-                //Log last known location
-                Log.i("route", "Last location: "+lastLocation)
-                //Add marker to new location
-                locationMap.addMarker(
-                    MarkerOptions()
-                        .position(LatLng(lastLocation.latitude, lastLocation.longitude))
-                        .title("Your current location")
-                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
-                )
+                //markers cannot be removed, clear and draw everything again
+                locationMap.clear()
+
+                marker = MarkerOptions()
+                    .position(lastLocationLatLng)
+                    .title("Your current location")
+                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.dot))
+
+                startMarker = MarkerOptions()
+                    .position(startPoint)
+                    .title("Start point")
+                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+
+                //add startMarker and current location marker
+                locationMap.addMarker(marker)
+                locationMap.addMarker(startMarker)
+
                 //move camera according to location update
                 locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+
+                //add point to list
+                routePoints.add(lastLocationLatLng)
+
+                //add polyline between locations
+                locationMap.addPolyline(
+                    PolylineOptions()
+                        .addAll(routePoints)
+                        .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
+                )
             }
         }
         createLocationRequest()
@@ -133,12 +164,15 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     override fun onMapReady(map: GoogleMap) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
              currentLocation = LatLng(location.latitude, location.longitude)
+            routePoints.add(currentLocation)
+            startPoint = currentLocation
             map.addMarker(
                 MarkerOptions()
                     .position(currentLocation)
-                    .title("Your current location")
+                    .title("Start location")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
+
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
             locationMap = map
         }
@@ -150,9 +184,25 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     override fun onSensorChanged(event: SensorEvent) {
         if (event.sensor == stepCounterSensor) {
-            Log.i("sensor", "Sensor data: ${event.values[0]}")
-            stepTextView.text = event.values[0].toString()
+
+            if (!firstStep) { //steps after the first
+                Log.i("sensor", "Sensor data: ${event.values[0]}")
+                stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
+                routeLength = (event.values[0] - stepsBeforeStart)*step
+                updateRouteLength()
+
+            } else {  //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
+                stepTextView.text = "0"
+                stepsBeforeStart = event.values[0]
+                firstStep = false
+                updateRouteLength()
+            }
         }
+    }
+
+    private fun updateRouteLength(){
+        val rounded = "%.1f".format(routeLength)
+        value_distance.text = rounded
     }
 
     override fun onResume() {
@@ -197,10 +247,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
-        Log.i("route", "Location request created")
 
         try {
-            //ohjeessa (this)
             val client = LocationServices.getSettingsClient(this.requireActivity())
             val task = client.checkLocationSettings(builder.build())
 
@@ -209,6 +257,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                 locationUpdateState = true
                 startLocationUpdates()
             }
+
             //On failure
             task.addOnFailureListener { e ->
                 if (e is ResolvableApiException) {
@@ -220,6 +269,10 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         } catch (e: Error){
             Log.e("route", "Error getting location updates: ${e.message}")
         }
+    }
+
+    fun resetStepCounter() {
+        firstStep = true
     }
 
     //TODO: move this fun to separate file
