@@ -43,9 +43,9 @@
     <string name="steps">Steps</string>
     <string name="txt_points_profile">points</string>
     <string name="txt_default_kilometers">0</string>
-    <string name="txt_total_kilometers">total kilometers</string>
+    <string name="txt_total_kilometers">Total distance</string>
     <string name="txt_default_time">0</string>
-    <string name="txt_total_time">total time</string>
+    <string name="txt_total_time">Total time</string>
     <string name="no_internet">No internet connection</string>
     <string name="try_again">Try again</string>
     <string name="txt_plogging_result">PLOGGING RESULT</string>

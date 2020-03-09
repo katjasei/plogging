@@ -34,13 +34,13 @@ class WeatherFragment: Fragment(){
 
                 //set weather description
                 Log.i("weather", weatherObject.weather[0].main)
-                weatherDescriptionTextView.text = weatherObject.weather[0].description
+                weatherDescriptionTextView?.text = weatherObject.weather[0].description
 
                 //set temperature
-                temperatureTextView.text = "${weatherObject.main.temp.roundToInt()}°C"
+                temperatureTextView?.text = "${weatherObject.main.temp.roundToInt()}°C"
 
                 //set location
-                locationTextView.text = weatherObject.name
+                locationTextView?.text = weatherObject.name
 
                 //get possible icon url
                 val icon: String? = weatherObject.weather[0].icon
@@ -94,7 +94,7 @@ class WeatherFragment: Fragment(){
 
         override fun onPostExecute(result: Bitmap?) {
             val imageView = weatherImageView
-            imageView.setImageBitmap(result)
+            imageView?.setImageBitmap(result)
         }
     }
 }
