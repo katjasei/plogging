@@ -12,6 +12,8 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.example.plogging.ui.auth.AuthActivity
+import com.example.plogging.ui.auth.FirstFragment
+import com.google.android.gms.auth.api.Auth
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -21,7 +23,7 @@ import kotlinx.android.synthetic.main.activity_main.*
 class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopActivityListener,
     HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener,
     PointFragment.PointActivityListener, ProfileFragment.ProfileFragmentListener,
-    NoInternetFragment.NoInternetFragmentListener{
+    NoInternetFragment.NoInternetFragmentListener, NotRegisteredFragment.NotRegisteredFragmentListener{
 
     //firebase auth object
     lateinit var mFirebaseAuth: FirebaseAuth
@@ -84,11 +86,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             .commit()
     }
 
-    override fun onStart() {
-        super.onStart()
-        //hide status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
 
     //when user click button LOGOUT
     override fun onButtonLogOutClick() {
@@ -116,6 +113,13 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     //when button "GoToProfile" clicked from PointFragment
     override fun onButtonGoToProfileClick() {
         replaceFragment(profileFragment)
+    }
+
+    //NotRegisteredFragment listener
+    //when button "First screen" clicked from NotRegisteredFragment
+    override fun onButtonFirstScreenClick() {
+        val intent =  Intent(this, AuthActivity::class.java)
+        startActivity(intent)
     }
 
     //AfterStopActivityFragment listener

@@ -88,7 +88,7 @@ class AfterStopActivityFragment: Fragment(){
                 .child("routes")
                 .push()
                 .setValue(route)
-            Log.i("database", "Route upload succesful! Uploaded: "+route)
+            Log.i("database", "Route upload successful! Uploaded: $route")
         } else {
             Log.e("database", "Route was empty, not saved to database")
         }

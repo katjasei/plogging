@@ -92,6 +92,11 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         startActivity(intent)
     }
 
+    override fun onButtonGoPlogginClick() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
     private fun replaceFragment(fragment: Fragment){
         Log.i("TAG", fragment.toString())
         supportFragmentManager.beginTransaction()

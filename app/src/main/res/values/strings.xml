@@ -49,4 +49,9 @@
     <string name="no_internet">No internet connection</string>
     <string name="try_again">Try again</string>
     <string name="txt_plogging_result">PLOGGING RESULT</string>
+    <string name="txt_con_desc_blue_pic">blue background picture</string>
+    <string name="txt_go_plogging">GO PLOGGING</string>
+    <string name="txt_not_register">You need to be registered</string>
+    <string name="txt_go_to_first_screen">FIRST SCREEN</string>
+    <string name="facebook_app_id">1356934837832274</string>
 </resources>

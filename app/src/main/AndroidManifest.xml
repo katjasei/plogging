@@ -1,9 +1,12 @@
 <?x
     ml version="1.0" encoding="utf-8"?>
-<manifest xmlns:android="http://schemas.android.com/apk/res/android"
+<manifest
+    xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     package="com.example.plogging">
 
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION"/>
+    <uses-feature android:name="android.hardware.camera" android:required="true" />
     <uses-permission android:name="android.permission.WRITE_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.READ_EXTERNAL_STORAGE"/>
     <uses-permission android:name="android.permission.INTERNET" />
@@ -25,6 +28,11 @@
         android:theme="@style/AppTheme">
 
         <meta-data
+            tools:replace="android:value"
+            android:name="com.facebook.sdk.ApplicationId"
+            android:value="@string/facebook_app_id"/>
+
+        <meta-data
             android:name="com.google.android.geo.API_KEY"
             android:value="AIzaSyBr5SYHrdPoKzOPZrSvAqVDh3F7Hw5Ltq4"/>
         <meta-data
@@ -43,6 +51,17 @@
         <activity android:name=".ui.home.MainActivity"
             android:theme="@style/AppTheme">
         </activity>
+
+        <provider
+            android:name="androidx.core.content.FileProvider"
+            android:authorities="com.example.plogging"
+            android:exported="false"
+            android:grantUriPermissions="true">
+            <meta-data
+                android:name="android.support.FILE_PROVIDER_PATHS"
+                android:resource="@xml/file_path">
+            </meta-data>
+        </provider>
     </application>
 
 </manifest>
