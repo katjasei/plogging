@@ -27,6 +27,7 @@ class AfterStopActivityFragment: Fragment(){
         fun onButtonUploadClick(points:String)
         fun getRoute():MutableList<LatLng>
         fun getRouteLength(): Double
+        fun getRouteTime(): Int
     }
 
     override fun onAttach(context: Context) {
@@ -50,8 +51,9 @@ class AfterStopActivityFragment: Fragment(){
             activityCallBack!!.onButtonUploadClick("+ $points Points")
             val route = activityCallBack!!.getRoute()
             val distance = activityCallBack!!.getRouteLength()
+            val time = activityCallBack!!.getRouteTime()
             addTrashToDB(points)
-            addRouteToDB(distance, route)
+            addRouteToDB(distance, route, time)
         }
     }
 
@@ -83,12 +85,12 @@ class AfterStopActivityFragment: Fragment(){
         Log.i("database", "Trash uploaded: "+trash)
     }
 
-    private fun addRouteToDB(distance: Double, route: MutableList<LatLng>){
+    private fun addRouteToDB(distance: Double, route: MutableList<LatLng>, time: Int){
         val userID = FirebaseAuth.getInstance().currentUser?.uid
 
-        val finalRoute = ClassRoute(distance, route)
+        val finalRoute = ClassRoute(distance, route, time)
 
-        if (route.size != 0) {
+        if (route.size > 1) {
             mFirebaseDB.child("users")
                 .child(userID!!)
                 .child("routes")

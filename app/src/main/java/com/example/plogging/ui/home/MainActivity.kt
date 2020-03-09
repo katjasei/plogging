@@ -189,4 +189,8 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     override fun getRouteLength(): Double {
         return ploggingActivityFragment.routeLength
     }
+
+    override fun getRouteTime(): Int {
+        return ploggingActivityFragment.seconds
+    }
 }

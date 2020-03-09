@@ -29,6 +29,7 @@ import com.google.firebase.database.ValueEventListener
 import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile.*
 import java.io.InputStream
+import java.lang.Error
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URI
@@ -108,43 +109,50 @@ class ProfileFragment: Fragment(){
                     var totalO = 0
                     var username = ""
 
-                        Log.d("p0.value", p0.value.toString())
-                           if(p0.child("profile_image").value != null){
-                               if (isNetworkAvailable()){
-                                   val myURLparams = URLparams(URL(p0.child("profile_image").value.toString()))
-                                   GetConn().execute(myURLparams)
-                               }
-                           }
+                    Log.d("p0.value", p0.value.toString())
+                    if(p0.child("profile_image").value != null){
+                        if (isNetworkAvailable()){
+                            val myURLparams = URLparams(URL(p0.child("profile_image").value.toString()))
+                            GetConn().execute(myURLparams)
+                        }
+                    }
 
-                            username = p0.child("username").value.toString()
-                            usernameTextView.text = username
-                        if (p0.child("trash").value != null) {
-                        val trash = p0.child("trash").children
-                            trash.forEach{
-                                total += Integer.parseInt(it.child("total").value.toString())
-                                totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
-                                totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
-                                totalCB += Integer.parseInt(it.child("cardboard").value.toString())
-                                totalC += Integer.parseInt(it.child("cigarettes").value.toString())
-                                totalO += Integer.parseInt(it.child("other").value.toString())
-                                Log.d("Total1", it.child("total").value.toString())
-                            }
-                            Log.d("Total", total.toString())
-                            totalPoints.text = total.toString()
-                            totalPet.text = totalPB.toString()
-                            totalCans.text = totalIC.toString()
-                            totalCardBoard.text = totalCB.toString()
-                            totalCigarettes.text = totalC.toString()
-                            totalOther.text = totalO.toString()
+                    //set username to textView
+                    username = p0.child("username").value.toString()
+                    usernameTextView.text = username
+
+                    //set total distance to textView
+                    var totalDistance = 0.0
+                    p0.child("routes").children.forEach {
+                        totalDistance += it.child("distance").value.toString().toDouble()
+                        }
+                    value_kilometers.text = "%.2f".format(totalDistance)
+
+                    //set trash to each textView
+                    if (p0.child("trash").value != null) { val trash = p0.child("trash").children
+                        trash.forEach{
+                            total += Integer.parseInt(it.child("total").value.toString())
+                            totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
+                            totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
+                            totalCB += Integer.parseInt(it.child("cardboard").value.toString())
+                            totalC += Integer.parseInt(it.child("cigarettes").value.toString())
+                            totalO += Integer.parseInt(it.child("other").value.toString())
+                            Log.d("Total1", it.child("total").value.toString())
+                        }
+                        Log.d("Total", total.toString())
+                        totalPoints.text = total.toString()
+                        totalPet.text = totalPB.toString()
+                        totalCans.text = totalIC.toString()
+                        totalCardBoard.text = totalCB.toString()
+                        totalCigarettes.text = totalC.toString()
+                        totalOther.text = totalO.toString()
                     }
                 }
                 override fun onCancelled(p0: DatabaseError) {
                     // Failed to read value
                     Log.d("Failed to read value.", "")
                 }
-            }
-            )
-
+            })
         return view
     }
 

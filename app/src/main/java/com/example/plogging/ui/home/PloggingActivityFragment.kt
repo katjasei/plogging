@@ -55,7 +55,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
     private var running = true
-    private var seconds = 0
+    var seconds = 0
 
     interface PloggingActivityListener {
         fun onButtonStopActivityClick()
@@ -195,8 +195,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     }
 
     private fun updateRouteLength(){
-        val rounded = "%.1f".format(routeLength)
-        value_distance_activity.text = rounded
+        value_distance_activity.text ="%.1f".format(routeLength)
     }
 
     override fun onResume() {
