@@ -26,8 +26,6 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     private val registrationFragment = RegistrationFragment()
     private val welcomeFragment = WelcomeFragment()
     private val splashScreenFragment = SplashScreenFragment()
-    //firebase auth object
-    private var mFirebaseAuth = FirebaseAuth.getInstance()
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
     private val loginViewModel = LoginViewModel()
@@ -42,23 +40,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         askPermissions(this,this)
 
         replaceFragment(splashScreenFragment)
+        //check if user already logged in
         observeAuthenticationState()
-        //if the objects getCurrentUser is not null
-        //means user is already logged in
-        /*
-        if(mFirebaseAuth.currentUser != null){
-            //if user is logged in go to HomeActvity - "Home or Map Screen"
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-        else {
-            val handler = Handler()
-            handler.postDelayed({
-                run {
-                    //go to FirstFragment, if user not logged in
-                    replaceFragment(firstFragment)
-                }
-            },3000)}*/
     }
 
     //FirstFragment listeners:
