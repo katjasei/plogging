@@ -26,7 +26,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     NoInternetFragment.NoInternetFragmentListener, NotRegisteredFragment.NotRegisteredFragmentListener{
 
     //firebase auth object
-    lateinit var mFirebaseAuth: FirebaseAuth
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
     //Create a new Fragment to be placed in the activity layout
     private val noInternetFragment = NoInternetFragment()
     private val homeFragment = HomeFragment()
@@ -73,23 +73,17 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
+        //hide status bar
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        //hideSystemUI()
-
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
-
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, homeFragment)
-            .commit()
+        replaceFragment(homeFragment)
     }
 
 
     //when user click button LOGOUT
     override fun onButtonLogOutClick() {
-        mFirebaseAuth = FirebaseAuth.getInstance()
+        //user logout
         mFirebaseAuth.signOut()
         //start new Activity - go to FirstScreen/LogIn, SighUp screen
         val intent = Intent(this, AuthActivity::class.java)

@@ -5,8 +5,8 @@ import android.net.Uri
 import android.widget.Toast
 import com.google.firebase.storage.FirebaseStorage
 
+//function for uploading profile image to Firebase DB
 fun uploadFileToFirebaseStorage(pickedImageURI:Uri, currentUserID:String, activity:Activity){
-
     val mStorage = FirebaseStorage.getInstance().reference.child("$currentUserID.jpg")
     val imageFilePath = mStorage.child(pickedImageURI.lastPathSegment!!)
 

@@ -7,9 +7,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.EditText
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.example.plogging.data.model.ClassTrash
+import com.example.plogging.utils.addRouteToDB
+import com.example.plogging.utils.addTrashToDB
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.FirebaseDatabase
@@ -19,14 +23,12 @@ import java.lang.Integer.parseInt
 
 class AfterStopActivityFragment: Fragment(){
 
-    private var mFirebaseDB = FirebaseDatabase.getInstance().reference
     private var activityCallBack: AfterStopActivityListener? = null
 
     interface AfterStopActivityListener {
         fun onButtonUploadClick(points:String)
         fun getRoute():MutableList<LatLng>
     }
-
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activityCallBack = context as AfterStopActivityListener
@@ -43,11 +45,18 @@ class AfterStopActivityFragment: Fragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        //when user enter the number of gathered trash, function onFocus Change clean text value
+        onFocusChange(value_pet_bottles)
+        onFocusChange(value_iron_cans)
+        onFocusChange(value_cardboard)
+        onFocusChange(value_cigarettes)
+        onFocusChange(value_other)
+
         btn_plogging_result.setOnClickListener {
             val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
             val route = activityCallBack!!.getRoute()
-            addTrashToDB(points)
+            addTrashToDB(points,value_pet_bottles, value_iron_cans, value_cardboard, value_cigarettes, value_other)
             addRouteToDB(route)
         }
     }
@@ -61,36 +70,11 @@ class AfterStopActivityFragment: Fragment(){
         value_other.setText("0")
     }
 
-    private fun addTrashToDB(points:Int){
-        val userID = FirebaseAuth.getInstance().currentUser?.uid
-        val trash = ClassTrash(
-            parseInt(value_pet_bottles.text.toString()),
-            parseInt(value_iron_cans.text.toString()),
-            parseInt(value_cardboard.text.toString()),
-            parseInt(value_cigarettes.text.toString()),
-            parseInt(value_other.text.toString()),
-            points
-        )
-
-        mFirebaseDB.child("users")
-            .child(userID!!)
-            .child("trash")
-            .push()
-            .setValue(trash)
-    }
-
-    private fun addRouteToDB(route: MutableList<LatLng>){
-        val userID = FirebaseAuth.getInstance().currentUser?.uid
-
-        if (route.size != 0) {
-            mFirebaseDB.child("users")
-                .child(userID!!)
-                .child("routes")
-                .push()
-                .setValue(route)
-            Log.i("database", "Route upload successful! Uploaded: $route")
-        } else {
-            Log.e("database", "Route was empty, not saved to database")
+    private fun onFocusChange(editText: EditText){
+        editText.setOnFocusChangeListener { _, hasFocus ->
+            if (hasFocus){
+                editText.setText("")
+            }
         }
     }
 }

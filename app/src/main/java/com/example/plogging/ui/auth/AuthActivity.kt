@@ -5,10 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
 import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
@@ -41,10 +38,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         //permissions
         askPermissions(this,this)
         // fragment manager can help when switching to the other fragment is needed
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, splashScreenFragment)
-            .commit()
+        replaceFragment(splashScreenFragment)
         //if the objects getCurrentUser is not null
         //means user is already logged in
         if(mFirebaseAuth.currentUser != null){
@@ -57,13 +51,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             handler.postDelayed({
                 run {
                     //go to FirstFragment, if user not logged in
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.fragment_container,
-                        firstFragment)
-                        .addToBackStack(null )
-                        .commit()
+                    replaceFragment(firstFragment)
                 }
-
             },3000)}
     }
 
@@ -97,8 +86,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         startActivity(intent)
     }
 
+    //function used for fragment replacement
     private fun replaceFragment(fragment: Fragment){
-        Log.i("TAG", fragment.toString())
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
@@ -122,7 +111,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             }
         }
     }
-
+    //hide status bar
     override fun onStart() {
         super.onStart()
         //hide status bar

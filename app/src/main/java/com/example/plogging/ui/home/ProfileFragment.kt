@@ -74,6 +74,7 @@ class ProfileFragment: Fragment(){
             return result
         }
         override fun onPostExecute(result: FinalBitmap) {
+            Log.d("Result", result.toString())
                 profile_image.setImageBitmap(result.bitmap)
         }
     }

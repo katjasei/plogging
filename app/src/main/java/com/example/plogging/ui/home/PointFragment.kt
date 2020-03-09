@@ -16,7 +16,6 @@ class PointFragment: Fragment(){
     interface PointActivityListener {
         fun onButtonGoToProfileClick()
     }
-
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as PointActivityListener
@@ -27,7 +26,6 @@ class PointFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_point, container, false)
     }
@@ -36,9 +34,7 @@ class PointFragment: Fragment(){
         super.onActivityCreated(savedInstanceState)
         val points = arguments!!.getCharSequence("points")
         value_points_profile.text = points
-
         btn_go_to_profile.setOnClickListener{
-
             activityCallBack!!.onButtonGoToProfileClick()
         }
 

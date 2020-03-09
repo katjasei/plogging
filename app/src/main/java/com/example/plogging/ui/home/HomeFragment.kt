@@ -70,7 +70,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
     override fun onMapReady(map: GoogleMap) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
             val currentLocation = LatLng(location.latitude, location.longitude)
-
             map.addMarker(
                 MarkerOptions()
                     .position(currentLocation)

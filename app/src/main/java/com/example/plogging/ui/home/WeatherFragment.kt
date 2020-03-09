@@ -21,30 +21,21 @@ import kotlin.math.roundToInt
 class WeatherFragment: Fragment(){
 
     private val handler: Handler = object :
-
         Handler(Looper.getMainLooper()) {
-
         @SuppressLint("SetTextI18n")
         override fun handleMessage(inputMessage: Message) {
-
             if (inputMessage.what == 0) {
-
                 //parse response
                 val weatherObject = WeatherApiResponseParser.parse(inputMessage.obj.toString())
-
                 //set weather description
                 Log.i("weather", weatherObject.weather[0].main)
                 weatherDescriptionTextView.text = weatherObject.weather[0].description
-
                 //set temperature
                 temperatureTextView.text = "${weatherObject.main.temp.roundToInt()}°C"
-
                 //set location
                 locationTextView.text = weatherObject.name
-
                 //get possible icon url
                 val icon: String? = weatherObject.weather[0].icon
-
                 //if weather icon is found, display it
                 if (icon != null) {
                     WeatherApiConnectionForImage().execute(URL(icon))
@@ -61,26 +52,18 @@ class WeatherFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         val weatherConnection =
             WeatherApiConnection(handler)
         val weatherThread = Thread(weatherConnection)
         weatherThread.start()
-
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_weather, container, false)
     }
 
-
-
-
     @SuppressLint("StaticFieldLeak")
     inner class WeatherApiConnectionForImage : AsyncTask<URL, Unit, Bitmap>()  {
-
         private lateinit var result: Bitmap
-
         override fun doInBackground(vararg urlParams: URL): Bitmap {
-
             try {
                 val imageConnection =  urlParams[0].openConnection() as HttpURLConnection
                 val inputStream = imageConnection.inputStream
@@ -91,7 +74,6 @@ class WeatherFragment: Fragment(){
             }
             return result
         }
-
         override fun onPostExecute(result: Bitmap?) {
             val imageView = weatherImageView
             imageView.setImageBitmap(result)
