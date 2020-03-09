@@ -37,21 +37,25 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     private val bundle = Bundle()
 
     //Bottom navigation click listener
-    //TODO maybe take this logic to a new file
     private val bottomNavigationOnClickListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.weather -> {
                 Log.i("TAG", "${item.title} pressed")
                 if (isNetworkAvailable(this)) {
-                replaceFragment(WeatherFragment()) }
-                else {
+                    replaceFragment(WeatherFragment())
+                } else {
                     replaceFragment(noInternetFragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.leaderboard -> {
                 Log.i("TAG", "${item.title} pressed")
-                replaceFragment(LeaderBoardFragment())
+                if (isNetworkAvailable(this)){
+                    replaceFragment(LeaderBoardFragment())
+                } else {
+                    replaceFragment(noInternetFragment)
+                }
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.home -> {
@@ -72,22 +76,17 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        //hideSystemUI()
-
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
 
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, homeFragment)
-            .commit()
+        replaceFragment(homeFragment)
     }
 
     override fun onStart() {
         super.onStart()
         //hide status bar
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        hideSystemUI()
     }
 
     //when user click button LOGOUT
@@ -136,6 +135,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         .replace(R.id.fragment_container, fragment)
         .addToBackStack(null)
         .commit()
+        hideSystemUI()
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {

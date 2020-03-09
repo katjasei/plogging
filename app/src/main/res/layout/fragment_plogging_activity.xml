@@ -13,8 +13,8 @@
 
         <RelativeLayout
             android:id="@+id/relativeLayout"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
+            android:layout_width="match_parent"
+            android:layout_height="447dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent">
@@ -22,22 +22,23 @@
             <fragment
                 android:id="@+id/map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
-                android:layout_width="fill_parent"
-                android:layout_height="300dp"
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
                 android:textAlignment="center"
                 app:layout_constraintEnd_toEndOf="parent"
                 app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="parent"/>
+                app:layout_constraintTop_toTopOf="parent" />
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floating_action_button"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/map"
+                android:layout_alignParentTop="true"
                 android:layout_gravity="center_horizontal"
-                android:layout_marginTop="225dp"
-                android:layout_marginEnd="20dp"
-                android:tint="@android:color/white"
+                android:layout_marginTop="369dp"
+                android:layout_marginEnd="16dp"
+                android:tint="@color/white"
                 app:backgroundTint="@color/colorPrimary"
                 app:srcCompat="@drawable/ic_my_location_white_24dp" />
         </RelativeLayout>
@@ -128,18 +129,6 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/btn_stop_activity" />
-
-        <TextView
-            android:id="@+id/stepTextView"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="8dp"
-            android:text="@string/steps"
-            android:textSize="24sp"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.498"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@+id/btn_plogging_result" />
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

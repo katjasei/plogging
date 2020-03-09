@@ -27,14 +27,10 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
-import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.btn_plogging_result
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
-import kotlin.math.round
-import kotlin.math.roundToInt
 
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
@@ -187,12 +183,10 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
             if (!firstStep) { //steps after the first
                 Log.i("sensor", "Sensor data: ${event.values[0]}")
-                stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
                 routeLength = (event.values[0] - stepsBeforeStart)*step
                 updateRouteLength()
 
             } else {  //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
-                stepTextView.text = "0"
                 stepsBeforeStart = event.values[0]
                 firstStep = false
                 updateRouteLength()
