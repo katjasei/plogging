@@ -9,6 +9,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
+import com.example.plogging.data.model.ClassRoute
 import com.example.plogging.data.model.ClassTrash
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
@@ -25,6 +26,7 @@ class AfterStopActivityFragment: Fragment(){
     interface AfterStopActivityListener {
         fun onButtonUploadClick(points:String)
         fun getRoute():MutableList<LatLng>
+        fun getRouteLength(): Double
     }
 
     override fun onAttach(context: Context) {
@@ -47,8 +49,9 @@ class AfterStopActivityFragment: Fragment(){
             val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
             val route = activityCallBack!!.getRoute()
+            val distance = activityCallBack!!.getRouteLength()
             addTrashToDB(points)
-            addRouteToDB(route)
+            addRouteToDB(distance, route)
         }
     }
 
@@ -77,20 +80,23 @@ class AfterStopActivityFragment: Fragment(){
             .child("trash")
             .push()
             .setValue(trash)
+        Log.i("database", "Trash uploaded: "+trash)
     }
 
-    private fun addRouteToDB(route: MutableList<LatLng>){
+    private fun addRouteToDB(distance: Double, route: MutableList<LatLng>){
         val userID = FirebaseAuth.getInstance().currentUser?.uid
+
+        val finalRoute = ClassRoute(distance, route)
 
         if (route.size != 0) {
             mFirebaseDB.child("users")
                 .child(userID!!)
                 .child("routes")
                 .push()
-                .setValue(route)
-            Log.i("database", "Route upload succesful! Uploaded: "+route)
+                .setValue(finalRoute)
+            Log.i("database", "Route upload succesful! Uploaded: "+finalRoute)
         } else {
-            Log.e("database", "Route was empty, not saved to database")
+            Log.e("database", "Route was empty or other error, not saved to database")
         }
     }
 }

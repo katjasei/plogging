@@ -36,7 +36,7 @@ import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
     private val step = 0.0007 //(km)
-    private var routeLength: Double = 0.0
+    var routeLength: Double = 0.0
     private lateinit var startPoint: LatLng
     var routePoints = mutableListOf<LatLng>()
     private lateinit var marker: MarkerOptions
