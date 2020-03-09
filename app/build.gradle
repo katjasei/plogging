@@ -5,6 +5,10 @@ apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 
 android {
+
+    kotlinOptions {
+        jvmTarget = "1.8"
+    }
     compileSdkVersion 28
     defaultConfig {
         applicationId "com.example.plogging"
@@ -45,6 +49,8 @@ dependencies {
     def lifecycle_version = "2.1.0"
     implementation "android.arch.lifecycle:extensions:$lifecycle_version"
     implementation "android.arch.lifecycle:runtime:$lifecycle_version"
+    implementation "androidx.lifecycle:lifecycle-livedata-ktx:2.3.0-alpha01"
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.0-alpha01'
 
     implementation 'de.hdodenhof:circleimageview:3.1.0'
 

@@ -7,9 +7,11 @@ import android.os.Bundle
 import android.os.Handler
 import android.view.View
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
 import com.example.plogging.utils.askPermissions
+import com.example.plogging.viewModel.LoginViewModel
 import com.google.firebase.auth.FirebaseAuth
 
 class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
@@ -28,6 +30,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     private var mFirebaseAuth = FirebaseAuth.getInstance()
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
+    private val loginViewModel = LoginViewModel()
 
     //FUNCTIONS:
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -37,10 +40,12 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         //permissions
         askPermissions(this,this)
-        // fragment manager can help when switching to the other fragment is needed
+
         replaceFragment(splashScreenFragment)
+        observeAuthenticationState()
         //if the objects getCurrentUser is not null
         //means user is already logged in
+        /*
         if(mFirebaseAuth.currentUser != null){
             //if user is logged in go to HomeActvity - "Home or Map Screen"
             val intent = Intent(this, MainActivity::class.java)
@@ -53,7 +58,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                     //go to FirstFragment, if user not logged in
                     replaceFragment(firstFragment)
                 }
-            },3000)}
+            },3000)}*/
     }
 
     //FirstFragment listeners:
@@ -88,6 +93,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
 
     //function used for fragment replacement
     private fun replaceFragment(fragment: Fragment){
+        // fragment manager can help when switching to the other fragment is needed
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
@@ -118,4 +124,26 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
+
+    private fun observeAuthenticationState() {
+        loginViewModel.authenticationState.observe(this, Observer {
+            when (it) {
+                LoginViewModel.AuthenticationState.AUTHENTICATED -> {
+                    val intent = Intent(this, MainActivity::class.java)
+                    startActivity(intent)
+                }
+                else -> {
+                    val handler = Handler()
+                    handler.postDelayed({
+                        run {
+                            //go to FirstFragment, if user not logged in
+                            replaceFragment(firstFragment)
+                        }
+                    },3000)}
+                }
+
+            })
+        }
+
 }
+
