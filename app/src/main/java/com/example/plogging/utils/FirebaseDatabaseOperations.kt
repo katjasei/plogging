@@ -116,8 +116,7 @@ fun getUserNameFromDataBase(userID:String, textView:TextView){
         )
 }
 
-
-fun getTotalPointsFromDataBase(userID:String, textView:TextView){
+    fun getTotalPointsFromDataBase(userID:String, textView:TextView){
     var total = 0
     mFirebaseDB.child("users")
         .child(userID!!)
@@ -140,7 +139,8 @@ fun getTotalPointsFromDataBase(userID:String, textView:TextView){
 
 }
 
-fun getUnitTrashInfoFromDataBase(userID: String, recyclerView:RecyclerView, context:Context){
+    fun getUnitTrashInfoFromDataBase(userID: String, recyclerView:RecyclerView, context:Context){
+     trashUnitList.clear()
     mFirebaseDB.child("users")
         .child(userID!!)
         .addValueEventListener(object: ValueEventListener {
