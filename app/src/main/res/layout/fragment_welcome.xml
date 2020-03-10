@@ -8,6 +8,7 @@
 
     <ImageView
         android:id="@+id/imageView"
+        android:contentDescription="@string/desc_running_image"
         android:layout_width="wrap_content"
         android:layout_height="346dp"
         android:background="@drawable/one_round_corner"
@@ -68,6 +69,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_start_plogging"
+        android:contentDescription="@string/desc_start_plogging_button"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="300dp"
         android:layout_height="60dp"

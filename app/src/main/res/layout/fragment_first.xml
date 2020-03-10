@@ -22,6 +22,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_up"
+        android:contentDescription="@string/txt_sign_up"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="300dp"
         android:layout_height="60dp"
@@ -39,6 +40,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_in"
+        android:contentDescription="@string/txt_log_in"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="300dp"
         android:layout_height="60dp"

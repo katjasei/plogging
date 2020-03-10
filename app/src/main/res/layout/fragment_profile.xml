@@ -15,6 +15,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
+            android:contentDescription="@string/desc_profile_image"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginStart="130dp"
@@ -137,6 +138,7 @@
 
             <ImageView
                 android:id="@+id/img_pet_bottle"
+                android:contentDescription="@string/desc_pet_bottle_icon"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 app:srcCompat="@drawable/pet" />
@@ -189,6 +191,7 @@
 
             <ImageView
                 android:id="@+id/img_iron_cans"
+                android:contentDescription="@string/desc_can_icon"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -244,6 +247,7 @@
 
             <ImageView
                 android:id="@+id/img_cigarette"
+                android:contentDescription="@string/desc_cigarette_icon"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -299,6 +303,7 @@
 
             <ImageView
                 android:id="@+id/img_cardboard"
+                android:contentDescription="@string/desc_cardboard_icon"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -354,6 +359,7 @@
 
             <ImageView
                 android:id="@+id/img_other"
+                android:contentDescription="@string/desc_other_icon"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center"
@@ -388,6 +394,7 @@
 
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logout"
+            android:contentDescription="@string/desc_logout"
             style="@style/Widget.MaterialComponents.Button.OutlinedButton"
             android:layout_width="300dp"
             android:layout_height="60dp"

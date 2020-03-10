@@ -22,6 +22,7 @@
 
             <fragment
                 android:id="@+id/map"
+                android:contentDescription="@string/desc_map"
                 android:name="com.google.android.gms.maps.SupportMapFragment"
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
@@ -32,6 +33,7 @@
 
             <com.google.android.material.floatingactionbutton.FloatingActionButton
                 android:id="@+id/floating_action_button"
+                android:contentDescription="@string/desc_map_center"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignEnd="@id/map"
@@ -61,6 +63,7 @@
             android:id="@+id/txt_distance"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:contentDescription="@string/desc_km"
             android:text="@string/txt_distance"
             android:textAlignment="center"
             android:textColor="@android:color/black"
@@ -104,6 +107,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_start_activity"
             style="@style/Widget.MaterialComponents.Button"
+            android:contentDescription="@string/desc_start_activity"
             android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_gravity="center"
@@ -118,8 +122,6 @@
             app:layout_constraintHorizontal_bias="0.55"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_duration" />
-
-
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>
