@@ -58,7 +58,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     private var activityCallBack: PloggingActivityListener? = null
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
-    private var running = true
+    private var running= false
     private var seconds = 0
 
     interface PloggingActivityListener {
@@ -117,6 +117,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        running = true
         val view = inflater.inflate(R.layout.fragment_plogging_activity, container, false)
         val duration = view.findViewById<TextView>(R.id.value_duration_activity)
         runTimer(duration)
@@ -128,6 +129,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
         btn_plogging_result.setOnClickListener{
             seconds = 0
             activityCallBack!!.onButtonStopActivityClick()
@@ -135,7 +137,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         btn_stop_activity.setOnClickListener {
             //stop the stopwatch running
             running = false
-
         }
         //FAB - set white tint for icon
         val myFabSrc = resources.getDrawable(R.drawable.ic_my_location_white_24dp,null)
@@ -204,6 +205,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         val rounded = "%.1f".format(routeLength)
         value_distance_activity.text = rounded
     }
+
 
     override fun onResume() {
         super.onResume()
@@ -287,7 +289,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                 val time = String.format("%d:%02d:%02d", hours,minutes,secs)
                 textView.text = time
                 if(running) {
-                    seconds++
+                    seconds+=1
+                    Log.d("seconds", seconds.toString())
                 }
                 handler.postDelayed(this,1000)
             }

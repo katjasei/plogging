@@ -17,13 +17,14 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.plogging.R
-import com.example.plogging.adapters.LeaderBoardAdapter
-import com.example.plogging.adapters.TrashAdapter
-import com.example.plogging.data.model.UnitTrash
+import com.example.plogging.utils.getTotalPointsFromDataBase
+import com.example.plogging.utils.getUnitTrashInfoFromDataBase
+import com.example.plogging.utils.getUserNameFromDataBase
 import com.example.plogging.utils.uploadFileToFirebaseStorage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -41,15 +42,15 @@ import java.net.URL
 class ProfileFragment: Fragment(){
 
     //VARIABLES:
-    val REQUEST_IMAGE_CAPTURE = 99
-    val REQUESTCODE = 1
-    var mCurrentPhotoPath = ""
-    var mFirebaseDB =  FirebaseDatabase.getInstance().reference
-    val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
+    private val REQUEST_IMAGE_CAPTURE = 99
+    private val REQUESTCODE = 1
+    private var mCurrentPhotoPath = ""
+    private var mFirebaseDB =  FirebaseDatabase.getInstance().reference
     private var activityCallBack: ProfileFragmentListener? = null
     private val alertItems = arrayOf("Open camera","Choose from library")
-    private var trashUnitList: MutableList<UnitTrash> = java.util.ArrayList()
+    private val userID = FirebaseAuth.getInstance().currentUser?.uid
 
+    //FUNCTIONS AND INTERFACES
     interface ProfileFragmentListener {
         fun onButtonLogOutClick()
     }
@@ -61,6 +62,7 @@ class ProfileFragment: Fragment(){
     data class  URLparams(val url: URL)
     data class FinalBitmap(val bitmap: Bitmap)
 
+    @SuppressLint("StaticFieldLeak")
     inner class GetConn : AsyncTask<URLparams, Unit, FinalBitmap>() {
         override fun doInBackground(vararg params: URLparams): FinalBitmap {
             lateinit var result: FinalBitmap
@@ -86,68 +88,23 @@ class ProfileFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_profile, container, false)
+        val view = inflater.inflate(R.layout.fragment_profile, container, false)
+        val recyclerViewTrash = view.findViewById<RecyclerView>(R.id.recycler_view_trash)
+        val username = view.findViewById<TextView>(R.id.value_user_name_profile)
+        val points = view.findViewById<TextView>(R.id.value_points_profile)
+
+        getUserNameFromDataBase(userID!!, username)
+        getTotalPointsFromDataBase(userID, points)
+        getProfilePictureFromDataBase(userID)
+        getUnitTrashInfoFromDataBase(userID, recyclerViewTrash, context!!)
+        return view
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userID = FirebaseAuth.getInstance().currentUser?.uid
 
-        mFirebaseDB.child("users")
-            .child(userID!!)
-            .addValueEventListener(object: ValueEventListener {
-                @SuppressLint("SetTextI18n")
-                override fun onDataChange(p0: DataSnapshot) {
 
-                    var total = 0
-                    var totalPB = 0
-                    var totalIC = 0
-                    var totalCB = 0
-                    var totalC = 0
-                    var totalO = 0
-                    var username = ""
-
-                    Log.d("p0.value", p0.value.toString())
-                    if(p0.child("profile_image").value != null){
-                        if (isNetworkAvailable()){
-                            val myURLparams = URLparams(URL(p0.child("profile_image").value.toString()))
-                            GetConn().execute(myURLparams)
-                        }
-                    }
-
-                    username = p0.child("username").value.toString()
-                    value_user_name_profile.text = username
-                    if (p0.child("trash").value != null) {
-                        val trash = p0.child("trash").children
-                        trash.forEach{
-                            totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
-                            totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
-                            totalCB += Integer.parseInt(it.child("cardboard").value.toString())
-                            totalC += Integer.parseInt(it.child("cigarettes").value.toString())
-                            totalO += Integer.parseInt(it.child("other").value.toString())
-                            total = totalPB + totalIC + totalCB + totalC + totalO
-                        }
-                        value_points_profile.text = total.toString()
-
-                        trashUnitList.add(UnitTrash(R.drawable.pet_bottles,"PET Bottles", totalPB.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.iron_cans,"Iron cans", totalIC.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.cardboard,"Cardboard", totalCB.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.cigarettes,"Cigarettes", totalC.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.other,"Other", totalO.toString()))
-                    }
-                    val trashAdapter = TrashAdapter(trashUnitList.sortedBy{ it.trash })
-                    recycler_view_trash.layoutManager = LinearLayoutManager(context)
-                    recycler_view_trash.adapter = trashAdapter
-                    trashAdapter.notifyDataSetChanged()
-                }
-                override fun onCancelled(p0: DatabaseError) {
-                    // Failed to read value
-                    Log.d("Failed to read value.", "")
-                }
-            }
-            )
 
         //profile image click listener, when user click profile image -> they can choose
         //photo from library or use camera
@@ -160,6 +117,30 @@ class ProfileFragment: Fragment(){
         }
     }
 
+    //FUNCTIONS FOR UPLOADING PROFILE PICTURE
+    //Alert dialog with to choices: Open camera or Choice from library
+    private fun showAlertDialog(){
+        val builder = AlertDialog.Builder(this.context)
+        builder.setTitle("Upload profile picture")
+        builder.setSingleChoiceItems(
+            alertItems,
+            -1
+        ) { _, which ->
+            if(which == 0){
+                openCamera()
+            } else {
+                openGallery()
+            }
+        }
+        builder.setPositiveButton(
+            "OK"
+        ) { _, _ ->
+
+        }
+        val dialog = builder.create()
+        // Display the alert dialog on interface
+        dialog.show()
+    }
 
     private fun openGallery(){
         //open gallery intent and wait for user to pick an image
@@ -171,7 +152,7 @@ class ProfileFragment: Fragment(){
     private fun openCamera(){
         val fileName = "temp_photo"
         val imgPath = context!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
-        var imageFile: File? = null
+        val imageFile: File?
         imageFile = File.createTempFile(fileName, ".jpg", imgPath)
         val photoURI: Uri =
             FileProvider.getUriForFile(this.context!!, "com.example.plogging", imageFile)
@@ -192,45 +173,42 @@ class ProfileFragment: Fragment(){
             val pickedImageURI = data.data!!
             profile_image.setImageURI(pickedImageURI)
             //upload user photo to firebase storage and get url
-            uploadFileToFirebaseStorage(pickedImageURI, currentUserID!!, activity!!)
+            uploadFileToFirebaseStorage(pickedImageURI, userID!!, activity!!)
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath)
-            uploadFileToFirebaseStorage(Uri.fromFile(File(mCurrentPhotoPath)), currentUserID!!, activity!!)
+            uploadFileToFirebaseStorage(Uri.fromFile(File(mCurrentPhotoPath)), userID!!, activity!!)
             profile_image.setImageBitmap(imageBitmap)
         }
     }
 
-    private fun isNetworkAvailable(): Boolean {
+    private fun getProfilePictureFromDataBase(userID:String){
+        mFirebaseDB.child("users")
+            .child(userID)
+            .addValueEventListener(object:ValueEventListener{
+                override fun onDataChange(p0: DataSnapshot) {
+                    if (p0.child("profile_image").value != null) {
+                        if (isNetworkAvailable()) {
+                            val myURLparams =
+                                URLparams(URL(p0.child("profile_image").value.toString()))
+                            GetConn().execute(myURLparams)
+                        }
+                    }
+                }
+
+                override fun onCancelled(p0: DatabaseError) {
+                    // Failed to read value
+                    Log.d("Failed to read value.", "")
+                }
+            })
+    }
+
+   private fun isNetworkAvailable(): Boolean {
         val connectivityManager = activity!!.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
         //if activeNetworkInfo == false -> if isConnected == false -> return false
         return connectivityManager.activeNetworkInfo?.isConnected?:false
-    }
-
-    //Alert dialog with to choices: Open camera or Choice from library
-    private fun showAlertDialog(){
-        val builder = AlertDialog.Builder(this.context)
-        builder.setTitle("Upload profile picture")
-        builder.setSingleChoiceItems(
-            alertItems,
-            -1
-        ) { _, which ->
-            if(which == 0){
-              openCamera()
-            } else {
-             openGallery()
-            }
-        }
-        builder.setPositiveButton(
-            "OK"
-        ) { _, _ ->
-
-        }
-         val dialog = builder.create()
-        // Display the alert dialog on interface
-        dialog.show()
     }
 
 }
