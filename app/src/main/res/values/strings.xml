@@ -2,11 +2,11 @@
     <string name="app_name">Plogging</string>
     <string name="txt_sign_up">SIGN UP</string>
     <string name="txt_log_in">LOGIN</string>
-    <string name="txt_user_name"> user name</string>
-    <string name="txt_password"> password</string>
-    <string name="txt_confirm_password"> confirm password</string>
+    <string name="txt_user_name">Username</string>
+    <string name="txt_password">Password</string>
+    <string name="txt_confirm_password">Confirm password</string>
     <string name="txt_plogging">Are you ready for plogging?</string>
-    <string name="txt_welcome">Welcome to our application Plogging! Together we can keep our Earth clean!</string>
+    <string name="txt_welcome">Welcome to our Plogging application! Together we can keep our Earth clean!</string>
     <string name="txt_start_plogging">START PLOGGING</string>
     <string name="txt_email">email</string>
     <!--strings for validation, validation is implemented with AwesomeValidation-->
@@ -20,9 +20,9 @@
     <string name="txt_current_user">Current user</string>
     <string name="txt_btn_logout">LOGOUT</string>
     <string name="txt_duration">0:00:00</string>
-    <string name="txt_duration2">duration</string>
+    <string name="txt_duration2">Duration</string>
     <string name="txt_value_distance">0.00</string>
-    <string name="txt_distance">distance km</string>
+    <string name="txt_distance">Distance km</string>
     <string name="txt_btn_start_activity">START ACTIVITY</string>
     <string name="txt_btn_stop_activity">STOP ACTIVITY</string>
     <string name="txt_pet_bottle">PET Bottles</string>
@@ -41,7 +41,7 @@
     <string name="location_loading">Loading location</string>
     <string name="temperature">0°C</string>
     <string name="steps">Steps</string>
-    <string name="txt_points_profile">points</string>
+    <string name="txt_points_profile">Points</string>
     <string name="txt_default_kilometers">0</string>
     <string name="txt_total_kilometers">Total distance</string>
     <string name="txt_default_time">0</string>

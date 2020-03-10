@@ -119,7 +119,7 @@ class ProfileFragment: Fragment(){
 
                     //set username to textView
                     username = p0.child("username").value.toString()
-                    usernameTextView.text = username
+                    usernameTextView?.text = username
 
                     //set total distance to textView
                     var totalDistance = 0.0
@@ -127,6 +127,19 @@ class ProfileFragment: Fragment(){
                         totalDistance += it.child("distance").value.toString().toDouble()
                         }
                     value_kilometers?.text = "%.2f".format(totalDistance)
+
+                    //set total time to textView
+                    var totalTime = 0
+                    p0.child("routes").children.forEach {
+                        if (it.child("time").value.toString().toInt() > 0)
+                        totalTime += it.child("time").value.toString().toInt()
+                    }
+                    Log.i("profile", "Total time: "+totalTime)
+                    when (totalTime) {
+                        in 0..60 -> value_time?.text = totalTime.toString()+"s"
+                        in 61..3600 -> value_time?.text = (totalTime/60).toString()+"min"
+                        else -> value_time?.text = (totalTime/3600).toString()+"h"
+                    }
 
                     //set trash to each textView
                     if (p0.child("trash").value != null) { val trash = p0.child("trash").children
@@ -140,12 +153,12 @@ class ProfileFragment: Fragment(){
                             Log.d("Total1", it.child("total").value.toString())
                         }
                         Log.d("Total", total.toString())
-                        totalPoints.text = total.toString()
-                        totalPet.text = totalPB.toString()
-                        totalCans.text = totalIC.toString()
-                        totalCardBoard.text = totalCB.toString()
-                        totalCigarettes.text = totalC.toString()
-                        totalOther.text = totalO.toString()
+                        totalPoints?.text = total.toString()
+                        totalPet?.text = totalPB.toString()
+                        totalCans?.text = totalIC.toString()
+                        totalCardBoard?.text = totalCB.toString()
+                        totalCigarettes?.text = totalC.toString()
+                        totalOther?.text = totalO.toString()
                     }
                 }
                 override fun onCancelled(p0: DatabaseError) {
