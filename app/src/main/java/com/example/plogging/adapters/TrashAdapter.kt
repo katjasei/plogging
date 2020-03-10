@@ -6,11 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plogging.R
-import com.example.plogging.data.model.ClassUserTrash
+import com.example.plogging.data.model.UnitTrash
+import kotlinx.android.synthetic.main.item_recycler_view_trash.view.*
 import kotlinx.android.synthetic.main.recycler_view_item.view.*
 
-class LeaderBoardAdapter (private val myDataset: List<ClassUserTrash>) :
-    RecyclerView.Adapter<LeaderBoardAdapter.MyViewHolder>() {
+class TrashAdapter(private val myDataset: List<UnitTrash>) :
+    RecyclerView.Adapter<TrashAdapter.MyViewHolder>() {
 
     // Provide a reference to the views for each data item
     // Complex data items may need more than one view per item, and
@@ -25,7 +26,7 @@ class LeaderBoardAdapter (private val myDataset: List<ClassUserTrash>) :
 
         // create a new view
         val view = LayoutInflater.from(parent.context)
-            .inflate(R.layout.recycler_view_item, parent, false)
+            .inflate(R.layout.item_recycler_view_trash, parent, false)
         // set the view's size, margins, paddings and layout parameters
         return MyViewHolder(view)
     }
@@ -36,10 +37,10 @@ class LeaderBoardAdapter (private val myDataset: List<ClassUserTrash>) :
         // - get element from your data set at this position
         // - replace the contents of the view with that element
 
-        val userTrash = myDataset[position]
-        holder.itemView.value_number.text = "    " + (position + 1).toString() + "."
-        holder.itemView.value_username.text = userTrash.username
-        holder.itemView.value_points_profile.text = userTrash.trashTotal.toString() + " pts"
+        val unitTrash = myDataset[position]
+        holder.itemView.img_trash.setImageResource(unitTrash.image)
+        holder.itemView.txt_trash.text = unitTrash.trash
+        holder.itemView.value_trash.text = unitTrash.total
 
     }
 

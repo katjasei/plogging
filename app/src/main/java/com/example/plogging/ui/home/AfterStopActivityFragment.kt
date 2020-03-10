@@ -21,14 +21,15 @@ import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
 import java.lang.Integer.parseInt
 
 
-class AfterStopActivityFragment: Fragment(){
+class AfterStopActivityFragment: Fragment() {
 
     private var activityCallBack: AfterStopActivityListener? = null
 
     interface AfterStopActivityListener {
-        fun onButtonUploadClick(points:String)
-        fun getRoute():MutableList<LatLng>
+        fun onButtonUploadClick(points: String)
+        fun getRoute(): MutableList<LatLng>
     }
+
     override fun onAttach(context: Context) {
         super.onAttach(context)
         activityCallBack = context as AfterStopActivityListener
@@ -53,10 +54,20 @@ class AfterStopActivityFragment: Fragment(){
         onFocusChange(value_other)
 
         btn_plogging_result.setOnClickListener {
-            val points = parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(value_cardboard.text.toString()) + parseInt(value_cigarettes.text.toString())+ parseInt(value_other.text.toString())
+            val points =
+                parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(
+                    value_cardboard.text.toString()
+                ) + parseInt(value_cigarettes.text.toString()) + parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
             val route = activityCallBack!!.getRoute()
-            addTrashToDB(points,value_pet_bottles, value_iron_cans, value_cardboard, value_cigarettes, value_other)
+            addTrashToDB(
+                points,
+                value_pet_bottles,
+                value_iron_cans,
+                value_cardboard,
+                value_cigarettes,
+                value_other
+            )
             addRouteToDB(route)
         }
     }
@@ -70,11 +81,15 @@ class AfterStopActivityFragment: Fragment(){
         value_other.setText("0")
     }
 
-    private fun onFocusChange(editText: EditText){
+    private fun onFocusChange(editText: EditText) {
         editText.setOnFocusChangeListener { _, hasFocus ->
-            if (hasFocus){
+            if (hasFocus && editText.text.toString() == "0") {
                 editText.setText("")
+            } else
+                    if (!hasFocus && editText.text.toString() == "") {
+                        editText.setText("0")
+
+                }
             }
         }
-    }
 }

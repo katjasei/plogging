@@ -54,4 +54,5 @@
     <string name="txt_not_register">You need to be registered</string>
     <string name="txt_go_to_first_screen">FIRST SCREEN</string>
     <string name="facebook_app_id">1356934837832274</string>
+    <string name="txt_trash_name">trash_name</string>
 </resources>

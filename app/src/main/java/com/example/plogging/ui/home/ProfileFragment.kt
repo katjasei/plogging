@@ -17,11 +17,13 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.TextView
 import androidx.core.content.FileProvider
-import androidx.core.net.toUri
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.LinearLayoutManager
 import com.example.plogging.R
+import com.example.plogging.adapters.LeaderBoardAdapter
+import com.example.plogging.adapters.TrashAdapter
+import com.example.plogging.data.model.UnitTrash
 import com.example.plogging.utils.uploadFileToFirebaseStorage
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -33,7 +35,6 @@ import java.io.File
 import java.io.InputStream
 import java.lang.Exception
 import java.net.HttpURLConnection
-import java.net.URI
 import java.net.URL
 
 
@@ -46,7 +47,8 @@ class ProfileFragment: Fragment(){
     var mFirebaseDB =  FirebaseDatabase.getInstance().reference
     val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
     private var activityCallBack: ProfileFragmentListener? = null
-    val alertItems = arrayOf("Open camera","Choose from library")
+    private val alertItems = arrayOf("Open camera","Choose from library")
+    private var trashUnitList: MutableList<UnitTrash> = java.util.ArrayList()
 
     interface ProfileFragmentListener {
         fun onButtonLogOutClick()
@@ -86,16 +88,12 @@ class ProfileFragment: Fragment(){
     ): View? {
 
         // Inflate the layout for this fragment
-        val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        val usernameTextView = view.findViewById<TextView>(R.id.value_user_name_profile)
-        val totalPoints = view.findViewById<TextView>(R.id.value_points_profile)
-        val totalPet = view.findViewById<TextView>(R.id.value_pet_bottles)
-        val totalCans = view.findViewById<TextView>(R.id.value_iron_cans)
-        val totalCardBoard = view.findViewById<TextView>(R.id.value_cardboard)
-        val totalCigarettes = view.findViewById<TextView>(R.id.value_cigarettes)
-        val totalOther = view.findViewById<TextView>(R.id.value_other)
-        val userID = FirebaseAuth.getInstance().currentUser?.uid
+        return inflater.inflate(R.layout.fragment_profile, container, false)
+    }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        val userID = FirebaseAuth.getInstance().currentUser?.uid
 
         mFirebaseDB.child("users")
             .child(userID!!)
@@ -111,35 +109,38 @@ class ProfileFragment: Fragment(){
                     var totalO = 0
                     var username = ""
 
-                        Log.d("p0.value", p0.value.toString())
-                           if(p0.child("profile_image").value != null){
-                               if (isNetworkAvailable()){
-                                   val myURLparams = URLparams(URL(p0.child("profile_image").value.toString()))
-                                   GetConn().execute(myURLparams)
-                               }
-                           }
-
-                            username = p0.child("username").value.toString()
-                            usernameTextView.text = username
-                        if (p0.child("trash").value != null) {
-                        val trash = p0.child("trash").children
-                            trash.forEach{
-                                total += Integer.parseInt(it.child("total").value.toString())
-                                totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
-                                totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
-                                totalCB += Integer.parseInt(it.child("cardboard").value.toString())
-                                totalC += Integer.parseInt(it.child("cigarettes").value.toString())
-                                totalO += Integer.parseInt(it.child("other").value.toString())
-                                Log.d("Total1", it.child("total").value.toString())
-                            }
-                            Log.d("Total", total.toString())
-                            totalPoints.text = total.toString()
-                            totalPet.text = totalPB.toString()
-                            totalCans.text = totalIC.toString()
-                            totalCardBoard.text = totalCB.toString()
-                            totalCigarettes.text = totalC.toString()
-                            totalOther.text = totalO.toString()
+                    Log.d("p0.value", p0.value.toString())
+                    if(p0.child("profile_image").value != null){
+                        if (isNetworkAvailable()){
+                            val myURLparams = URLparams(URL(p0.child("profile_image").value.toString()))
+                            GetConn().execute(myURLparams)
+                        }
                     }
+
+                    username = p0.child("username").value.toString()
+                    value_user_name_profile.text = username
+                    if (p0.child("trash").value != null) {
+                        val trash = p0.child("trash").children
+                        trash.forEach{
+                            totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
+                            totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
+                            totalCB += Integer.parseInt(it.child("cardboard").value.toString())
+                            totalC += Integer.parseInt(it.child("cigarettes").value.toString())
+                            totalO += Integer.parseInt(it.child("other").value.toString())
+                            total = totalPB + totalIC + totalCB + totalC + totalO
+                        }
+                        value_points_profile.text = total.toString()
+
+                        trashUnitList.add(UnitTrash(R.drawable.pet_bottles,"PET Bottles", totalPB.toString()))
+                        trashUnitList.add(UnitTrash(R.drawable.iron_cans,"Iron cans", totalIC.toString()))
+                        trashUnitList.add(UnitTrash(R.drawable.cardboard,"Cardboard", totalCB.toString()))
+                        trashUnitList.add(UnitTrash(R.drawable.cigarettes,"Cigarettes", totalC.toString()))
+                        trashUnitList.add(UnitTrash(R.drawable.other,"Other", totalO.toString()))
+                    }
+                    val trashAdapter = TrashAdapter(trashUnitList.sortedBy{ it.trash })
+                    recycler_view_trash.layoutManager = LinearLayoutManager(context)
+                    recycler_view_trash.adapter = trashAdapter
+                    trashAdapter.notifyDataSetChanged()
                 }
                 override fun onCancelled(p0: DatabaseError) {
                     // Failed to read value
@@ -148,11 +149,8 @@ class ProfileFragment: Fragment(){
             }
             )
 
-        return view
-    }
-
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+        //profile image click listener, when user click profile image -> they can choose
+        //photo from library or use camera
         profile_image.setOnClickListener {
             showAlertDialog()
         }
