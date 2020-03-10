@@ -7,6 +7,7 @@ import android.os.Bundle
 import android.os.Handler
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import androidx.core.app.ActivityCompat
 import androidx.core.content.ContextCompat
 import androidx.fragment.app.Fragment
@@ -18,7 +19,6 @@ import com.google.firebase.auth.FirebaseAuth
 class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     RegistrationFragment.RegistrationFragmentListener, WelcomeFragment.WelcomeFragmentListener
 {
-    //VARIABLES:
     // Permission code
     private val PERMISSIONS = 1
     //Create a new Fragment to be placed in the activity layout
@@ -36,8 +36,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-        // Hide the status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        hideSystemUI()
         //permissions
         askPermissions(this,this)
         // fragment manager can help when switching to the other fragment is needed
@@ -62,8 +61,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                         firstFragment)
                         .addToBackStack(null )
                         .commit()
+                    hideSystemUI()
                 }
-
             },3000)}
     }
 
@@ -98,6 +97,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+        hideSystemUI()
     }
 
     override fun onRequestPermissionsResult(
@@ -110,9 +110,11 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                 //if request is cancelled, the result array is empty
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted
+                    //TODO permissions accepted, continue as normal
                 }
                 else{
                     //permission denied
+                    //TODO permissions denied
                 }
             }
         }
@@ -124,4 +126,13 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
     }
 
+    private fun hideSystemUI() {
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+    }
 }
