@@ -55,7 +55,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
     private var running = true
-    var seconds = 0
+    private var seconds = 0
+    var time = 0
 
     interface PloggingActivityListener {
         fun onButtonStopActivityClick()
@@ -124,10 +125,15 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+
+        //Result button onClickListener
         btn_plogging_result.setOnClickListener{
+            time = seconds
             seconds = 0
             activityCallBack!!.onButtonStopActivityClick()
         }
+
+        //Stop activity onClickListener
         btn_stop_activity.setOnClickListener {
             //stop the stopwatch running
             running = false
@@ -286,5 +292,4 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
             }
         })
     }
-
 }

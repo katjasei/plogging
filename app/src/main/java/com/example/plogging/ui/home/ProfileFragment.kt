@@ -126,7 +126,7 @@ class ProfileFragment: Fragment(){
                     p0.child("routes").children.forEach {
                         totalDistance += it.child("distance").value.toString().toDouble()
                         }
-                    value_kilometers.text = "%.2f".format(totalDistance)
+                    value_kilometers?.text = "%.2f".format(totalDistance)
 
                     //set trash to each textView
                     if (p0.child("trash").value != null) { val trash = p0.child("trash").children

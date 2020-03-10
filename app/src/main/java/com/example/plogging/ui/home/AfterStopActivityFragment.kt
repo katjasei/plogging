@@ -97,6 +97,7 @@ class AfterStopActivityFragment: Fragment(){
                 .push()
                 .setValue(finalRoute)
             Log.i("database", "Route upload succesful! Uploaded: "+finalRoute)
+            Log.i("database", "Time uploaded: "+finalRoute.time)
         } else {
             Log.e("database", "Route was empty or other error, not saved to database")
         }

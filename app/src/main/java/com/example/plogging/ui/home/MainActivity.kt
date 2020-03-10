@@ -191,6 +191,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
     override fun getRouteTime(): Int {
-        return ploggingActivityFragment.seconds
+        return ploggingActivityFragment.time
     }
 }
