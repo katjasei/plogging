@@ -10,7 +10,7 @@ App records the number of picking up trash, location, distance and the time spen
   +  Follow material design guidelines recommendation
   +  Accessibility checked (contrast, label,...)
   +  Use at least 2 out of 4 basic components (activity, broadcast receiver, service, content provider)
-  +  Fagments
+  +  Fragments
   +  Persistence (Room and/or File and/or SharedPreferences)
   +  Clean code (private, val, correct indent, no lint warnings, packages,...)
 
