@@ -27,8 +27,25 @@ App records the number of picking up trash, location, distance and the time spen
   
 # App features
 
+# API Reference
++ Minimum SDK: 16
++ Target SDK: 28
+
+# Info
+
+Written in Android Studio 3.6 with Kotlin language
+
 # Mockups
 
 <p align="center">
   <img src="https://github.com/oonarauhala/plogging/blob/ProfileImage/images/mockup1.jpg" width="350" title="hover text">
+  <img src="https://github.com/oonarauhala/plogging/blob/ProfileImage/images/mockup2.jpg" width="350" title="hover text">
+  <img src="https://github.com/oonarauhala/plogging/blob/ProfileImage/images/mockup3.jpg" width="350" title="hover text">
+  <img src="https://github.com/oonarauhala/plogging/blob/ProfileImage/images/mockup4.jpg" width="350" title="hover text">
 </p>
+
+# Github users
+
++ [oonarauhala](https://github.com/oonarauhala)
++ [katjasei](https://github.com/katjasei)
+
