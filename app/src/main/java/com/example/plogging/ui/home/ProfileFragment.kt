@@ -17,6 +17,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
@@ -32,8 +33,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.jetbrains.anko.doAsync
-import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.InputStream
 import java.lang.Exception
@@ -50,7 +49,8 @@ class ProfileFragment: Fragment(){
     private var mFirebaseDB =  FirebaseDatabase.getInstance().reference
     private var activityCallBack: ProfileFragmentListener? = null
     private val alertItems = arrayOf("Open camera","Choose from library")
-    private val userID = FirebaseAuth.getInstance().currentUser?.uid
+    lateinit var userID: String
+    lateinit var imageView: ImageView
 
     //FUNCTIONS AND INTERFACES
     interface ProfileFragmentListener {
@@ -80,8 +80,8 @@ class ProfileFragment: Fragment(){
             return result
         }
         override fun onPostExecute(result: FinalBitmap) {
-            Log.d("Result", result.toString())
-                profile_image.setImageBitmap(result.bitmap)
+            Log.d("ImageView", imageView.toString())
+                imageView.setImageBitmap(result.bitmap)
         }
     }
 
@@ -95,7 +95,8 @@ class ProfileFragment: Fragment(){
         val recyclerViewTrash = view.findViewById<RecyclerView>(R.id.recycler_view_trash)
         val username = view.findViewById<TextView>(R.id.value_user_name_profile)
         val points = view.findViewById<TextView>(R.id.value_points_profile)
-
+        userID = FirebaseAuth.getInstance().currentUser!!.uid
+        imageView = view.findViewById(R.id.profile_image)
         getUserNameFromDataBase(userID!!, username)
         getTotalPointsFromDataBase(userID, points)
         getProfilePictureFromDataBase(userID)
@@ -105,9 +106,6 @@ class ProfileFragment: Fragment(){
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-
-
-
         //profile image click listener, when user click profile image -> they can choose
         //photo from library or use camera
         profile_image.setOnClickListener {
@@ -118,6 +116,7 @@ class ProfileFragment: Fragment(){
             activityCallBack!!.onButtonLogOutClick()
         }
     }
+
 
     //FUNCTIONS FOR UPLOADING PROFILE PICTURE
     //Alert dialog with to choices: Open camera or Choice from library
@@ -190,16 +189,16 @@ class ProfileFragment: Fragment(){
             .child(userID)
             .addValueEventListener(object:ValueEventListener{
                 override fun onDataChange(p0: DataSnapshot) {
+                    Log.d("p0", p0.child("profile_image").value.toString())
                     if (p0.child("profile_image").value != null) {
                         if (isNetworkAvailable()) {
-                           /* val myURLparams =
+                            val myURLparams =
                                 URLparams(URL(p0.child("profile_image").value.toString()))
-                            GetConn().execute(myURLparams)*/
+                            GetConn().execute(myURLparams)
 
                         }
                     }
                 }
-
                 override fun onCancelled(p0: DatabaseError) {
                     // Failed to read value
                     Log.d("Failed to read value.", "")

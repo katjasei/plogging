@@ -57,11 +57,13 @@ class AfterStopActivityFragment: Fragment() {
             checkTrashUnitValue(value_cardboard)
             checkTrashUnitValue(value_cigarettes)
             checkTrashUnitValue(value_other)
+
             val points =
                 parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(
                     value_cardboard.text.toString()
                 ) + parseInt(value_cigarettes.text.toString()) + parseInt(value_other.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
+
             val route = activityCallBack!!.getRoute()
 
             addTrashToDB(
