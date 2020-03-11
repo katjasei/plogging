@@ -23,16 +23,14 @@ import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plogging.R
-import com.example.plogging.utils.getTotalPointsFromDataBase
-import com.example.plogging.utils.getUnitTrashInfoFromDataBase
-import com.example.plogging.utils.getUserNameFromDataBase
-import com.example.plogging.utils.uploadFileToFirebaseStorage
+import com.example.plogging.utils.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
+import org.w3c.dom.Text
 import java.io.File
 import java.io.InputStream
 import java.lang.Error
@@ -93,10 +91,16 @@ class ProfileFragment: Fragment(){
         val recyclerViewTrash = view.findViewById<RecyclerView>(R.id.recycler_view_trash)
         val username = view.findViewById<TextView>(R.id.value_user_name_profile)
         val points = view.findViewById<TextView>(R.id.value_points_profile)
+        val distance = view.findViewById<TextView>(R.id.value_kilometers)
+        val time = view.findViewById<TextView>(R.id.value_time)
         userID = FirebaseAuth.getInstance().currentUser!!.uid
         imageView = view.findViewById(R.id.profile_image)
+
+        //Set user data to textViews
         getUserNameFromDataBase(userID, username)
         getTotalPointsFromDataBase(userID, points)
+        getTotalDistanceFromDatabase(userID, distance)
+        getTotalTimeFromDatabase(userID, time)
         getProfilePictureFromDataBase(userID)
         getUnitTrashInfoFromDataBase(userID, recyclerViewTrash, context!!)
         return view
@@ -182,7 +186,6 @@ class ProfileFragment: Fragment(){
     }
 
     private fun getProfilePictureFromDataBase(userID:String){
-
         mFirebaseDB.child("users")
             .child(userID)
             .addValueEventListener(object:ValueEventListener{
