@@ -5,7 +5,6 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
@@ -14,8 +13,6 @@ import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
 import com.example.plogging.utils.askPermissions
 import com.example.plogging.viewModel.LoginViewModel
-import com.google.firebase.auth.FirebaseAuth
-
 
 class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     RegistrationFragment.RegistrationFragmentListener, WelcomeFragment.WelcomeFragmentListener
@@ -29,8 +26,6 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     private val registrationFragment = RegistrationFragment()
     private val welcomeFragment = WelcomeFragment()
     private val splashScreenFragment = SplashScreenFragment()
-    //firebase auth object
-    private var mFirebaseAuth = FirebaseAuth.getInstance()
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
     private val loginViewModel = LoginViewModel()

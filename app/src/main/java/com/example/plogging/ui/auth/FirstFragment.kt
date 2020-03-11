@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
-import kotlinx.android.synthetic.main.fragment_first.*
 
 class FirstFragment: Fragment() {
 

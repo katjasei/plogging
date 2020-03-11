@@ -34,6 +34,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     private val pointFragment = PointFragment()
     private val profileFragment = ProfileFragment()
     private val loginViewModel = LoginViewModel()
+    private var logedin: Boolean = false
 
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
@@ -67,7 +68,14 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             }
             R.id.profile -> {
                 Log.i("TAG", "${item.title} pressed")
-                observeAuthenticationState()
+               observeAuthenticationState()
+                if(logedin){
+                    replaceFragment(ProfileFragment())
+                }
+                else {
+                    val intent = Intent(this, NotRegisteredActivity::class.java)
+                    startActivity(intent)
+                }
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -76,13 +84,12 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
 
     private fun observeAuthenticationState() {
         loginViewModel.authenticationState.observe(this, Observer {
-            when (it) {
+            logedin = when (it) {
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
-                    replaceFragment(ProfileFragment())
+                    true
                 }
                 else -> {
-                    val intent = Intent(this, NotRegisteredActivity::class.java)
-                    startActivity(intent)
+                    false
                 }
             }
 
@@ -117,7 +124,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         hideSystemUI()
     }
-    //TODO check this when all functionality moved from ploggingActivityFragment to HomeFragment
+
     //HomeFragment listener
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {

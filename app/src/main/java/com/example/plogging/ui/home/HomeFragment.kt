@@ -33,9 +33,7 @@ import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.maps.model.PolylineOptions
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.floating_action_button
-import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
-
 
 class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
@@ -61,6 +59,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
     private lateinit var sensorManager: SensorManager
     private var stepCounterSensor: Sensor? = null
     private lateinit var currentLocation: LatLng
+    private var logedin: Boolean = false
 
     interface HomeFragmentListener {
         fun onButtonStartActivityClick()
@@ -99,6 +98,12 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
         //Result button OnClick
         resultButton.setOnClickListener {
             observeAuthenticationState()
+            if(logedin){
+                activityCallBack!!.onButtonPloggingResultClick()
+            } else {
+                val intent = Intent(context, NotRegisteredActivity::class.java)
+                startActivity(intent)
+            }
         }
 
         sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
@@ -152,11 +157,10 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
         loginViewModel.authenticationState.observe(this, Observer {
             when (it) {
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
-                    activityCallBack!!.onButtonPloggingResultClick()
+                    logedin = true
                 }
                 else -> {
-                    val intent = Intent(context, NotRegisteredActivity::class.java)
-                    startActivity(intent)
+                    logedin = false
                 }
             }
 

@@ -33,10 +33,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.w3c.dom.Text
 import java.io.File
 import java.io.InputStream
-import java.lang.Error
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
