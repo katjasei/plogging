@@ -2,7 +2,6 @@
 <ScrollView
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
@@ -76,9 +75,12 @@
             android:id="@+id/divider"
             android:layout_width="match_parent"
             android:layout_height="2dp"
+            android:layout_marginStart="16dp"
+            android:layout_marginEnd="16dp"
             android:background="?android:attr/listDivider"
-            app:layout_constraintTop_toBottomOf="@+id/txt_distance"
-            tools:layout_editor_absoluteX="-36dp" />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_distance" />
 
         <TextView
             android:id="@+id/value_duration"
@@ -116,12 +118,62 @@
             android:layout_marginEnd="32dp"
             android:text="@string/txt_btn_start_activity"
             android:textColor="#FFFFFF"
+            android:visibility="visible"
             app:backgroundTint="@color/colorPrimary"
             app:cornerRadius="8dp"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintHorizontal_bias="0.55"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@+id/txt_duration" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_stop_activity_home"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:layout_gravity="center"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/txt_btn_stop_activity"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible"
+            app:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.55"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/txt_duration" />
+
+        <com.google.android.material.button.MaterialButton
+            android:id="@+id/btn_plogging_result_home"
+            style="@style/Widget.MaterialComponents.Button"
+            android:layout_width="300dp"
+            android:layout_height="60dp"
+            android:layout_marginStart="32dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="32dp"
+            android:text="@string/txt_plogging_result"
+            android:textColor="#FFFFFF"
+            android:visibility="invisible"
+            app:backgroundTint="@color/colorPrimary"
+            app:cornerRadius="8dp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_stop_activity_home" />
+
+        <TextView
+            android:id="@+id/stepTextView_home"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="8dp"
+            android:text="@string/steps"
+            android:textSize="24sp"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintHorizontal_bias="0.498"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btn_plogging_result_home" />
+
 
     </androidx.constraintlayout.widget.ConstraintLayout>
 </ScrollView>

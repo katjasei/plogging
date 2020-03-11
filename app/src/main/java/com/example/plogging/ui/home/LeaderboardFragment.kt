@@ -11,23 +11,18 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plogging.R
 import com.example.plogging.adapters.LeaderBoardAdapter
-import com.example.plogging.data.model.ClassTrash
 import com.example.plogging.data.model.ClassUserTrash
-import com.google.android.material.snackbar.Snackbar
-import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.fragment_leaderboard.*
 import java.lang.Integer.parseInt
-import java.util.*
-import kotlin.collections.HashMap
+
 
 class LeaderBoardFragment: Fragment(){
 
-    var mFirebaseDB =  FirebaseDatabase.getInstance().reference
-    var listOfTrash1: MutableList<ClassUserTrash> = java.util.ArrayList()
+    private var mFirebaseDB =  FirebaseDatabase.getInstance().reference
+    private var listOfTrash1: MutableList<ClassUserTrash> = java.util.ArrayList()
     lateinit var child: MutableIterable<DataSnapshot>
 
 
@@ -41,16 +36,16 @@ class LeaderBoardFragment: Fragment(){
         val view = inflater.inflate(R.layout.fragment_leaderboard, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_leaderboard)
 
+        //get from Firebase database username and total number of points
         mFirebaseDB.child("users")
             .addValueEventListener(object: ValueEventListener {
                 @SuppressLint("SetTextI18n")
                 override fun onDataChange(p0: DataSnapshot) {
                     val children = p0.children
                     var total = 0
-                    var username = ""
+                    var username: String
 
-                    children.forEach {
-                        Log.d("p0.value", it.value.toString())
+                    children.forEach { it ->
                         if (it.child("trash").value != null) {
                             username = it.child("username").value.toString()
                             val child = it.child("trash")
@@ -58,8 +53,8 @@ class LeaderBoardFragment: Fragment(){
                                 total += parseInt(it.child("total").value.toString())
                                 Log.d("p0", it.child("total").value.toString())
                             }
-                            Log.d("Total", total.toString())
-                            listOfTrash1.add(ClassUserTrash(username, total))
+                            if (total != 0){
+                            listOfTrash1.add(ClassUserTrash(username, total))}
                             total = 0
                         }
 
@@ -78,10 +73,4 @@ class LeaderBoardFragment: Fragment(){
             )
         return view
     }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-    }
-
 }

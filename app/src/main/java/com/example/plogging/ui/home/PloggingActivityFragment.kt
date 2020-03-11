@@ -27,6 +27,8 @@ import com.google.android.gms.maps.model.*
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.btn_plogging_result
 import java.lang.Error
@@ -54,7 +56,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     private var activityCallBack: PloggingActivityListener? = null
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private lateinit var currentLocation: LatLng
-    private var running = true
+    private var running= false
     private var seconds = 0
     var time = 0
 
@@ -114,6 +116,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
+        running = true
         val view = inflater.inflate(R.layout.fragment_plogging_activity, container, false)
         val duration = view.findViewById<TextView>(R.id.value_duration_activity)
         runTimer(duration)
@@ -137,8 +140,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         btn_stop_activity.setOnClickListener {
             //stop the stopwatch running
             running = false
-
         }
+
         //FAB - set white tint for icon
         val myFabSrc = resources.getDrawable(R.drawable.ic_my_location_white_24dp,null)
         val willBeWhite = myFabSrc?.constantState?.newDrawable()
@@ -201,7 +204,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     }
 
     private fun updateRouteLength(){
-        value_distance_activity.text ="%.1f".format(routeLength)
+        val rounded = "%.1f".format(routeLength)
+        value_distance_activity.text = rounded
     }
 
     override fun onResume() {
@@ -270,10 +274,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         }
     }
 
-    fun resetStepCounter() {
-        firstStep = true
-    }
-
     //TODO: move this fun to separate file
     private fun runTimer(textView: TextView){
         val handler = Handler()
@@ -286,7 +286,8 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
                 val time = String.format("%d:%02d:%02d", hours,minutes,secs)
                 textView.text = time
                 if(running) {
-                    seconds++
+                    seconds+=1
+                    Log.d("seconds", seconds.toString())
                 }
                 handler.postDelayed(this,1000)
             }

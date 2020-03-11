@@ -11,8 +11,10 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.plogging.R
 import com.example.plogging.ui.auth.AuthActivity
+import com.example.plogging.viewModel.LoginViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -20,12 +22,11 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopActivityListener,
-    HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener,
-    PointFragment.PointActivityListener, ProfileFragment.ProfileFragmentListener,
-    NoInternetFragment.NoInternetFragmentListener{
+    HomeFragment.HomeFragmentListener, PointFragment.PointActivityListener,
+    ProfileFragment.ProfileFragmentListener, NoInternetFragment.NoInternetFragmentListener {
 
     //firebase auth object
-    lateinit var mFirebaseAuth: FirebaseAuth
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
     //Create a new Fragment to be placed in the activity layout
     private val noInternetFragment = NoInternetFragment()
     private val homeFragment = HomeFragment()
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     private val afterStopActivityFragment = AfterStopActivityFragment()
     private val pointFragment = PointFragment()
     private val profileFragment = ProfileFragment()
+    private val loginViewModel = LoginViewModel()
 
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
@@ -66,11 +68,26 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             }
             R.id.profile -> {
                 Log.i("TAG", "${item.title} pressed")
-                replaceFragment(ProfileFragment())
+                observeAuthenticationState()
                 return@OnNavigationItemSelectedListener true
             }
         }
         false
+    }
+
+    private fun observeAuthenticationState() {
+        loginViewModel.authenticationState.observe(this, Observer {
+            when (it) {
+                LoginViewModel.AuthenticationState.AUTHENTICATED -> {
+                    replaceFragment(ProfileFragment())
+                }
+                else -> {
+                    val intent = Intent(this, NotRegisteredActivity::class.java)
+                    startActivity(intent)
+                }
+            }
+
+        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -79,7 +96,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
 
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
-
         replaceFragment(homeFragment)
     }
 
@@ -92,24 +108,19 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
 
     //when user click button LOGOUT
     override fun onButtonLogOutClick() {
-        mFirebaseAuth = FirebaseAuth.getInstance()
+        //user logout
         mFirebaseAuth.signOut()
         //start new Activity - go to FirstScreen/LogIn, SighUp screen
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
     }
+    //TODO check this when all functionality moved from ploggingActivityFragment to HomeFragment
     //HomeFragment listener
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {
         hideBottomNavigation()
-        ploggingActivityFragment.resetStepCounter()
-        replaceFragment(ploggingActivityFragment)
-    }
-
-    //PloggingActivityFragment listener
-    //when button "Stop activity" clicked from PloggingActivityFragment
-    override fun onButtonStopActivityClick() {
-        replaceFragment(afterStopActivityFragment)
+        homeFragment.resetStepCounter()
+       // replaceFragment(ploggingActivityFragment)
     }
 
     //PointActivityFragment listener
@@ -126,6 +137,12 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         pointFragment.arguments = bundle
         showBottomNavigation()
     }
+
+    override fun onButtonPloggingResultClick() {
+        replaceFragment(afterStopActivityFragment)
+    }
+    //HomeFragment listener
+    //when button "Plogging Result" clicked from HomeFragment
 
     private fun replaceFragment(fragment: Fragment) {
         //if fragment is homeFragment, display bottom navigation
