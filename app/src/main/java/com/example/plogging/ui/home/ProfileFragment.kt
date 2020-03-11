@@ -32,6 +32,8 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
+import org.jetbrains.anko.doAsync
+import org.jetbrains.anko.uiThread
 import java.io.File
 import java.io.InputStream
 import java.lang.Exception
@@ -183,15 +185,17 @@ class ProfileFragment: Fragment(){
     }
 
     private fun getProfilePictureFromDataBase(userID:String){
+
         mFirebaseDB.child("users")
             .child(userID)
             .addValueEventListener(object:ValueEventListener{
                 override fun onDataChange(p0: DataSnapshot) {
                     if (p0.child("profile_image").value != null) {
                         if (isNetworkAvailable()) {
-                            val myURLparams =
+                           /* val myURLparams =
                                 URLparams(URL(p0.child("profile_image").value.toString()))
-                            GetConn().execute(myURLparams)
+                            GetConn().execute(myURLparams)*/
+
                         }
                     }
                 }
