@@ -155,33 +155,6 @@ class ProfileFragment: Fragment(){
             )
     }
 
-
-    //FUNCTIONS FOR UPLOADING PROFILE PICTURE
-    //Alert dialog with to choices: Open camera or Choice from library
-    private fun showAlertDialog(){
-        val builder = AlertDialog.Builder(this.context)
-        builder.setTitle("Upload profile picture")
-        builder.setSingleChoiceItems(
-            alertItems,
-            -1
-        ) { _, which ->
-            if(which == 0){
-                openCamera()
-            } else {
-                openGallery()
-            }
-        }
-        builder.setPositiveButton(
-            "OK"
-        ) { _, _ ->
-
-        }
-        val dialog = builder.create()
-        // Display the alert dialog on interface
-        dialog.show()
-    }
-
-
     //FUNCTIONS FOR UPLOADING PROFILE PICTURE
     //Alert dialog with to choices: Open camera or Choice from library
     private fun showAlertDialog(){

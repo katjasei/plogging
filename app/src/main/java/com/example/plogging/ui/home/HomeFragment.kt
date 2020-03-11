@@ -24,12 +24,6 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.fragment_home.*
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -41,7 +35,6 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.floating_action_button
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
-
 
 
 class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
@@ -219,7 +212,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
         //register sensor listener
         stepCounterSensor?.also {
             sensorManager.registerListener(this, it,
-              SensorManager.SENSOR_DELAY_NORMAL)
+                SensorManager.SENSOR_DELAY_NORMAL)
         }
         //start location updates if not already on
         if (!locationUpdateState) {

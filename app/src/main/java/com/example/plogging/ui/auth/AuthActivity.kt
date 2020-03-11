@@ -14,6 +14,7 @@ import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
 import com.example.plogging.utils.askPermissions
 import com.example.plogging.viewModel.LoginViewModel
+import com.google.firebase.auth.FirebaseAuth
 
 
 class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
