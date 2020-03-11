@@ -6,13 +6,14 @@ import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
 import android.view.View
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
 import com.example.plogging.utils.askPermissions
 import com.example.plogging.viewModel.LoginViewModel
-import com.google.firebase.auth.FirebaseAuth
+
 
 class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     RegistrationFragment.RegistrationFragmentListener, WelcomeFragment.WelcomeFragmentListener
@@ -35,10 +36,11 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
         // Hide the status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
         //permissions
         askPermissions(this,this)
-
         replaceFragment(splashScreenFragment)
         //check if user already logged in
         observeAuthenticationState()
@@ -49,6 +51,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     override fun onButtonSignUpClick() {
         replaceFragment(registrationFragment)
     }
+
     //when button "sign in" clicked from FirstFragment
     override fun onButtonSignInClick() {
        replaceFragment(loginFragment)
@@ -100,20 +103,19 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             }
         }
     }
-    //hide status bar
-    override fun onStart() {
-        super.onStart()
-        //hide status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
-
 
     private fun observeAuthenticationState() {
         loginViewModel.authenticationState.observe(this, Observer {
             when (it) {
                 LoginViewModel.AuthenticationState.AUTHENTICATED -> {
-                    val intent = Intent(this, MainActivity::class.java)
-                    startActivity(intent)
+                    val handler = Handler()
+                    handler.postDelayed({
+                        run {
+                            //go to FirstFragment, if user not logged in
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                        }
+                    },3000)
                 }
                 else -> {
                     val handler = Handler()

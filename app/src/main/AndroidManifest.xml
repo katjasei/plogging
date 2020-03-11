@@ -52,6 +52,10 @@
             android:theme="@style/AppTheme">
         </activity>
 
+        <activity android:name=".ui.home.NotRegisteredActivity"
+            android:theme="@style/AppTheme">
+        </activity>
+
         <provider
             android:name="androidx.core.content.FileProvider"
             android:authorities="com.example.plogging"

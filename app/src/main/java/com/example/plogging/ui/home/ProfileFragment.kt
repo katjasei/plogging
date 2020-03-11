@@ -73,14 +73,12 @@ class ProfileFragment: Fragment(){
                 val istream: InputStream = myConn.inputStream
                 val image = BitmapFactory.decodeStream(istream)
                 result = FinalBitmap(image)
-
             } catch (e: Exception) {
                 Log.e("Connection", "Reading error", e)
             }
             return result
         }
         override fun onPostExecute(result: FinalBitmap) {
-            Log.d("ImageView", imageView.toString())
                 imageView.setImageBitmap(result.bitmap)
         }
     }
@@ -97,7 +95,7 @@ class ProfileFragment: Fragment(){
         val points = view.findViewById<TextView>(R.id.value_points_profile)
         userID = FirebaseAuth.getInstance().currentUser!!.uid
         imageView = view.findViewById(R.id.profile_image)
-        getUserNameFromDataBase(userID!!, username)
+        getUserNameFromDataBase(userID, username)
         getTotalPointsFromDataBase(userID, points)
         getProfilePictureFromDataBase(userID)
         getUnitTrashInfoFromDataBase(userID, recyclerViewTrash, context!!)
@@ -174,11 +172,11 @@ class ProfileFragment: Fragment(){
             val pickedImageURI = data.data!!
             profile_image.setImageURI(pickedImageURI)
             //upload user photo to firebase storage and get url
-            uploadFileToFirebaseStorage(pickedImageURI, userID!!, activity!!)
+            uploadFileToFirebaseStorage(pickedImageURI, userID, activity!!)
         }
         if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
             val imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath)
-            uploadFileToFirebaseStorage(Uri.fromFile(File(mCurrentPhotoPath)), userID!!, activity!!)
+            uploadFileToFirebaseStorage(Uri.fromFile(File(mCurrentPhotoPath)), userID, activity!!)
             profile_image.setImageBitmap(imageBitmap)
         }
     }
