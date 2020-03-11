@@ -29,4 +29,6 @@ App records the number of picking up trash, location, distance and the time spen
 
 # Mockups
 
-![alt text](https://github.com/adam-p/markdown-here/raw/master/src/common/images/icon48.png "Logo Title Text 1")
+<p align="center">
+  <img src="https://github.com/oonarauhala/plogging/blob/ProfileImage/images/mockup1.jpg" width="350" title="hover text">
+</p>
