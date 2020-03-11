@@ -24,6 +24,12 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
+import com.google.firebase.auth.FirebaseAuth
+import com.google.firebase.database.DataSnapshot
+import com.google.firebase.database.DatabaseError
+import com.google.firebase.database.FirebaseDatabase
+import com.google.firebase.database.ValueEventListener
+import kotlinx.android.synthetic.main.fragment_home.*
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -35,6 +41,7 @@ import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.floating_action_button
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
+
 
 
 class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
@@ -79,7 +86,8 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
         val resultButton = view.findViewById<Button>(R.id.btn_plogging_result_home)
         val duration = view.findViewById<TextView>(R.id.value_duration)
         seconds = 0
-        //if user click button "StartActivity"
+
+        //Start button onClick
         startButton.setOnClickListener {
             // activityCallBack!!.onButtonStartActivityClick()
             startButton.visibility = View.INVISIBLE
@@ -88,11 +96,14 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
             runTimer(duration)
         }
 
+        //Stop button onClick
         stopButton.setOnClickListener {
             running = false
             resultButton.visibility = View.VISIBLE
+            stopButton.visibility = View.INVISIBLE
         }
 
+        //Result button OnClick
         resultButton.setOnClickListener {
             observeAuthenticationState()
         }
@@ -185,12 +196,10 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
             if (!firstStep) { //steps after the first
                 Log.i("sensor", "Sensor data: ${event.values[0]}")
-                stepTextView_home.text = (event.values[0] - stepsBeforeStart).toString()
                 routeLength = (event.values[0] - stepsBeforeStart)*step
                 updateRouteLength()
 
             } else {  //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
-                stepTextView_home.text = "0"
                 stepsBeforeStart = event.values[0]
                 firstStep = false
                 updateRouteLength()

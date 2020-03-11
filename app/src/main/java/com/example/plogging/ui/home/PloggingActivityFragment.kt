@@ -33,14 +33,12 @@ import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import kotlinx.android.synthetic.main.fragment_plogging_activity.btn_plogging_result
 import java.lang.Error
 import kotlinx.android.synthetic.main.fragment_plogging_activity.floating_action_button
-import kotlin.math.round
-import kotlin.math.roundToInt
 
 
 class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListener {
 
     private val step = 0.0007 //(km)
-    private var routeLength: Double = 0.0
+    var routeLength: Double = 0.0
     private lateinit var startPoint: LatLng
     var routePoints = mutableListOf<LatLng>()
     private lateinit var marker: MarkerOptions
@@ -60,6 +58,7 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     private lateinit var currentLocation: LatLng
     private var running= false
     private var seconds = 0
+    var time = 0
 
     interface PloggingActivityListener {
         fun onButtonStopActivityClick()
@@ -130,14 +129,19 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 
+        //Result button onClickListener
         btn_plogging_result.setOnClickListener{
+            time = seconds
             seconds = 0
             activityCallBack!!.onButtonStopActivityClick()
         }
+
+        //Stop activity onClickListener
         btn_stop_activity.setOnClickListener {
             //stop the stopwatch running
             running = false
         }
+
         //FAB - set white tint for icon
         val myFabSrc = resources.getDrawable(R.drawable.ic_my_location_white_24dp,null)
         val willBeWhite = myFabSrc?.constantState?.newDrawable()
@@ -188,12 +192,10 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
 
             if (!firstStep) { //steps after the first
                 Log.i("sensor", "Sensor data: ${event.values[0]}")
-                stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
                 routeLength = (event.values[0] - stepsBeforeStart)*step
                 updateRouteLength()
 
             } else {  //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
-                stepTextView.text = "0"
                 stepsBeforeStart = event.values[0]
                 firstStep = false
                 updateRouteLength()
@@ -271,10 +273,6 @@ class PloggingActivityFragment: Fragment(), OnMapReadyCallback, SensorEventListe
         } catch (e: Error){
             Log.e("route", "Error getting location updates: ${e.message}")
         }
-    }
-
-    fun resetStepCounter() {
-        firstStep = true
     }
 
     //TODO: move this fun to separate file

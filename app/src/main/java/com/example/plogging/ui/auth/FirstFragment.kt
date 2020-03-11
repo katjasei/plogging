@@ -8,7 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
-
+import kotlinx.android.synthetic.main.fragment_first.*
 
 class FirstFragment: Fragment() {
 
@@ -21,6 +21,7 @@ class FirstFragment: Fragment() {
         fun onButtonSignInClick()
         fun onButtonGoPlogginClick()
     }
+
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as FirstFragmentListener
@@ -47,4 +48,5 @@ class FirstFragment: Fragment() {
         }
         return view
     }
+
 }

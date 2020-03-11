@@ -85,12 +85,13 @@
             app:layout_constraintTop_toTopOf="parent">
 
 
-            <ImageView
-                android:id="@+id/img_iron_cans"
-                android:layout_width="120dp"
-                android:layout_height="76dp"
-                android:layout_gravity="center"
-                app:srcCompat="@drawable/iron_cans" />
+        <ImageView
+            android:id="@+id/img_iron_cans"
+            android:contentDescription="@string/desc_can_icon"
+            android:layout_width="120dp"
+            android:layout_height="76dp"
+            android:layout_gravity="center"
+            app:srcCompat="@drawable/iron_cans" />
 
             <TextView
                 android:id="@+id/txt_iron_cans"
@@ -117,8 +118,7 @@
                 android:textColorHint="@android:color/tertiary_text_light"
                 android:textSize="24sp" />
 
-        </LinearLayout>
-    </com.google.android.material.card.MaterialCardView>
+    </LinearLayout>
 
     <com.google.android.material.card.MaterialCardView
         android:id="@+id/mat_card3"
@@ -143,6 +143,7 @@
 
             <ImageView
                 android:id="@+id/img_cigarette"
+                android:contentDescription="@string/desc_cigarette_icon"
                 android:layout_width="120dp"
                 android:layout_height="76dp"
                 android:layout_gravity="center"
@@ -256,6 +257,7 @@
 
             <ImageView
                 android:id="@+id/img_other"
+                android:contentDescription="@string/desc_other_icon"
                 android:layout_width="120dp"
                 android:layout_height="56dp"
                 android:layout_gravity="center"
@@ -292,6 +294,7 @@
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_upload_after_activity"
         style="@style/Widget.MaterialComponents.Button"
+        android:contentDescription="@string/txt_btn_upload"
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"

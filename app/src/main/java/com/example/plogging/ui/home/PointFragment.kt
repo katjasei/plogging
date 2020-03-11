@@ -29,6 +29,7 @@ class PointFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
+
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_point, container, false)
         val valuePoints = view.findViewById<TextView>(R.id.value_points_profile)

@@ -24,6 +24,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_up"
+        android:contentDescription="@string/txt_sign_up"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
         android:layout_width="130dp"
         android:layout_height="60dp"
@@ -41,6 +42,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_in"
+        android:contentDescription="@string/txt_log_in"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="130dp"
         android:layout_height="60dp"
@@ -53,13 +55,12 @@
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent" />
 
-
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_go_plogging"
         android:layout_width="0dp"
         android:layout_height="60dp"
-        android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
+        android:layout_marginStart="32dp"
+        android:layout_marginEnd="32dp"
         android:layout_marginBottom="124dp"
         android:text="@string/txt_go_plogging"
         android:textColor="#FFFFFF"

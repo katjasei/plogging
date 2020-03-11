@@ -28,6 +28,7 @@
 
         <de.hdodenhof.circleimageview.CircleImageView
             android:id="@+id/profile_image"
+            android:contentDescription="@string/desc_profile_image"
             android:layout_width="0dp"
             android:layout_height="150dp"
             android:layout_marginStart="130dp"
@@ -152,6 +153,7 @@
         <com.google.android.material.button.MaterialButton
             android:id="@+id/btn_logout"
             style="@style/Widget.MaterialComponents.Button.TextButton"
+            android:contentDescription="@string/desc_logout"
             android:layout_width="300dp"
             android:layout_height="60dp"
             android:layout_gravity="center"

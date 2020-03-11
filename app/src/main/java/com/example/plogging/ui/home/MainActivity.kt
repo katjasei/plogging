@@ -39,21 +39,25 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     private val bundle = Bundle()
 
     //Bottom navigation click listener
-    //TODO maybe take this logic to a new file
     private val bottomNavigationOnClickListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.weather -> {
                 Log.i("TAG", "${item.title} pressed")
                 if (isNetworkAvailable(this)) {
-                replaceFragment(WeatherFragment()) }
-                else {
+                    replaceFragment(WeatherFragment())
+                } else {
                     replaceFragment(noInternetFragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.leaderboard -> {
                 Log.i("TAG", "${item.title} pressed")
-                replaceFragment(LeaderBoardFragment())
+                if (isNetworkAvailable(this)){
+                    replaceFragment(LeaderBoardFragment())
+                } else {
+                    replaceFragment(noInternetFragment)
+                }
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.home -> {
@@ -107,6 +111,13 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         startActivity(intent)
     }
 
+    override fun onStart() {
+        super.onStart()
+        //hide status bar
+        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        hideSystemUI()
+    }
+    //TODO check this when all functionality moved from ploggingActivityFragment to HomeFragment
     //HomeFragment listener
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {
@@ -144,6 +155,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         .replace(R.id.fragment_container, fragment)
         .addToBackStack(null)
         .commit()
+        hideSystemUI()
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {
@@ -172,7 +184,8 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
     private fun hideSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -190,5 +203,13 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
 
     override fun getRoute(): MutableList<LatLng> {
         return ploggingActivityFragment.routePoints
+    }
+
+    override fun getRouteLength(): Double {
+        return ploggingActivityFragment.routeLength
+    }
+
+    override fun getRouteTime(): Int {
+        return ploggingActivityFragment.time
     }
 }

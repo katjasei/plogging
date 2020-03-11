@@ -33,8 +33,10 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
+import org.w3c.dom.Text
 import java.io.File
 import java.io.InputStream
+import java.lang.Error
 import java.lang.Exception
 import java.net.HttpURLConnection
 import java.net.URL
@@ -151,6 +153,32 @@ class ProfileFragment: Fragment(){
                 }
             }
             )
+    }
+
+
+    //FUNCTIONS FOR UPLOADING PROFILE PICTURE
+    //Alert dialog with to choices: Open camera or Choice from library
+    private fun showAlertDialog(){
+        val builder = AlertDialog.Builder(this.context)
+        builder.setTitle("Upload profile picture")
+        builder.setSingleChoiceItems(
+            alertItems,
+            -1
+        ) { _, which ->
+            if(which == 0){
+                openCamera()
+            } else {
+                openGallery()
+            }
+        }
+        builder.setPositiveButton(
+            "OK"
+        ) { _, _ ->
+
+        }
+        val dialog = builder.create()
+        // Display the alert dialog on interface
+        dialog.show()
     }
 
 

@@ -76,7 +76,7 @@ class WeatherFragment: Fragment(){
         }
         override fun onPostExecute(result: Bitmap?) {
             val imageView = weatherImageView
-            imageView.setImageBitmap(result)
+            imageView?.setImageBitmap(result)
         }
     }
 }

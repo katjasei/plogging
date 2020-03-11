@@ -3,8 +3,6 @@ package com.example.plogging.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.text.Editable
-import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -14,6 +12,7 @@ import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
+import com.example.plogging.data.model.ClassRoute
 import com.example.plogging.data.model.ClassTrash
 import com.example.plogging.utils.addRouteToDB
 import com.example.plogging.utils.addTrashToDB
@@ -24,7 +23,7 @@ import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
 import java.lang.Integer.parseInt
 
 
-class AfterStopActivityFragment: Fragment() {
+class AfterStopActivityFragment: Fragment(){
 
     //VARIABLES:
     private var activityCallBack: AfterStopActivityListener? = null
@@ -33,6 +32,8 @@ class AfterStopActivityFragment: Fragment() {
     interface AfterStopActivityListener {
         fun onButtonUploadClick(points: String)
         fun getRoute(): MutableList<LatLng>
+        fun getRouteLength(): Double
+        fun getRouteTime(): Int
     }
 
     override fun onAttach(context: Context) {
@@ -66,8 +67,9 @@ class AfterStopActivityFragment: Fragment() {
                     valueCardboard.text.toString()
                 ) + parseInt(valueCig.text.toString()) + parseInt(valueOther.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
-
             val route = activityCallBack!!.getRoute()
+            val distance = activityCallBack!!.getRouteLength()
+            val time = activityCallBack!!.getRouteTime()
 
             addTrashToDB(
                 points,

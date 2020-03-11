@@ -22,12 +22,12 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 
-
-//VARIABLES:
+    //VARIABLES:
     //firebase db
     var mFirebaseDB = FirebaseDatabase.getInstance().reference
+    var trashUnitList: MutableList<UnitTrash> = java.util.ArrayList()
 
-//FUNCTIONS:
+     //FUNCTIONS:
     //Functions, that are used in RegistrationFragment
     //function checks if username or user_email already in use
     fun checkIfParameterExistInFirebaseDB (parameter:String, parameterName:String, textView: TextView){
@@ -50,7 +50,7 @@ import com.google.firebase.database.ValueEventListener
             })
     }
 
-   //function for adding user to Firebase DB
+   //function add user to Firebase DB
    fun addUserNameToUser(userFromRegistration: FirebaseUser, textView:TextView){
     val username = textView.text.toString()
     val email = userFromRegistration.email

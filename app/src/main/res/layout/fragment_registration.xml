@@ -10,6 +10,7 @@
 
     <ImageView
         android:id="@+id/background_picture"
+        android:contentDescription="@null"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:alpha="0.51"
@@ -24,6 +25,7 @@
 
     <EditText
         android:id="@+id/value_user_name"
+        android:contentDescription="@string/txt_user_name"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -43,6 +45,7 @@
 
     <TextView
         android:id="@+id/txt_duplicate_name"
+        android:contentDescription="@string/duplicate_name"
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
@@ -58,6 +61,7 @@
 
     <EditText
         android:id="@+id/value_email"
+        android:contentDescription="@string/txt_email"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -76,6 +80,7 @@
 
     <TextView
         android:id="@+id/txt_duplicate_email"
+        android:contentDescription="@string/invalid_email"
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
@@ -91,6 +96,7 @@
 
     <EditText
         android:id="@+id/value_password"
+        android:contentDescription="@string/txt_password"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -109,6 +115,7 @@
 
     <EditText
         android:id="@+id/value_confirm_password"
+        android:contentDescription="@string/txt_confirm_password"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -127,6 +134,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_up"
+        android:contentDescription="@string/txt_sign_up"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="300dp"
         android:layout_height="60dp"

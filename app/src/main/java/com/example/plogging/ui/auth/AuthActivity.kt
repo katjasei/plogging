@@ -5,6 +5,7 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
+import android.util.Log
 import android.view.View
 import android.view.WindowManager
 import androidx.fragment.app.Fragment
@@ -27,6 +28,8 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     private val registrationFragment = RegistrationFragment()
     private val welcomeFragment = WelcomeFragment()
     private val splashScreenFragment = SplashScreenFragment()
+    //firebase auth object
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
     private val loginViewModel = LoginViewModel()
@@ -35,10 +38,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-        // Hide the status bar
-        window.setFlags(
-            WindowManager.LayoutParams.FLAG_FULLSCREEN,
-            WindowManager.LayoutParams.FLAG_FULLSCREEN)
+        hideSystemUI()
         //permissions
         askPermissions(this,this)
         replaceFragment(splashScreenFragment)
@@ -51,7 +51,6 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     override fun onButtonSignUpClick() {
         replaceFragment(registrationFragment)
     }
-
     //when button "sign in" clicked from FirstFragment
     override fun onButtonSignInClick() {
        replaceFragment(loginFragment)
@@ -84,6 +83,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+        hideSystemUI()
     }
 
     override fun onRequestPermissionsResult(
@@ -96,9 +96,11 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                 //if request is cancelled, the result array is empty
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted
+                    //TODO permissions accepted, continue as normal
                 }
                 else{
                     //permission denied
+                    //TODO permissions denied
                 }
             }
         }
@@ -131,5 +133,13 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
             })
         }
 
-}
-
+    private fun hideSystemUI() {
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        }
+    }
