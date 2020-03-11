@@ -111,8 +111,8 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {
         hideBottomNavigation()
-        ploggingActivityFragment.resetStepCounter()
-        replaceFragment(ploggingActivityFragment)
+        homeFragment.resetStepCounter()
+       // replaceFragment(ploggingActivityFragment)
     }
 
     //PointActivityFragment listener

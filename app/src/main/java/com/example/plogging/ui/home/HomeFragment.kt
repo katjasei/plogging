@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.PorterDuff
 import android.hardware.Sensor
 import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
 import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
@@ -23,7 +24,6 @@ import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import kotlinx.android.synthetic.main.fragment_home.*
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
@@ -31,12 +31,13 @@ import com.google.android.gms.maps.model.MarkerOptions
 import androidx.lifecycle.Observer
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.maps.model.PolylineOptions
+import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.floating_action_button
 import kotlinx.android.synthetic.main.fragment_plogging_activity.*
 import java.lang.Error
 
 
-class HomeFragment: Fragment(), OnMapReadyCallback  {
+class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
     private var activityCallBack: HomeFragmentListener? = null
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
@@ -174,7 +175,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
         floating_action_button.setImageDrawable(willBeWhite)
     }
 
-   /*
+
     override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
         Log.i("sensor", "Accuracy changed")
     }
@@ -184,12 +185,12 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
 
             if (!firstStep) { //steps after the first
                 Log.i("sensor", "Sensor data: ${event.values[0]}")
-                stepTextView.text = (event.values[0] - stepsBeforeStart).toString()
+                stepTextView_home.text = (event.values[0] - stepsBeforeStart).toString()
                 routeLength = (event.values[0] - stepsBeforeStart)*step
                 updateRouteLength()
 
             } else {  //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
-                stepTextView.text = "0"
+                stepTextView_home.text = "0"
                 stepsBeforeStart = event.values[0]
                 firstStep = false
                 updateRouteLength()
@@ -197,11 +198,10 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
         }
     }
 
-    */
 
     private fun updateRouteLength(){
         val rounded = "%.1f".format(routeLength)
-        value_distance_activity.text = rounded
+        value_distance.text = rounded
     }
 
 
@@ -209,8 +209,8 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
         super.onResume()
         //register sensor listener
         stepCounterSensor?.also {
-           // sensorManager.registerListener(this, it,
-         //       SensorManager.SENSOR_DELAY_NORMAL)
+            sensorManager.registerListener(this, it,
+              SensorManager.SENSOR_DELAY_NORMAL)
         }
         //start location updates if not already on
         if (!locationUpdateState) {
@@ -231,14 +231,16 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
     override fun onPause() {
         super.onPause()
         //unregister sensor listener
-       // sensorManager.unregisterListener(this)
+        sensorManager.unregisterListener(this)
         //remove location updates
         fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
     override fun onMapReady(map: GoogleMap) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
-            val currentLocation = LatLng(location.latitude, location.longitude)
+            currentLocation = LatLng(location.latitude, location.longitude)
+            routePoints.add(currentLocation)
+            startPoint = currentLocation
             map.addMarker(
                 MarkerOptions()
                     .position(currentLocation)
@@ -246,6 +248,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
             map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+            locationMap = map
         }
     }
 
