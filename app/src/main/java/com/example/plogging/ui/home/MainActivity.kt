@@ -10,10 +10,8 @@ import android.view.View
 import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
-import androidx.lifecycle.Observer
 import com.example.plogging.R
 import com.example.plogging.ui.auth.AuthActivity
-import com.example.plogging.viewModel.LoginViewModel
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.material.bottomnavigation.BottomNavigationView
 import com.google.firebase.auth.FirebaseAuth
@@ -33,8 +31,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     private val afterStopActivityFragment = AfterStopActivityFragment()
     private val pointFragment = PointFragment()
     private val profileFragment = ProfileFragment()
-    private val loginViewModel = LoginViewModel()
-    private var logedin: Boolean = false
+
 
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
@@ -68,8 +65,8 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             }
             R.id.profile -> {
                 Log.i("TAG", "${item.title} pressed")
-               observeAuthenticationState()
-                if(logedin){
+
+                if(mFirebaseAuth.currentUser != null){
                     replaceFragment(ProfileFragment())
                 }
                 else {
@@ -80,20 +77,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             }
         }
         false
-    }
-
-    private fun observeAuthenticationState() {
-        loginViewModel.authenticationState.observe(this, Observer {
-            logedin = when (it) {
-                LoginViewModel.AuthenticationState.AUTHENTICATED -> {
-                    true
-                }
-                else -> {
-                    false
-                }
-            }
-
-        })
     }
 
     override fun onCreate(savedInstanceState: Bundle?) {

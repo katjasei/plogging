@@ -19,7 +19,6 @@ import android.widget.Button
 import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
-import com.example.plogging.viewModel.LoginViewModel
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
@@ -28,9 +27,9 @@ import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
-import androidx.lifecycle.Observer
 import com.google.android.gms.common.api.ResolvableApiException
 import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.floating_action_button
 import java.lang.Error
@@ -41,7 +40,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private var running= false
     private var seconds = 0
-    private val loginViewModel = LoginViewModel()
     private val step = 0.0007 //(km)
     private var routeLength: Double = 0.0
     private lateinit var startPoint: LatLng
@@ -59,7 +57,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
     private lateinit var sensorManager: SensorManager
     private var stepCounterSensor: Sensor? = null
     private lateinit var currentLocation: LatLng
-    private var logedin: Boolean = false
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
 
     interface HomeFragmentListener {
         fun onButtonStartActivityClick()
@@ -97,8 +95,8 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
         //Result button OnClick
         resultButton.setOnClickListener {
-            observeAuthenticationState()
-            if(logedin){
+
+            if(mFirebaseAuth.currentUser != null){
                 activityCallBack!!.onButtonPloggingResultClick()
             } else {
                 val intent = Intent(context, NotRegisteredActivity::class.java)
@@ -149,22 +147,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
             }
         }
         createLocationRequest()
-
         return view
-    }
-
-    private fun observeAuthenticationState() {
-        loginViewModel.authenticationState.observe(this, Observer {
-            when (it) {
-                LoginViewModel.AuthenticationState.AUTHENTICATED -> {
-                    logedin = true
-                }
-                else -> {
-                    logedin = false
-                }
-            }
-
-        })
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
