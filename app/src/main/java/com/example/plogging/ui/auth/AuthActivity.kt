@@ -104,6 +104,7 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         }
     }
 
+    //function check if user already logged in or not (observer)
     private fun observeAuthenticationState() {
         loginViewModel.authenticationState.observe(this, Observer {
             when (it) {

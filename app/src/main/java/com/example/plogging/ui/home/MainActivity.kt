@@ -106,7 +106,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
     }
-    //TODO check this when all functionality moved from ploggingActivityFragment to HomeFragment
+
     //HomeFragment listener
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {

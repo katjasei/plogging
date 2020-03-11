@@ -16,27 +16,22 @@ import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import java.lang.Integer.parseInt
-
 
 class LeaderBoardFragment: Fragment(){
 
-    private var mFirebaseDB =  FirebaseDatabase.getInstance().reference
-    private var listOfTrash1: MutableList<ClassUserTrash> = java.util.ArrayList()
-    lateinit var child: MutableIterable<DataSnapshot>
+    //VARIABLES:
+   private var listOfTrash1: MutableList<ClassUserTrash> = java.util.ArrayList()
+   private var mFirebaseDB = FirebaseDatabase.getInstance().reference
 
-
+    //FUNCTIONS AND INTERFACES:
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
         val view = inflater.inflate(R.layout.fragment_leaderboard, container, false)
         val recyclerView = view.findViewById<RecyclerView>(R.id.recycler_view_leaderboard)
-
-        //get from Firebase database username and total number of points
         mFirebaseDB.child("users")
             .addValueEventListener(object: ValueEventListener {
                 @SuppressLint("SetTextI18n")
@@ -44,20 +39,17 @@ class LeaderBoardFragment: Fragment(){
                     val children = p0.children
                     var total = 0
                     var username: String
-
                     children.forEach { it ->
                         if (it.child("trash").value != null) {
                             username = it.child("username").value.toString()
                             val child = it.child("trash")
                             child.children.forEach{
-                                total += parseInt(it.child("total").value.toString())
-                                Log.d("p0", it.child("total").value.toString())
+                                total += Integer.parseInt(it.child("total").value.toString())
                             }
                             if (total != 0){
-                            listOfTrash1.add(ClassUserTrash(username, total))}
+                                listOfTrash1.add(ClassUserTrash(username, total))}
                             total = 0
                         }
-
                         val leaderBoardAdapter = LeaderBoardAdapter(listOfTrash1.sortedByDescending{ it.trashTotal })
                         recyclerView.layoutManager = LinearLayoutManager(context)
                         recyclerView.adapter = leaderBoardAdapter

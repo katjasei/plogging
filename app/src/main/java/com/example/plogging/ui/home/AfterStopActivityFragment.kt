@@ -9,6 +9,7 @@ import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
 import android.widget.EditText
 import android.widget.TextView
 import androidx.fragment.app.Fragment
@@ -25,8 +26,10 @@ import java.lang.Integer.parseInt
 
 class AfterStopActivityFragment: Fragment() {
 
+    //VARIABLES:
     private var activityCallBack: AfterStopActivityListener? = null
 
+    //FUNCTIONS AND INTERFACES
     interface AfterStopActivityListener {
         fun onButtonUploadClick(points: String)
         fun getRoute(): MutableList<LatLng>
@@ -43,40 +46,41 @@ class AfterStopActivityFragment: Fragment() {
         savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_after_stop_activity, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-
-
-        btn_plogging_result.setOnClickListener {
+        val view = inflater.inflate(R.layout.fragment_after_stop_activity, container, false)
+        val buttonUpload = view.findViewById<Button>(R.id.btn_upload_after_activity)
+        val valuePET = view.findViewById<EditText>(R.id.value_pet_bottles)
+        val valueCan = view.findViewById<EditText>(R.id.value_iron_cans)
+        val valueCardboard = view.findViewById<EditText>(R.id.value_cardboard)
+        val valueCig = view.findViewById<EditText>(R.id.value_cigarettes)
+        val valueOther = view.findViewById<EditText>(R.id.value_other)
+        buttonUpload.setOnClickListener {
             //if user don't enter number of gathered trash, by default it is 0
-            checkTrashUnitValue(value_pet_bottles)
-            checkTrashUnitValue(value_iron_cans)
-            checkTrashUnitValue(value_cardboard)
-            checkTrashUnitValue(value_cigarettes)
-            checkTrashUnitValue(value_other)
-
+            checkTrashUnitValue(valuePET)
+            checkTrashUnitValue(valueCan)
+            checkTrashUnitValue(valueCardboard)
+            checkTrashUnitValue(valueCig)
+            checkTrashUnitValue(valueOther)
+            //all points that user enter
             val points =
-                parseInt(value_pet_bottles.text.toString()) + parseInt(value_iron_cans.text.toString()) + parseInt(
-                    value_cardboard.text.toString()
-                ) + parseInt(value_cigarettes.text.toString()) + parseInt(value_other.text.toString())
+                parseInt(valuePET.text.toString()) + parseInt(valueCan.text.toString()) + parseInt(
+                    valueCardboard.text.toString()
+                ) + parseInt(valueCig.text.toString()) + parseInt(valueOther.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
 
             val route = activityCallBack!!.getRoute()
 
             addTrashToDB(
                 points,
-                value_pet_bottles,
-                value_iron_cans,
-                value_cardboard,
-                value_cigarettes,
-                value_other
+                valuePET,
+                valueCan,
+                valueCardboard,
+                valueCig,
+                valueOther
             )
 
             addRouteToDB(route)
         }
+        return view
     }
 
     override fun onResume() {
@@ -87,7 +91,7 @@ class AfterStopActivityFragment: Fragment() {
         value_cigarettes.setText("")
         value_other.setText("")
     }
-
+    //if no value in Edit text, it value by default 0
     private fun checkTrashUnitValue(editText: EditText) {
             if(editText.text.toString()==""){
                 editText.setText("0")

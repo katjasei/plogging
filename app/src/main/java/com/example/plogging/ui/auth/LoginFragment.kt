@@ -6,6 +6,8 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import android.widget.Toast
 import androidx.fragment.app.Fragment
 import com.example.plogging.ui.home.MainActivity
@@ -23,29 +25,30 @@ class LoginFragment: Fragment() {
     //firebase auth object
     private var mFirebaseAuth = FirebaseAuth.getInstance()
 
-
+    //FUNCTIONS:
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_login, container, false)
-    }
+        val view= inflater.inflate(R.layout.fragment_login, container, false)
+        val buttonLogin = view.findViewById<Button>(R.id.btn_sign_in)
+        val valueEmail = view.findViewById<TextView>(R.id.value_email)
+        val valuePassword = view.findViewById<TextView>(R.id.value_password)
 
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
-       // after button sign in is clicked
-        btn_sign_in.setOnClickListener {
-            userLogin(value_email.text.toString(), value_password.text.toString())
+        // after button sign in is clicked
+        buttonLogin.setOnClickListener {
+            //function login
+            userLogin(valueEmail.text.toString(), valuePassword.text.toString())
         }
         //using the preferences from PreferenceHelper
         val prefs = PreferenceHelper.customPreference(context!!, "prefs")
         //get user email and password from Shared Preferences
-        value_email.setText(prefs.userEmail)
-        value_password.setText(prefs.password)
+        valueEmail.text = prefs.userEmail
+        valuePassword.text = prefs.password
+        return view
     }
 
     @SuppressLint("SetTextI18n")
     // user login through Firebase
     private fun userLogin(email:String, password:String){
-
         //check if email and password fields are not empty
         if (value_email.text.toString().isNotEmpty() && value_password.text.toString().isNotEmpty()) {
             //logging in the user
@@ -53,6 +56,7 @@ class LoginFragment: Fragment() {
                 .addOnCompleteListener { task ->
                     if (task.isSuccessful) {
                         activity!!.finish()
+                        //move to MainActivity (HomeActivity)
                         val intent = Intent(this.context, MainActivity::class.java)
                         startActivity(intent)
                     } else {
@@ -61,10 +65,10 @@ class LoginFragment: Fragment() {
                     }
                 }
         } else {
+            //check if user email and password are entered
             if (value_email.text.toString().isEmpty()){
                 Toast.makeText(this.context,"Please enter email", Toast.LENGTH_LONG).show()
             }
-
             if(value_password.text.toString().isEmpty()){
                 Toast.makeText(this.context,"Please enter password", Toast.LENGTH_LONG).show()
             }

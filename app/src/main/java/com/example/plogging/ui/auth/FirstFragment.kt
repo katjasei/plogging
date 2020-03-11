@@ -8,8 +8,7 @@ import android.view.ViewGroup
 import android.widget.Button
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
-import com.facebook.FacebookSdk
-import kotlinx.android.synthetic.main.fragment_first.*
+
 
 class FirstFragment: Fragment() {
 
@@ -34,12 +33,15 @@ class FirstFragment: Fragment() {
         val buttonSignIn = view.findViewById<Button>(R.id.btn_sign_in)
         val buttonGoPlogging = view.findViewById<Button>(R.id.btn_go_plogging)
         //callbacks for buttons in this fragment
+        //button Sign Up
         buttonSignUp.setOnClickListener {
             activityCallBack!!.onButtonSignUpClick()
         }
+        //button Sign In
         buttonSignIn.setOnClickListener {
             activityCallBack!!.onButtonSignInClick()
         }
+        //button Go Plogging
         buttonGoPlogging.setOnClickListener {
             activityCallBack!!.onButtonGoPlogginClick()
         }
