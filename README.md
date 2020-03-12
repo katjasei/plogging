@@ -35,6 +35,7 @@ App records the number of picked up trash, location, distance and the time spent
 + Stepcounter
 + Leaderboard (number of picked up trash)
 + Local temperature and weather
++ ViewModel/LiveData to keep track of changes to the logged in user (update the UI based on the authentication state)
 
 # API Reference
 + Minimum SDK: 16
