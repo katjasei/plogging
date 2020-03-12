@@ -26,7 +26,7 @@
     <string name="txt_btn_start_activity">START ACTIVITY</string>
     <string name="txt_btn_stop_activity">STOP ACTIVITY</string>
     <string name="txt_pet_bottle">PET Bottles</string>
-    <string name="txt_iron_cans">Iron Cans</string>
+    <string name="txt_iron_cans">Alumininum Cans</string>
     <string name="txt_cigarettes">Cigarette</string>
     <string name="txt_cardboard">Cardboard</string>
     <string name="txt_other">Other</string>
@@ -75,7 +75,7 @@
     <!--AfterStop-->
     <string name="desc_pet_bottle_icon">Pet bottle icon</string>
     <string name="desc_pet_bottle_number">Number of pet bottles</string>
-    <string name="desc_can_icon">Aluminum can icon</string>
+    <string name="desc_can_icon">Alumininum can icon</string>
     <string name="desc_can_number">Number of cans</string>
     <string name="desc_cigarette_icon">Cigarette icon</string>
     <string name="desc_cigarette_number">Number of cigarette butts</string>
