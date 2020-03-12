@@ -81,6 +81,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center_horizontal|center_vertical"
                     android:text="@string/txt_default_points"
+                    android:textColor="@color/textBlack"
                     android:textSize="18sp" />
 
                 <TextView
@@ -89,6 +90,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/txt_points_profile"
+                    android:textColor="@color/textBlack"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -104,6 +106,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/txt_default_kilometers"
+                    android:textColor="@color/textBlack"
                     android:textSize="18sp" />
 
                 <TextView
@@ -112,6 +115,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/txt_total_kilometers"
+                    android:textColor="@color/textBlack"
                     android:textSize="18sp" />
             </LinearLayout>
 
@@ -127,6 +131,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/txt_default_time"
+                    android:textColor="@color/textBlack"
                     android:textSize="18sp" />
 
                 <TextView
@@ -135,6 +140,7 @@
                     android:layout_height="wrap_content"
                     android:gravity="center"
                     android:text="@string/txt_total_time"
+                    android:textColor="@color/textBlack"
                     android:textSize="18sp" />
             </LinearLayout>
 
