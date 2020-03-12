@@ -246,7 +246,7 @@ fun getUnitTrashInfoForUser(userID:String, recyclerViewTrash:RecyclerView,contex
                         totalO += Integer.parseInt(it.child("other").value.toString())
                     }
                     trashUnitList.add(UnitTrash(R.drawable.pet_bottles,"PET Bottles", totalPB.toString()))
-                    trashUnitList.add(UnitTrash(R.drawable.iron_cans,"Iron cans", totalIC.toString()))
+                    trashUnitList.add(UnitTrash(R.drawable.iron_cans,"Aluminium cans", totalIC.toString()))
                     trashUnitList.add(UnitTrash(R.drawable.cardboard,"Cardboard", totalCB.toString()))
                     trashUnitList.add(UnitTrash(R.drawable.cigarettes,"Cigarettes", totalC.toString()))
                     trashUnitList.add(UnitTrash(R.drawable.other,"Other", totalO.toString()))
