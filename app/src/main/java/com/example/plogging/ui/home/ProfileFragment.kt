@@ -101,6 +101,7 @@ class ProfileFragment: Fragment(){
         val time = view.findViewById<TextView>(R.id.value_time)
         userID = FirebaseAuth.getInstance().currentUser!!.uid
         imageView = view.findViewById(R.id.profile_image)
+        getUnitTrashInfoForUser(userID,recyclerViewTrash,context!!)
         getUserNameFromDataBase(userID, username)
         getTotalPointsFromDataBase(userID, points)
         getTotalDistanceFromDatabase(userID, distance)
@@ -121,43 +122,6 @@ class ProfileFragment: Fragment(){
             activityCallBack!!.onButtonLogOutClick()
         }
 
-        mFirebaseDB.child("users")
-            .child(userID)
-            .addValueEventListener(object: ValueEventListener {
-                @SuppressLint("SetTextI18n")
-                override fun onDataChange(p0: DataSnapshot) {
-                    var totalPB = 0
-                    var totalIC = 0
-                    var totalCB = 0
-                    var totalC = 0
-                    var totalO = 0
-                    trashUnitList.clear()
-                    if (p0.child("trash").value != null) {
-                        val trash = p0.child("trash").children
-                        trash.forEach{
-                            totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
-                            totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
-                            totalCB += Integer.parseInt(it.child("cardboard").value.toString())
-                            totalC += Integer.parseInt(it.child("cigarettes").value.toString())
-                            totalO += Integer.parseInt(it.child("other").value.toString())
-                        }
-                        trashUnitList.add(UnitTrash(R.drawable.pet_bottles,"PET Bottles", totalPB.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.iron_cans,"Iron cans", totalIC.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.cardboard,"Cardboard", totalCB.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.cigarettes,"Cigarettes", totalC.toString()))
-                        trashUnitList.add(UnitTrash(R.drawable.other,"Other", totalO.toString()))
-                    }
-                    val trashAdapter = TrashAdapter(trashUnitList)
-                    recyclerViewTrash.layoutManager = LinearLayoutManager(context)
-                    recyclerViewTrash.adapter = trashAdapter
-                    trashAdapter.notifyDataSetChanged()
-                }
-                override fun onCancelled(p0: DatabaseError) {
-                    // Failed to read value
-                    Log.d("Failed to read value.", "")
-                }
-            }
-            )
     }
 
     //FUNCTIONS FOR UPLOADING PROFILE PICTURE

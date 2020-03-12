@@ -23,6 +23,7 @@ import com.google.firebase.database.ValueEventListener
     //firebase db
     var mFirebaseDB = FirebaseDatabase.getInstance().reference
     var trashUnitList: MutableList<UnitTrash> = java.util.ArrayList()
+    var listOfTrash1: MutableList<ClassUserTrash> = java.util.ArrayList()
 
      //FUNCTIONS:
     //Functions, that are used in RegistrationFragment
@@ -184,5 +185,81 @@ fun getTotalTimeFromDatabase(userID: String, textView: TextView){
         })
 }
 
+
+fun getUsersAndTotalPointsFromDB(recyclerView:RecyclerView, context:Context){
+
+    mFirebaseDB.child("users")
+        .addValueEventListener(object: ValueEventListener {
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(p0: DataSnapshot) {
+                listOfTrash1.clear()
+                val children = p0.children
+                var total = 0
+                var username: String
+                children.forEach { it ->
+                    if (it.child("trash").value != null) {
+                        username = it.child("username").value.toString()
+                        val child = it.child("trash")
+                        child.children.forEach{
+                            total += Integer.parseInt(it.child("total").value.toString())
+                        }
+                        if (total != 0){
+                            listOfTrash1.add(ClassUserTrash(username, total))}
+                        total = 0
+                    }
+                    val leaderBoardAdapter = LeaderBoardAdapter(listOfTrash1.sortedByDescending{ it.trashTotal })
+                    recyclerView.layoutManager = LinearLayoutManager(context)
+                    recyclerView.adapter = leaderBoardAdapter
+                    leaderBoardAdapter.notifyDataSetChanged()
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                // Failed to read value
+                Log.d("Failed to read value.", "")
+            }
+        }
+        )
+}
+
+fun getUnitTrashInfoForUser(userID:String, recyclerViewTrash:RecyclerView,context: Context){
+    mFirebaseDB.child("users")
+        .child(userID)
+        .addValueEventListener(object: ValueEventListener {
+            @SuppressLint("SetTextI18n")
+            override fun onDataChange(p0: DataSnapshot) {
+                var totalPB = 0
+                var totalIC = 0
+                var totalCB = 0
+                var totalC = 0
+                var totalO = 0
+                trashUnitList.clear()
+                if (p0.child("trash").value != null) {
+                    val trash = p0.child("trash").children
+                    trash.forEach{
+                        totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
+                        totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
+                        totalCB += Integer.parseInt(it.child("cardboard").value.toString())
+                        totalC += Integer.parseInt(it.child("cigarettes").value.toString())
+                        totalO += Integer.parseInt(it.child("other").value.toString())
+                    }
+                    trashUnitList.add(UnitTrash(R.drawable.pet_bottles,"PET Bottles", totalPB.toString()))
+                    trashUnitList.add(UnitTrash(R.drawable.iron_cans,"Iron cans", totalIC.toString()))
+                    trashUnitList.add(UnitTrash(R.drawable.cardboard,"Cardboard", totalCB.toString()))
+                    trashUnitList.add(UnitTrash(R.drawable.cigarettes,"Cigarettes", totalC.toString()))
+                    trashUnitList.add(UnitTrash(R.drawable.other,"Other", totalO.toString()))
+                }
+                val trashAdapter = TrashAdapter(trashUnitList)
+                recyclerViewTrash.layoutManager = LinearLayoutManager(context)
+                recyclerViewTrash.adapter = trashAdapter
+                trashAdapter.notifyDataSetChanged()
+            }
+            override fun onCancelled(p0: DatabaseError) {
+                // Failed to read value
+                Log.d("Failed to read value.", "")
+            }
+        }
+        )
+}
 
 
