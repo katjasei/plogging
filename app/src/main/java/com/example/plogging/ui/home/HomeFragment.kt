@@ -102,7 +102,8 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
             val route = afterStopActivityCallBack!!.getRoute()
             val distance = afterStopActivityCallBack!!.getRouteLength()
             val time = afterStopActivityCallBack!!.getRouteTime()
-            addRouteToDB(distance, route, time)
+            if(mFirebaseAuth.currentUser != null){
+            addRouteToDB(distance, route, time)}
         }
 
         //Result button OnClick
