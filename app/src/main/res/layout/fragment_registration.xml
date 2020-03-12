@@ -3,6 +3,7 @@
 
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:orientation="vertical">
@@ -41,7 +42,9 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription"
+        android:importantForAutofill="no"/>
 
 
     <TextView
@@ -79,7 +82,9 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_duplicate_name" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_duplicate_name"
+        android:importantForAutofill="no"
+        tools:ignore="ContentDescription,TextFields" />
 
     <TextView
         android:id="@+id/txt_duplicate_email"
@@ -116,7 +121,9 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/txt_duplicate_email" />
+        app:layout_constraintTop_toBottomOf="@+id/txt_duplicate_email"
+        tools:ignore="ContentDescription"
+        android:importantForAutofill="no"/>
 
     <EditText
         android:id="@+id/value_confirm_password"
@@ -137,7 +144,9 @@
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/value_password" />
+        app:layout_constraintTop_toBottomOf="@+id/value_password"
+        tools:ignore="ContentDescription"
+        android:importantForAutofill="no"/>
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_up"

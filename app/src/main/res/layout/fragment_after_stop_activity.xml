@@ -57,7 +57,8 @@
                 android:inputType="number"
                 android:textColor="@color/textBlack"
                 android:textColorHint="@android:color/tertiary_text_light"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:importantForAutofill="no" />
 
         </LinearLayout>
 
@@ -116,7 +117,8 @@
                 android:inputType="number"
                 android:textColor="@color/textBlack"
                 android:textColorHint="@android:color/tertiary_text_light"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
 
     </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -163,7 +165,7 @@
 
             <EditText
                 android:id="@+id/value_cigarettes"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -173,7 +175,8 @@
                 android:inputType="number"
                 android:textColor="@color/textBlack"
                 android:textColorHint="@android:color/tertiary_text_light"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -220,7 +223,7 @@
 
             <EditText
                 android:id="@+id/value_cardboard"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -230,7 +233,8 @@
                 android:inputType="number"
                 android:textColor="@color/textBlack"
                 android:textColorHint="@android:color/tertiary_text_light"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
@@ -278,7 +282,7 @@
 
             <EditText
                 android:id="@+id/value_other"
-                android:layout_width="wrap_content"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:background="@android:color/transparent"
@@ -288,7 +292,8 @@
                 android:inputType="number"
                 android:textColor="@color/textBlack"
                 android:textColorHint="@android:color/tertiary_text_light"
-                android:textSize="24sp" />
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
 
         </LinearLayout>
     </com.google.android.material.card.MaterialCardView>
