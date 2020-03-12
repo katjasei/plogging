@@ -60,8 +60,8 @@ import com.google.firebase.database.ValueEventListener
 
 //function for adding route to Firebase DB
 fun addRouteToDB(distance: Double, route: MutableList<LatLng>, time: Int) {
-    val userID = FirebaseAuth.getInstance().currentUser?.uid
 
+    val userID = FirebaseAuth.getInstance().currentUser?.uid
     val finalRoute = ClassRoute(distance, route, time)
 
     if (route.size > 1) {

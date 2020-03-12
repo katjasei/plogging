@@ -45,15 +45,15 @@
 
     <TextView
         android:id="@+id/txt_duplicate_name"
-        android:contentDescription="@string/duplicate_name"
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="32dp"
+        android:contentDescription="@string/duplicate_name"
         android:text="@string/txt_empty"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -80,15 +80,15 @@
 
     <TextView
         android:id="@+id/txt_duplicate_email"
-        android:contentDescription="@string/invalid_email"
         android:layout_width="300dp"
         android:layout_height="30dp"
         android:layout_marginStart="32dp"
         android:layout_marginTop="4dp"
         android:layout_marginEnd="32dp"
+        android:contentDescription="@string/invalid_email"
         android:text="@string/empty_string"
         android:textColor="@android:color/holo_red_dark"
-        android:textSize="18sp"
+        android:textSize="14sp"
         android:visibility="invisible"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -96,7 +96,6 @@
 
     <EditText
         android:id="@+id/value_password"
-        android:contentDescription="@string/txt_password"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -104,6 +103,7 @@
         android:layout_marginEnd="32dp"
         android:alpha="0.7"
         android:background="@drawable/rounded_edittext"
+        android:contentDescription="@string/txt_password"
         android:ems="10"
         android:gravity="start|center"
         android:hint="@string/txt_password"
