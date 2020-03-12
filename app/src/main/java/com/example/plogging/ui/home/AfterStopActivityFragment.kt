@@ -67,9 +67,6 @@ class AfterStopActivityFragment: Fragment(){
                     valueCardboard.text.toString()
                 ) + parseInt(valueCig.text.toString()) + parseInt(valueOther.text.toString())
             activityCallBack!!.onButtonUploadClick("+ $points Points")
-            val route = activityCallBack!!.getRoute()
-            val distance = activityCallBack!!.getRouteLength()
-            val time = activityCallBack!!.getRouteTime()
 
             addTrashToDB(
                 points,
@@ -79,8 +76,6 @@ class AfterStopActivityFragment: Fragment(){
                 valueCig,
                 valueOther
             )
-
-            addRouteToDB(distance, route, time)
         }
         return view
     }

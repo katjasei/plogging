@@ -36,10 +36,12 @@ import java.lang.Error
 import com.example.plogging.utils.PreferenceHelper
 import com.example.plogging.utils.PreferenceHelper.distance
 import com.example.plogging.utils.PreferenceHelper.duration
+import com.example.plogging.utils.addRouteToDB
 
 class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
     private var activityCallBack: HomeFragmentListener? = null
+    private var afterStopActivityCallBack: AfterStopActivityFragment.AfterStopActivityListener? = null
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private var running= false
     var seconds = 0
@@ -69,6 +71,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as HomeFragmentListener
+        afterStopActivityCallBack = context as AfterStopActivityFragment.AfterStopActivityListener
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
@@ -95,6 +98,11 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
             running = false
             resultButton.visibility = View.VISIBLE
             stopButton.visibility = View.INVISIBLE
+            //upload route data to firebase
+            val route = afterStopActivityCallBack!!.getRoute()
+            val distance = afterStopActivityCallBack!!.getRouteLength()
+            val time = afterStopActivityCallBack!!.getRouteTime()
+            addRouteToDB(distance, route, time)
         }
 
         //Result button OnClick
