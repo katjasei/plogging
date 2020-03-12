@@ -27,7 +27,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     //Create a new Fragment to be placed in the activity layout
     private val noInternetFragment = NoInternetFragment()
     private val homeFragment = HomeFragment()
-    private val ploggingActivityFragment = PloggingActivityFragment()
     private val afterStopActivityFragment = AfterStopActivityFragment()
     private val pointFragment = PointFragment()
     private val profileFragment = ProfileFragment()
