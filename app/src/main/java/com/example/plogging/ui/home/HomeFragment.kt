@@ -33,6 +33,9 @@ import com.google.firebase.auth.FirebaseAuth
 import kotlinx.android.synthetic.main.fragment_home.*
 import kotlinx.android.synthetic.main.fragment_home.floating_action_button
 import java.lang.Error
+import com.example.plogging.utils.PreferenceHelper
+import com.example.plogging.utils.PreferenceHelper.distance
+import com.example.plogging.utils.PreferenceHelper.duration
 
 class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
@@ -76,6 +79,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
         val resultButton = view.findViewById<Button>(R.id.btn_plogging_result_home)
         val duration = view.findViewById<TextView>(R.id.value_duration)
         seconds = 0
+        val prefsActivity = PreferenceHelper.customPreference(context!!, "prefsActivity")
 
         //Start button onClick
         startButton.setOnClickListener {
@@ -99,6 +103,9 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
             if(mFirebaseAuth.currentUser != null){
                 activityCallBack!!.onButtonPloggingResultClick()
             } else {
+                //save unregistered  user results to SharedPreferences
+                prefsActivity.duration = value_duration.toString()
+                prefsActivity.distance = value_distance.toString()
                 val intent = Intent(context, NotRegisteredActivity::class.java)
                 startActivity(intent)
             }

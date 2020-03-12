@@ -8,6 +8,9 @@ object PreferenceHelper {
 
     val USER_EMAIL = "USER_EMAIL"
     val USER_PASSWORD = "PASSWORD"
+    val DISTANCE = "DISTANCE"
+    val DURATION = "DURATION"
+
     fun defaultPreference(context: Context):
             SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
 
@@ -57,5 +60,31 @@ object PreferenceHelper {
                         it.remove(USER_PASSWORD)
                   }
                 }
+
+    var SharedPreferences.distance
+        get() = getString( DISTANCE, "")
+        set(value) {
+            editMe {
+                it.put(DISTANCE to value)
+
+            }
+        }
+
+    var SharedPreferences.duration
+        get() = getString( DURATION, "")
+        set(value) {
+            editMe {
+                it.put(DURATION to value)
+            }
+        }
+
+    var SharedPreferences.clearActivityValues
+        get() = {}
+        set(value) {
+            editMe {
+                it.remove(DURATION)
+                it.remove(DISTANCE)
+            }
+        }
 }
 
