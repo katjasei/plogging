@@ -137,7 +137,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
                     marker = MarkerOptions()
                         .position(lastLocationLatLng)
                         .title("Your current location")
-                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.dot))
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
 
                     startMarker = MarkerOptions()
                         .position(startPoint)
