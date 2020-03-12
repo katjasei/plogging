@@ -32,6 +32,7 @@
                 android:id="@+id/img_pet_bottle"
                 android:layout_width="120dp"
                 android:layout_height="100dp"
+                android:contentDescription="@string/desc_pet_bottle_icon"
                 app:srcCompat="@drawable/pet_bottles" />
 
             <TextView
@@ -204,6 +205,7 @@
                 android:layout_width="120dp"
                 android:layout_height="76dp"
                 android:layout_gravity="center"
+                android:contentDescription="@string/desc_cardboard_icon"
                 app:srcCompat="@drawable/cardboard" />
 
             <TextView
