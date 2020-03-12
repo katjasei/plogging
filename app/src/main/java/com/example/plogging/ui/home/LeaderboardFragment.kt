@@ -38,6 +38,7 @@ class LeaderBoardFragment: Fragment(){
             .addValueEventListener(object: ValueEventListener {
                 @SuppressLint("SetTextI18n")
                 override fun onDataChange(p0: DataSnapshot) {
+                    listOfTrash1.clear()
                     val children = p0.children
                     var total = 0
                     var username: String

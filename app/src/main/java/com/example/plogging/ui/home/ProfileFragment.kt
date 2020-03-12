@@ -131,6 +131,7 @@ class ProfileFragment: Fragment(){
                     var totalCB = 0
                     var totalC = 0
                     var totalO = 0
+                    trashUnitList.clear()
                     if (p0.child("trash").value != null) {
                         val trash = p0.child("trash").children
                         trash.forEach{

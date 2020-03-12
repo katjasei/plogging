@@ -115,11 +115,12 @@ fun getUserNameFromDataBase(userID:String, textView:TextView){
 }
    //get information about total number of points that user has
     fun getTotalPointsFromDataBase(userID:String, textView:TextView){
-    var total = 0
-    mFirebaseDB.child("users")
+       var total: Int
+       mFirebaseDB.child("users")
         .child(userID)
         .addValueEventListener(object:ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
+                total = 0
                 if (p0.child("trash").value != null) {
                     val trash = p0.child("trash").children
                     trash.forEach{
@@ -138,11 +139,12 @@ fun getUserNameFromDataBase(userID:String, textView:TextView){
 }
 
 fun getTotalDistanceFromDatabase(userID: String, textView: TextView) {
-    var totalDistance = 0.0
+    var totalDistance: Double
     mFirebaseDB.child("users")
         .child(userID)
         .addValueEventListener(object:ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
+                totalDistance = 0.0
                 p0.child("routes").children.forEach {
                     totalDistance += it.child("distance").value.toString().toDouble()
                 }
@@ -157,11 +159,12 @@ fun getTotalDistanceFromDatabase(userID: String, textView: TextView) {
 }
 
 fun getTotalTimeFromDatabase(userID: String, textView: TextView){
-    var totalTime = 0
+    var totalTime: Int
     mFirebaseDB.child("users")
         .child(userID)
         .addValueEventListener(object:ValueEventListener{
             override fun onDataChange(p0: DataSnapshot) {
+                totalTime = 0
                 p0.child("routes").children.forEach {
                     if (it.child("time").value.toString().toInt() > 0)
                         totalTime += it.child("time").value.toString().toInt()
