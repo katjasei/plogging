@@ -64,13 +64,13 @@ class WeatherFragment: Fragment(){
     inner class WeatherApiConnectionForImage : AsyncTask<URL, Unit, Bitmap>()  {
         private lateinit var result: Bitmap
         override fun doInBackground(vararg urlParams: URL): Bitmap {
-            try {
+            result = try {
                 val imageConnection =  urlParams[0].openConnection() as HttpURLConnection
                 val inputStream = imageConnection.inputStream
-                result = BitmapFactory.decodeStream(inputStream)
+                BitmapFactory.decodeStream(inputStream)
             } catch (e: Error){
                 Log.i("TAG", "Error getting weather icon: ${e.message}")
-                result = BitmapFactory.decodeFile("drawable/home_icon.xml")
+                BitmapFactory.decodeFile("drawable/home_icon.xml")
             }
             return result
         }

@@ -3,22 +3,15 @@ package com.example.plogging.ui.home
 
 import android.content.Context
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Button
 import android.widget.EditText
-import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
-import com.example.plogging.data.model.ClassRoute
-import com.example.plogging.data.model.ClassTrash
-import com.example.plogging.utils.addRouteToDB
 import com.example.plogging.utils.addTrashToDB
 import com.google.android.gms.maps.model.LatLng
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.FirebaseDatabase
 import kotlinx.android.synthetic.main.fragment_after_stop_activity.*
 import java.lang.Integer.parseInt
 

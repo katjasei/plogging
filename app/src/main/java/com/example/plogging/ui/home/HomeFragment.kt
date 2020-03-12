@@ -153,7 +153,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
                     //add point to list
                     routePoints.add(lastLocationLatLng)
-                    Log.i("location", "Route points: "+routePoints)
+                    Log.i("location", "Route points: $routePoints")
 
                     //add polyline between locations
                     locationMap?.addPolyline(

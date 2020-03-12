@@ -13,7 +13,6 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
-import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -22,11 +21,8 @@ import android.widget.ImageView
 import android.widget.TextView
 import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.plogging.R
-import com.example.plogging.adapters.TrashAdapter
-import com.example.plogging.data.model.UnitTrash
 import com.example.plogging.utils.*
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.database.DataSnapshot
@@ -34,7 +30,6 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
-import org.w3c.dom.Text
 import java.io.File
 import java.io.InputStream
 import java.lang.Exception
@@ -53,7 +48,6 @@ class ProfileFragment: Fragment(){
     private val alertItems = arrayOf("Open camera","Choose from library")
     private lateinit var userID: String
     private lateinit var imageView: ImageView
-    var trashUnitList: MutableList<UnitTrash> = java.util.ArrayList()
     private lateinit var recyclerViewTrash: RecyclerView
 
     //FUNCTIONS AND INTERFACES

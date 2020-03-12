@@ -71,7 +71,7 @@ fun addRouteToDB(distance: Double, route: MutableList<LatLng>, time: Int) {
             .child("routes")
             .push()
             .setValue(finalRoute)
-        Log.i("database", "Route upload succesful! Uploaded: " + finalRoute)
+        Log.i("database", "Route upload succesful! Uploaded: $finalRoute")
         Log.i("database", "Time uploaded: " + finalRoute.time)
     } else {
         Log.e("database", "Route was empty or other error, not saved to database")
@@ -145,6 +145,7 @@ fun getTotalDistanceFromDatabase(userID: String, textView: TextView) {
     mFirebaseDB.child("users")
         .child(userID)
         .addValueEventListener(object:ValueEventListener{
+            @SuppressLint("SetTextI18n")
             override fun onDataChange(p0: DataSnapshot) {
                 totalDistance = 0.0
                 p0.child("routes").children.forEach {
@@ -165,6 +166,7 @@ fun getTotalTimeFromDatabase(userID: String, textView: TextView){
     mFirebaseDB.child("users")
         .child(userID)
         .addValueEventListener(object:ValueEventListener{
+            @SuppressLint("SetTextI18n")
             override fun onDataChange(p0: DataSnapshot) {
                 totalTime = 0
                 p0.child("routes").children.forEach {
