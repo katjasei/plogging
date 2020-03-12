@@ -29,11 +29,11 @@ class WeatherFragment: Fragment(){
                 val weatherObject = WeatherApiResponseParser.parse(inputMessage.obj.toString())
                 //set weather description
                 Log.i("weather", weatherObject.weather[0].main)
-                weatherDescriptionTextView.text = weatherObject.weather[0].description
+                weatherDescriptionTextView?.text = weatherObject.weather[0].description
                 //set temperature
-                temperatureTextView.text = "${weatherObject.main.temp.roundToInt()}°C"
+                temperatureTextView?.text = "${weatherObject.main.temp.roundToInt()}°C"
                 //set location
-                locationTextView.text = weatherObject.name
+                locationTextView?.text = weatherObject.name
                 //get possible icon url
                 val icon: String? = weatherObject.weather[0].icon
                 //if weather icon is found, display it

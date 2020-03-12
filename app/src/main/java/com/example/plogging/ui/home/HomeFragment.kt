@@ -48,7 +48,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
     private lateinit var startMarker: MarkerOptions
     private var stepsBeforeStart: Float = 1f
     private var firstStep = true
-    private lateinit var locationMap: GoogleMap
+    private var locationMap: GoogleMap? = null
     private lateinit var lastLocation: Location
     private lateinit var lastLocationLatLng: LatLng
     private lateinit var locationCallback: LocationCallback
@@ -115,35 +115,38 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
                 lastLocationLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
                 Log.i("location", "Location update: $lastLocationLatLng")
 
-                //markers cannot be removed, clear and draw everything again
-                locationMap.clear()
+                if (running) {
+                    //markers cannot be removed, clear and draw everything again
+                    locationMap?.clear()
 
-                marker = MarkerOptions()
-                    .position(lastLocationLatLng)
-                    .title("Your current location")
-                    .icon(BitmapDescriptorFactory.fromResource(R.drawable.dot))
+                    marker = MarkerOptions()
+                        .position(lastLocationLatLng)
+                        .title("Your current location")
+                        .icon(BitmapDescriptorFactory.fromResource(R.drawable.dot))
 
-                startMarker = MarkerOptions()
-                    .position(startPoint)
-                    .title("Start point")
-                    .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+                    startMarker = MarkerOptions()
+                        .position(startPoint)
+                        .title("Start point")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
 
-                //add startMarker and current location marker
-                locationMap.addMarker(marker)
-                locationMap.addMarker(startMarker)
+                    //add startMarker and current location marker
+                    locationMap?.addMarker(marker)
+                    locationMap?.addMarker(startMarker)
 
-                //move camera according to location update
-                locationMap.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+                    //move camera according to location update
+                    locationMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
 
-                //add point to list
-                routePoints.add(lastLocationLatLng)
+                    //add point to list
+                    routePoints.add(lastLocationLatLng)
 
-                //add polyline between locations
-                locationMap.addPolyline(
-                    PolylineOptions()
-                        .addAll(routePoints)
-                        .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
-                )
+                    //add polyline between locations
+                    locationMap?.addPolyline(
+                        PolylineOptions()
+                            .addAll(routePoints)
+                            .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
+                    )
+                }
+
             }
         }
         createLocationRequest()
@@ -242,7 +245,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
     }
 
     private fun startLocationUpdates() {
-        fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
     }
 
     private fun createLocationRequest() {
@@ -253,27 +256,28 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
         val builder = LocationSettingsRequest.Builder()
             .addLocationRequest(locationRequest)
 
-        try {
-            val client = LocationServices.getSettingsClient(this.requireActivity())
-            val task = client.checkLocationSettings(builder.build())
 
-            //On success
-            task.addOnSuccessListener {
-                locationUpdateState = true
-                startLocationUpdates()
-            }
+            try {
+                val client = LocationServices.getSettingsClient(this.requireActivity())
+                val task = client.checkLocationSettings(builder.build())
 
-            //On failure
-            task.addOnFailureListener { e ->
-                if (e is ResolvableApiException) {
-                    Log.i("route", "Error in location settings")
-                } else {
-                    Log.e("route", "CheckLocationSettings task failed: "+e.message)
+                //On success
+                task.addOnSuccessListener {
+                    locationUpdateState = true
+                        startLocationUpdates()
                 }
+
+                //On failure
+                task.addOnFailureListener { e ->
+                    if (e is ResolvableApiException) {
+                        Log.i("route", "Error in location settings")
+                    } else {
+                        Log.e("route", "CheckLocationSettings task failed: "+e.message)
+                    }
+                }
+            } catch (e: Error){
+                Log.e("route", "Error getting location updates: ${e.message}")
             }
-        } catch (e: Error){
-            Log.e("route", "Error getting location updates: ${e.message}")
-        }
     }
 
     private fun checkForStepCounterSensor() {

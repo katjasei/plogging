@@ -136,9 +136,49 @@ fun getUserNameFromDataBase(userID:String, textView:TextView){
         })
 
 }
-    //get information about all kind of trash (pet_bottles,iron_cans...) that user gathered
-    fun getUnitTrashInfoFromDataBase(userID: String, recyclerView:RecyclerView, context:Context){
 
+fun getTotalDistanceFromDatabase(userID: String, textView: TextView) {
+    var totalDistance = 0.0
+    mFirebaseDB.child("users")
+        .child(userID)
+        .addValueEventListener(object:ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                p0.child("routes").children.forEach {
+                    totalDistance += it.child("distance").value.toString().toDouble()
+                }
+                textView.text = "%.2f".format(totalDistance)
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                // Failed to read value
+                Log.d("Failed to read value.", "")
+            }
+        })
 }
+
+fun getTotalTimeFromDatabase(userID: String, textView: TextView){
+    var totalTime = 0
+    mFirebaseDB.child("users")
+        .child(userID)
+        .addValueEventListener(object:ValueEventListener{
+            override fun onDataChange(p0: DataSnapshot) {
+                p0.child("routes").children.forEach {
+                    if (it.child("time").value.toString().toInt() > 0)
+                        totalTime += it.child("time").value.toString().toInt()
+                }
+                when (totalTime) {
+                    in 0..60 -> textView.text = totalTime.toString()+"s"
+                    in 61..3600 -> textView.text = (totalTime/60).toString()+"min"
+                    else -> textView.text = (totalTime/3600).toString()+"h"
+                }
+            }
+
+            override fun onCancelled(p0: DatabaseError) {
+                // Failed to read value
+                Log.d("Failed to read value.", "")
+            }
+        })
+}
+
 
 

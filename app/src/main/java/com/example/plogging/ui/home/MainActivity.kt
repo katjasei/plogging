@@ -103,8 +103,6 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
 
     override fun onStart() {
         super.onStart()
-        //hide status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
         hideSystemUI()
     }
 

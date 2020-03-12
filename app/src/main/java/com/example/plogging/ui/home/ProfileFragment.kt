@@ -13,6 +13,7 @@ import android.os.AsyncTask
 import android.os.Bundle
 import android.os.Environment
 import android.provider.MediaStore
+import android.speech.tts.TextToSpeech
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
@@ -33,6 +34,7 @@ import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
 import kotlinx.android.synthetic.main.fragment_profile.*
+import org.w3c.dom.Text
 import java.io.File
 import java.io.InputStream
 import java.lang.Exception
@@ -95,10 +97,14 @@ class ProfileFragment: Fragment(){
         recyclerViewTrash = view.findViewById(R.id.recycler_view_trash)
         val username = view.findViewById<TextView>(R.id.value_user_name_profile)
         val points = view.findViewById<TextView>(R.id.value_points_profile)
+        val distance = view.findViewById<TextView>(R.id.value_kilometers)
+        val time = view.findViewById<TextView>(R.id.value_time)
         userID = FirebaseAuth.getInstance().currentUser!!.uid
         imageView = view.findViewById(R.id.profile_image)
         getUserNameFromDataBase(userID, username)
         getTotalPointsFromDataBase(userID, points)
+        getTotalDistanceFromDatabase(userID, distance)
+        getTotalTimeFromDatabase(userID, time)
         getProfilePictureFromDataBase(userID)
         return view
     }
