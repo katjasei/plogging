@@ -125,6 +125,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
         //setup location callback (when location changes, do this)
         locationCallback = object : LocationCallback() {
+
             override fun onLocationResult(p0: LocationResult) {
                 super.onLocationResult(p0)
                 lastLocation = p0.lastLocation
@@ -150,7 +151,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
                     locationMap?.addMarker(startMarker)
 
                     //move camera according to location update
-                    locationMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+                    locationMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17f))
 
                     //add point to list
                     routePoints.add(lastLocationLatLng)
@@ -255,7 +256,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
                     .title("Your current location")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17f))
             locationMap = map
         }
     }

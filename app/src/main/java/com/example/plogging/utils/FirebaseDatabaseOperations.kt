@@ -97,7 +97,6 @@ fun addRouteToDB(distance: Double, route: MutableList<LatLng>, time: Int) {
         .setValue(trash)
 }
 
-
 // function for getting user name from database
 fun getUserNameFromDataBase(userID:String, textView:TextView){
 
