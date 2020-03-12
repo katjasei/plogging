@@ -2,288 +2,306 @@
 <androidx.constraintlayout.widget.ConstraintLayout
     xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    xmlns:tools="http://schemas.android.com/tools"
     android:orientation="vertical"
     android:layout_width="match_parent"
     android:layout_height="match_parent">
 
-    <LinearLayout
-        android:layout_width="0dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mat_card1"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
 
-
-        <ImageView
-            android:id="@+id/img_pet_bottle"
-            android:layout_width="120dp"
-            android:layout_height="100dp"
-            app:srcCompat="@drawable/pet" />
-
-        <TextView
-            android:id="@+id/txt_pet_bottle"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:text="@string/txt_pet_bottle"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/value_pet_bottles"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="@string/default_value_trash"
-            android:inputType="number"
-            android:text="@string/default_value_trash"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textColorHint="@android:color/tertiary_text_light"
-            android:textSize="24sp"
-            tools:text="@string/default_value_trash" />
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
 
-    <View
-        android:id="@+id/divider2"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="100dp"
-        android:layout_weight="1"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+            <ImageView
+                android:id="@+id/img_pet_bottle"
+                android:layout_width="120dp"
+                android:layout_height="100dp"
+                android:contentDescription="@string/desc_pet_bottle_icon"
+                app:srcCompat="@drawable/pet_bottles" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout"
-        android:layout_width="0dp"
+            <TextView
+                android:id="@+id/txt_pet_bottle"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="@string/txt_pet_bottle"
+                android:textAlignment="center"
+                android:textColor="@color/textBlack"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/value_pet_bottles"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/default_value_trash"
+                android:inputType="number"
+                android:textColor="@color/textBlack"
+                android:textColorHint="@android:color/tertiary_text_light"
+                android:textSize="24sp"
+                android:importantForAutofill="no" />
+
+        </LinearLayout>
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mat_card2"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="102dp"
-        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@+id/mat_card1">
+
+        <LinearLayout
+            android:id="@+id/linearLayout"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
 
         <ImageView
             android:id="@+id/img_iron_cans"
+            android:contentDescription="@string/desc_can_icon"
             android:layout_width="120dp"
             android:layout_height="76dp"
             android:layout_gravity="center"
             app:srcCompat="@drawable/iron_cans" />
 
-        <TextView
-            android:id="@+id/txt_iron_cans"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:text="@string/txt_iron_cans"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
+            <TextView
+                android:id="@+id/txt_iron_cans"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="@string/txt_iron_cans"
+                android:textAlignment="center"
+                android:textColor="@color/textBlack"
+                android:textSize="24sp"
+                android:textStyle="bold" />
 
-        <EditText
-            android:id="@+id/value_iron_cans"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="@string/default_value_trash"
-            android:inputType="number"
-            android:text="@string/default_value_trash"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textColorHint="@android:color/tertiary_text_light"
-            android:textSize="24sp"
-            tools:text="@string/default_value_trash" />
+            <EditText
+                android:id="@+id/value_iron_cans"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/default_value_trash"
+                android:inputType="number"
+                android:textColor="@color/textBlack"
+                android:textColorHint="@android:color/tertiary_text_light"
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
 
     </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
-    <View
-        android:id="@+id/divider3"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="201dp"
-        android:layout_weight="1"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
-
-    <LinearLayout
-        android:layout_width="0dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mat_card3"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="203dp"
-        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/mat_card2">
 
-
-        <ImageView
-            android:id="@+id/img_cigarette"
-            android:layout_width="120dp"
-            android:layout_height="76dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/cigarette" />
-
-        <TextView
-            android:id="@+id/txt_cigarette"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:text="@string/txt_cigarettes"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/value_cigarettes"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="@string/default_value_trash"
-            android:inputType="number"
-            android:text="@string/default_value_trash"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textColorHint="@android:color/tertiary_text_light"
-            android:textSize="24sp"
-            tools:text="@string/default_value_trash" />
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
 
-    <View
-        android:id="@+id/divider4"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="203dp"
-        android:layout_weight="1"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+            <ImageView
+                android:id="@+id/img_cigarette"
+                android:contentDescription="@string/desc_cigarette_icon"
+                android:layout_width="120dp"
+                android:layout_height="76dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/cigarettes" />
 
-    <LinearLayout
-        android:layout_width="0dp"
+            <TextView
+                android:id="@+id/txt_cigarette"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="@string/txt_cigarettes"
+                android:textAlignment="center"
+                android:textColor="@color/textBlack"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/value_cigarettes"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/default_value_trash"
+                android:inputType="number"
+                android:textColor="@color/textBlack"
+                android:textColorHint="@android:color/tertiary_text_light"
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mat_card4"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="305dp"
-        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/mat_card3">
 
-
-        <ImageView
-            android:id="@+id/img_cardboard"
-            android:layout_width="120dp"
-            android:layout_height="76dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/cardboard" />
-
-        <TextView
-            android:id="@+id/txt_cardboard"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:text="@string/txt_cardboard"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/value_cardboard"
+        <LinearLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="@string/default_value_trash"
-            android:inputType="number"
-            android:text="@string/default_value_trash"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textColorHint="@android:color/tertiary_text_light"
-            android:textSize="24sp"
-            tools:text="@string/default_value_trash" />
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
 
-       <View
-        android:id="@+id/divider5"
-        android:layout_width="match_parent"
-        android:layout_height="2dp"
-        android:layout_marginTop="303dp"
-        android:layout_weight="1"
-        android:background="?android:attr/listDivider"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/divider2" />
+            <ImageView
+                android:id="@+id/img_cardboard"
+                android:layout_width="120dp"
+                android:layout_height="76dp"
+                android:layout_gravity="center"
+                android:contentDescription="@string/desc_cardboard_icon"
+                app:srcCompat="@drawable/cardboard" />
 
-    <LinearLayout
-        android:id="@+id/linearLayout2"
-        android:layout_width="0dp"
+            <TextView
+                android:id="@+id/txt_cardboard"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="@string/txt_cardboard"
+                android:textAlignment="center"
+                android:textColor="@color/textBlack"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/value_cardboard"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/default_value_trash"
+                android:inputType="number"
+                android:textColor="@color/textBlack"
+                android:textColorHint="@android:color/tertiary_text_light"
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/mat_card5"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="407dp"
-        android:orientation="horizontal"
+        android:layout_marginStart="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        app:cardElevation="4dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent">
+        app:layout_constraintTop_toBottomOf="@id/mat_card4">
 
-
-        <ImageView
-            android:id="@+id/img_other"
-            android:layout_width="120dp"
-            android:layout_height="56dp"
-            android:layout_gravity="center"
-            app:srcCompat="@drawable/trash" />
-
-        <TextView
-            android:id="@+id/txt_other"
-            android:layout_width="200dp"
-            android:layout_height="100dp"
-            android:gravity="center"
-            android:text="@string/txt_other"
-            android:textAlignment="center"
-            android:textColor="@android:color/black"
-            android:textSize="24sp"
-            android:textStyle="bold" />
-
-        <EditText
-            android:id="@+id/value_other"
+        <LinearLayout
+            android:id="@+id/linearLayout2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_weight="1"
-            android:background="@android:color/transparent"
-            android:ems="10"
-            android:gravity="center"
-            android:hint="@string/default_value_trash"
-            android:inputType="number"
-            android:text="@string/default_value_trash"
-            android:textColor="@android:color/tertiary_text_light"
-            android:textColorHint="@android:color/tertiary_text_light"
-            android:textSize="24sp"
-            tools:text="@string/default_value_trash" />
+            android:orientation="horizontal"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="parent">
 
-    </LinearLayout>
+
+            <ImageView
+                android:id="@+id/img_other"
+                android:contentDescription="@string/desc_other_icon"
+                android:layout_width="120dp"
+                android:layout_height="56dp"
+                android:layout_gravity="center"
+                app:srcCompat="@drawable/other" />
+
+            <TextView
+                android:id="@+id/txt_other"
+                android:layout_width="200dp"
+                android:layout_height="100dp"
+                android:gravity="center"
+                android:text="@string/txt_other"
+                android:textAlignment="center"
+                android:textColor="@color/textBlack"
+                android:textSize="24sp"
+                android:textStyle="bold" />
+
+            <EditText
+                android:id="@+id/value_other"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:background="@android:color/transparent"
+                android:ems="10"
+                android:gravity="center"
+                android:hint="@string/default_value_trash"
+                android:inputType="number"
+                android:textColor="@color/textBlack"
+                android:textColorHint="@android:color/tertiary_text_light"
+                android:textSize="24sp"
+                android:importantForAutofill="no"/>
+
+        </LinearLayout>
+    </com.google.android.material.card.MaterialCardView>
 
     <com.google.android.material.button.MaterialButton
-        android:id="@+id/btn_plogging_result"
+        android:id="@+id/btn_upload_after_activity"
         style="@style/Widget.MaterialComponents.Button"
+        android:contentDescription="@string/txt_btn_upload"
         android:layout_width="300dp"
         android:layout_height="60dp"
         android:layout_marginStart="32dp"
@@ -297,6 +315,6 @@
         app:cornerRadius="8dp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/linearLayout2" />
+        app:layout_constraintTop_toBottomOf="@+id/mat_card5" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

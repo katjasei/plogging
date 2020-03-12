@@ -10,6 +10,7 @@
 
     <ImageView
         android:id="@+id/background_picture"
+        android:contentDescription="@null"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:alpha="0.51"
@@ -31,14 +32,18 @@
         android:layout_marginEnd="32dp"
         android:alpha="0.7"
         android:background="@drawable/rounded_edittext"
+        android:contentDescription="@string/txt_email"
         android:ems="10"
         android:gravity="start|center"
         android:hint="@string/txt_email"
         android:inputType="textMultiLine"
+        android:textColorHint="@color/textBlack"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toTopOf="parent"
+        tools:ignore="ContentDescription,TextFields"
+        android:importantForAutofill="no"/>
 
     <EditText
         android:id="@+id/value_password"
@@ -49,14 +54,18 @@
         android:layout_marginEnd="32dp"
         android:alpha="0.7"
         android:background="@drawable/rounded_edittext"
+        android:contentDescription="@string/txt_password"
         android:ems="10"
         android:gravity="start|center"
         android:hint="@string/txt_password"
         android:inputType="textPassword"
+        android:textColorHint="@color/textBlack"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/value_email" />
+        app:layout_constraintTop_toBottomOf="@+id/value_email"
+        tools:ignore="ContentDescription"
+        android:importantForAutofill="no"/>
 
     <TextView
         android:id="@+id/txt_login_fail"
@@ -77,6 +86,7 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_in"
+        android:contentDescription="@string/txt_log_in"
         style="@style/Widget.MaterialComponents.Button"
         android:layout_width="300dp"
         android:layout_height="60dp"

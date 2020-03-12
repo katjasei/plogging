@@ -1,80 +1,177 @@
 package com.example.plogging.ui.home
 
-import android.annotation.SuppressLint
 import android.content.Context
+import android.content.Intent
 import android.graphics.Color
 import android.graphics.PorterDuff
+import android.hardware.Sensor
+import android.hardware.SensorEvent
+import android.hardware.SensorEventListener
+import android.hardware.SensorManager
 import android.location.Location
 import android.os.Bundle
+import android.os.Handler
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.Button
+import android.widget.TextView
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
 import com.google.android.gms.location.*
 import com.google.android.gms.maps.CameraUpdateFactory
 import com.google.android.gms.maps.GoogleMap
 import com.google.android.gms.maps.SupportMapFragment
-import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.database.DataSnapshot
-import com.google.firebase.database.DatabaseError
-import com.google.firebase.database.FirebaseDatabase
-import com.google.firebase.database.ValueEventListener
-import kotlinx.android.synthetic.main.fragment_home.*
 import com.google.android.gms.maps.OnMapReadyCallback
 import com.google.android.gms.maps.model.BitmapDescriptorFactory
 import com.google.android.gms.maps.model.LatLng
 import com.google.android.gms.maps.model.MarkerOptions
+import com.google.android.gms.common.api.ResolvableApiException
+import com.google.android.gms.maps.model.PolylineOptions
+import com.google.firebase.auth.FirebaseAuth
+import kotlinx.android.synthetic.main.fragment_home.*
+import kotlinx.android.synthetic.main.fragment_home.floating_action_button
+import java.lang.Error
+import com.example.plogging.utils.PreferenceHelper
+import com.example.plogging.utils.PreferenceHelper.distance
+import com.example.plogging.utils.PreferenceHelper.duration
+import com.example.plogging.utils.addRouteToDB
 
-class HomeFragment: Fragment(), OnMapReadyCallback  {
+class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
-    var mFirebaseDB =  FirebaseDatabase.getInstance().reference
     private var activityCallBack: HomeFragmentListener? = null
+    private var afterStopActivityCallBack: AfterStopActivityFragment.AfterStopActivityListener? = null
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
+    private var running= false
+    var seconds = 0
+    private val step = 0.0007 //(km)
+    var routeLength: Double = 0.0
+    private lateinit var startPoint: LatLng
+    var routePoints = mutableListOf<LatLng>()
+    private lateinit var marker: MarkerOptions
+    private lateinit var startMarker: MarkerOptions
+    private var stepsBeforeStart: Float = 1f
+    private var firstStep = true
+    private var locationMap: GoogleMap? = null
+    private lateinit var lastLocation: Location
+    private lateinit var lastLocationLatLng: LatLng
+    private lateinit var locationCallback: LocationCallback
+    private lateinit var locationRequest: LocationRequest
+    private var locationUpdateState = false
+    private lateinit var sensorManager: SensorManager
+    private var stepCounterSensor: Sensor? = null
+    private lateinit var currentLocation: LatLng
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
 
     interface HomeFragmentListener {
         fun onButtonStartActivityClick()
+        fun onButtonPloggingResultClick()
     }
-
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as HomeFragmentListener
+        afterStopActivityCallBack = context as AfterStopActivityFragment.AfterStopActivityListener
     }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-//        HomeActivity().actionBar?.title =  "My jogging record"
         val view = inflater.inflate(R.layout.fragment_home, container, false)
+        val startButton = view.findViewById<Button>(R.id.btn_start_activity)
+        val stopButton = view.findViewById<Button>(R.id.btn_stop_activity_home)
+        val resultButton = view.findViewById<Button>(R.id.btn_plogging_result_home)
+        val duration = view.findViewById<TextView>(R.id.value_duration)
+        seconds = 0
+        val prefsActivity = PreferenceHelper.customPreference(context!!, "prefsActivity")
 
-        val userID = FirebaseAuth.getInstance().currentUser?.uid
+        //Start button onClick
+        startButton.setOnClickListener {
+            // activityCallBack!!.onButtonStartActivityClick()
+            startButton.visibility = View.INVISIBLE
+            stopButton.visibility = View.VISIBLE
+            running = true
+            runTimer(duration)
+        }
 
-        mFirebaseDB.child("users")
-            .child(userID!!)
-            .addValueEventListener(object: ValueEventListener {
-                @SuppressLint("SetTextI18n")
-                override fun onDataChange(p0: DataSnapshot) {
-                    Log.d("p0", p0.child("username").value.toString())
-                    //val user = p0.getValue(ClassUser::class.java)
-                    val username = p0.child("username").value.toString()
+        //Stop button onClick
+        stopButton.setOnClickListener {
+            running = false
+            resultButton.visibility = View.VISIBLE
+            stopButton.visibility = View.INVISIBLE
+            //upload route data to firebase
+            val route = afterStopActivityCallBack!!.getRoute()
+            val distance = afterStopActivityCallBack!!.getRouteLength()
+            val time = afterStopActivityCallBack!!.getRouteTime()
+            if(mFirebaseAuth.currentUser != null){
+            addRouteToDB(distance, route, time)}
+        }
+
+        //Result button OnClick
+        resultButton.setOnClickListener {
+
+            if(mFirebaseAuth.currentUser != null){
+                activityCallBack!!.onButtonPloggingResultClick()
+            } else {
+                //save unregistered  user results to SharedPreferences
+                prefsActivity.duration = value_duration.toString()
+                prefsActivity.distance = value_distance.toString()
+                val intent = Intent(context, NotRegisteredActivity::class.java)
+                startActivity(intent)
+            }
+        }
+
+        sensorManager = activity?.getSystemService(Context.SENSOR_SERVICE) as SensorManager
+        checkForStepCounterSensor()
+
+        //setup location callback (when location changes, do this)
+        locationCallback = object : LocationCallback() {
+
+            override fun onLocationResult(p0: LocationResult) {
+                super.onLocationResult(p0)
+                lastLocation = p0.lastLocation
+                lastLocationLatLng = LatLng(lastLocation.latitude, lastLocation.longitude)
+                Log.i("location", "Location update: $lastLocationLatLng")
+
+                if (running) {
+                    //markers cannot be removed, clear and draw everything again
+                    locationMap?.clear()
+
+                    marker = MarkerOptions()
+                        .position(lastLocationLatLng)
+                        .title("Your current location")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_RED))
+
+                    startMarker = MarkerOptions()
+                        .position(startPoint)
+                        .title("Start point")
+                        .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
+
+                    //add startMarker and current location marker
+                    locationMap?.addMarker(marker)
+                    locationMap?.addMarker(startMarker)
+
+                    //move camera according to location update
+                    locationMap?.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17f))
+
+                    //add point to list
+                    routePoints.add(lastLocationLatLng)
+                    Log.i("location", "Route points: $routePoints")
+
+                    //add polyline between locations
+                    locationMap?.addPolyline(
+                        PolylineOptions()
+                            .addAll(routePoints)
+                            .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
+                    )
                 }
-                override fun onCancelled(p0: DatabaseError) {
-                    // Failed to read value
-                    Log.d("Failed to read value.", "")
-                }
-            })
-
+            }
+        }
+        createLocationRequest()
         return view
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
-        //if user click button "StartActivity"
-        btn_start_activity.setOnClickListener {
-            activityCallBack!!.onButtonStartActivityClick()
-        }
-
         //
         floating_action_button.setOnClickListener {
             fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
@@ -89,24 +186,149 @@ class HomeFragment: Fragment(), OnMapReadyCallback  {
         floating_action_button.setImageDrawable(willBeWhite)
     }
 
+
+    override fun onAccuracyChanged(sensor: Sensor?, accuracy: Int) {
+        Log.i("sensor", "Accuracy changed")
+    }
+
+    override fun onSensorChanged(event: SensorEvent) {
+        if (event.sensor == stepCounterSensor) {
+
+            if (!firstStep) { //steps after the first
+                Log.i("sensor", "Sensor data: ${event.values[0]}")
+                routeLength = (event.values[0] - stepsBeforeStart)*step
+                updateRouteLength()
+
+            } else {  //first event, check the sensor value and set it to stepsBeforeStart to calculate steps during this plogging
+                stepsBeforeStart = event.values[0]
+                firstStep = false
+                updateRouteLength()
+            }
+        }
+    }
+
+
+    private fun updateRouteLength(){
+        val rounded = "%.1f".format(routeLength)
+        value_distance.text = rounded
+    }
+
+
+    override fun onResume() {
+        super.onResume()
+        //register sensor listener
+        stepCounterSensor?.also {
+            sensorManager.registerListener(this, it,
+                SensorManager.SENSOR_DELAY_NORMAL)
+        }
+        //start location updates if not already on
+        if (!locationUpdateState) {
+            startLocationUpdates()
+        }
+    }
+
     override fun onStart() {
         super.onStart()
         fusedLocationProviderClient = LocationServices.getFusedLocationProviderClient(context!!.applicationContext)
         val mapFragment = childFragmentManager.findFragmentById(R.id.map) as SupportMapFragment
         mapFragment.getMapAsync(this)
+        //start location updates
+        locationUpdateState = true
+        startLocationUpdates()
+    }
+
+    override fun onPause() {
+        super.onPause()
+        //unregister sensor listener
+        sensorManager.unregisterListener(this)
+        //remove location updates
+        fusedLocationProviderClient.removeLocationUpdates(locationCallback)
     }
 
     override fun onMapReady(map: GoogleMap) {
         fusedLocationProviderClient.lastLocation.addOnSuccessListener { location: Location ->
-            val currentLocation = LatLng(location.latitude, location.longitude)
-
+            currentLocation = LatLng(location.latitude, location.longitude)
+            routePoints.add(currentLocation)
+            startPoint = currentLocation
             map.addMarker(
                 MarkerOptions()
                     .position(currentLocation)
                     .title("Your current location")
                     .icon(BitmapDescriptorFactory.defaultMarker(BitmapDescriptorFactory.HUE_GREEN))
             )
-            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 15f))
+            map.moveCamera(CameraUpdateFactory.newLatLngZoom(currentLocation, 17f))
+            locationMap = map
         }
+    }
+
+    private fun startLocationUpdates() {
+            fusedLocationProviderClient.requestLocationUpdates(locationRequest, locationCallback, null)
+    }
+
+    private fun createLocationRequest() {
+        locationRequest = LocationRequest()
+        locationRequest.interval = 10000
+        locationRequest.fastestInterval = 5000
+        locationRequest.priority = LocationRequest.PRIORITY_HIGH_ACCURACY
+        val builder = LocationSettingsRequest.Builder()
+            .addLocationRequest(locationRequest)
+
+
+            try {
+                val client = LocationServices.getSettingsClient(this.requireActivity())
+                val task = client.checkLocationSettings(builder.build())
+
+                //On success
+                task.addOnSuccessListener {
+                    locationUpdateState = true
+                        startLocationUpdates()
+                }
+
+                //On failure
+                task.addOnFailureListener { e ->
+                    if (e is ResolvableApiException) {
+                        Log.i("route", "Error in location settings")
+                    } else {
+                        Log.e("route", "CheckLocationSettings task failed: "+e.message)
+                    }
+                }
+            } catch (e: Error){
+                Log.e("route", "Error getting location updates: ${e.message}")
+            }
+    }
+
+    private fun checkForStepCounterSensor() {
+        if (sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER) != null) {
+            stepCounterSensor = sensorManager.getDefaultSensor(Sensor.TYPE_STEP_COUNTER)
+            Log.i("TAG", "Sensor found")
+        } else {
+            Log.i("TAG", "No sensor available")
+            //TODO disable sensor activity
+        }
+    }
+
+    fun resetStepCounter() {
+        firstStep = true
+    }
+
+
+    //TODO: move this fun to separate file
+    private fun runTimer(textView: TextView){
+        val handler = Handler()
+
+        handler.post ( object : Runnable {
+            override fun run() {
+                val hours = seconds/3600
+                val minutes = (seconds%3600)/60
+                val secs = seconds%60
+                val time = String.format("%d:%02d:%02d", hours,minutes,secs)
+                textView.text = time
+                if(running) {
+                    seconds+=1
+                    Log.d("seconds", seconds.toString())
+                }
+                handler.postDelayed(this,1000)
+            }
+        })
     }
 }

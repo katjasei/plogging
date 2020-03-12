@@ -41,9 +41,6 @@ class LeaderBoardAdapter (private val myDataset: List<ClassUserTrash>) :
         holder.itemView.value_username.text = userTrash.username
         holder.itemView.value_points_profile.text = userTrash.trashTotal.toString() + " pts"
 
-        // holder.itemView.value_number.text = meal.meal!!.mealName
-        //holder.itemView.value_username.text = meal.type?.type
-        //holder.itemView.value_points.text = meal.meal!!.mealDescription
     }
 
     // Return the size of your data set (invoked by the layout manager)

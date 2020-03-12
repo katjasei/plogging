@@ -2,13 +2,13 @@
     <string name="app_name">Plogging</string>
     <string name="txt_sign_up">SIGN UP</string>
     <string name="txt_log_in">LOGIN</string>
-    <string name="txt_user_name"> user name</string>
-    <string name="txt_password"> password</string>
-    <string name="txt_confirm_password"> confirm password</string>
+    <string name="txt_user_name">Username</string>
+    <string name="txt_password">Password</string>
+    <string name="txt_confirm_password">Confirm password</string>
     <string name="txt_plogging">Are you ready for plogging?</string>
-    <string name="txt_welcome">Welcome to our application Plogging! Together we can keep our Earth clean!</string>
+    <string name="txt_welcome">Welcome to our Plogging application! Together we can keep our Earth clean!</string>
     <string name="txt_start_plogging">START PLOGGING</string>
-    <string name="txt_email">email</string>
+    <string name="txt_email">Email</string>
     <!--strings for validation, validation is implemented with AwesomeValidation-->
     <string name="invalid_name">User name must not be empty</string>
     <string name="duplicate_name">User with this name already exists</string>
@@ -20,13 +20,13 @@
     <string name="txt_current_user">Current user</string>
     <string name="txt_btn_logout">LOGOUT</string>
     <string name="txt_duration">0:00:00</string>
-    <string name="txt_duration2">duration</string>
+    <string name="txt_duration2">Duration</string>
     <string name="txt_value_distance">0.00</string>
-    <string name="txt_distance">distance km</string>
+    <string name="txt_distance">Distance km</string>
     <string name="txt_btn_start_activity">START ACTIVITY</string>
     <string name="txt_btn_stop_activity">STOP ACTIVITY</string>
     <string name="txt_pet_bottle">PET Bottles</string>
-    <string name="txt_iron_cans">Iron Cans</string>
+    <string name="txt_iron_cans">Alumininum Cans</string>
     <string name="txt_cigarettes">Cigarette</string>
     <string name="txt_cardboard">Cardboard</string>
     <string name="txt_other">Other</string>
@@ -41,12 +41,72 @@
     <string name="location_loading">Loading location</string>
     <string name="temperature">0°C</string>
     <string name="steps">Steps</string>
-    <string name="txt_points_profile">points</string>
+    <string name="txt_points_profile">Points</string>
     <string name="txt_default_kilometers">0</string>
-    <string name="txt_total_kilometers">total kilometers</string>
+    <string name="txt_total_kilometers">Total distance</string>
     <string name="txt_default_time">0</string>
-    <string name="txt_total_time">total time</string>
+    <string name="txt_total_time">Total time</string>
     <string name="no_internet">No internet connection</string>
     <string name="try_again">Try again</string>
     <string name="txt_plogging_result">PLOGGING RESULT</string>
+    <string name="txt_con_desc_blue_pic">blue background picture</string>
+    <string name="txt_go_plogging">GO PLOGGING</string>
+    <string name="txt_not_register">You need to be registered or logged in</string>
+    <string name="txt_go_to_first_screen">FIRST SCREEN</string>
+    <string name="facebook_app_id">1356934837832274</string>
+    <string name="txt_trash_name">trash_name</string>
+    <string name="txt_registration">REGISTRATION</string>
+
+    <!--Content description strings -->
+
+    <!--NoInternet-->
+    <string name="desc_try_again">Try again</string>
+
+    <!--Home-->
+    <string name="desc_map">Map of your current location</string>
+    <string name="desc_map_center">Center your map</string>
+    <string name="desc_km">Kilometers</string>
+    <string name="desc_start_activity">Start activity</string>
+
+    <!--PloggingActivity-->
+    <string name="desc_stop_activity">Stop plogging</string>
+    <string name="desc_plogging_result">Plogging results</string>
+
+    <!--AfterStop-->
+    <string name="desc_pet_bottle_icon">Pet bottle icon</string>
+    <string name="desc_pet_bottle_number">Number of pet bottles</string>
+    <string name="desc_can_icon">Alumininum can icon</string>
+    <string name="desc_can_number">Number of cans</string>
+    <string name="desc_cigarette_icon">Cigarette icon</string>
+    <string name="desc_cigarette_number">Number of cigarette butts</string>
+    <string name="desc_cardboard_icon">Cardboard icon</string>
+    <string name="desc_cardboard_number">Number of cardboard items</string>
+    <string name="desc_other_icon">Other items icon</string>
+    <string name="desc_other_number">Number of other items</string>
+    <string name="home">Home</string>
+    <string name="weather">Weather</string>
+    <string name="leaderboard">Leaderboard</string>
+    <string name="profile">Profile</string>
+
+    <!--Point-->
+    <string name="desc_prize">Image of an award rosette</string>
+
+    <!--Profile-->
+    <string name="desc_profile_image">Your profile image</string>
+    <string name="desc_logout">Log out</string>
+    <string name="desc_icon">Trash icon</string>
+
+    <!--SplashScreen-->
+    <string name="desc_splash">Loading</string>
+
+    <!--Weather-->
+    <string name="desc_weather_icon">Weather icon</string>
+
+    <!--Welcome-->
+    <string name="desc_running_image">Image of running feet</string>
+    <string name="desc_start_plogging_button">Start plogging</string>
+
+    <!--Leaderboard-->
+    <string name="desc_podium_image">Image of a podium</string>
+
 </resources>

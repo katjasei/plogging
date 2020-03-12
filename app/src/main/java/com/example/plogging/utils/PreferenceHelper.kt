@@ -2,14 +2,13 @@ package com.example.plogging.utils
 
 import android.content.Context
 import android.content.SharedPreferences
-import android.preference.PreferenceManager
 
 object PreferenceHelper {
 
-    val USER_EMAIL = "USER_EMAIL"
-    val USER_PASSWORD = "PASSWORD"
-    fun defaultPreference(context: Context):
-            SharedPreferences = PreferenceManager.getDefaultSharedPreferences(context)
+    private const val USER_EMAIL = "USER_EMAIL"
+    private const val USER_PASSWORD = "PASSWORD"
+    private const val DISTANCE = "DISTANCE"
+    private const val DURATION = "DURATION"
 
     fun customPreference(context: Context, name: String):
             SharedPreferences = context.getSharedPreferences(name, Context.MODE_PRIVATE)
@@ -22,8 +21,7 @@ object PreferenceHelper {
 
     private fun SharedPreferences.Editor.put(pair: Pair<String, Any>) {
         val key = pair.first
-        val value = pair.second
-        when (value) {
+        when (val value = pair.second) {
             is String -> putString(key, value)
             is Int -> putInt(key, value)
             is Boolean -> putBoolean(key, value)
@@ -51,11 +49,29 @@ object PreferenceHelper {
             }
             var SharedPreferences.clearValues
                 get() = {}
-                set(value) {
+                set(_) {
                     editMe {
                         it.remove(USER_EMAIL)
                         it.remove(USER_PASSWORD)
                   }
                 }
+
+    var SharedPreferences.distance
+        get() = getString( DISTANCE, "")
+        set(value) {
+            editMe {
+                it.put(DISTANCE to value)
+
+            }
+        }
+
+    var SharedPreferences.duration
+        get() = getString( DURATION, "")
+        set(value) {
+            editMe {
+                it.put(DURATION to value)
+            }
+        }
+
 }
 

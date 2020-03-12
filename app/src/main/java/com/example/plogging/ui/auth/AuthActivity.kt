@@ -5,15 +5,14 @@ import android.content.pm.PackageManager
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.os.Handler
-import android.util.Log
 import android.view.View
-import androidx.core.app.ActivityCompat
-import androidx.core.content.ContextCompat
+import android.view.WindowManager
 import androidx.fragment.app.Fragment
+import androidx.lifecycle.Observer
 import com.example.plogging.*
 import com.example.plogging.ui.home.MainActivity
 import com.example.plogging.utils.askPermissions
-import com.google.firebase.auth.FirebaseAuth
+import com.example.plogging.viewModel.LoginViewModel
 
 class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     RegistrationFragment.RegistrationFragmentListener, WelcomeFragment.WelcomeFragmentListener
@@ -27,44 +26,20 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
     private val registrationFragment = RegistrationFragment()
     private val welcomeFragment = WelcomeFragment()
     private val splashScreenFragment = SplashScreenFragment()
-    //firebase auth object
-    private var mFirebaseAuth = FirebaseAuth.getInstance()
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
+    private val loginViewModel = LoginViewModel()
 
     //FUNCTIONS:
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_auth)
-        // Hide the status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
+        hideSystemUI()
         //permissions
         askPermissions(this,this)
-        // fragment manager can help when switching to the other fragment is needed
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, splashScreenFragment)
-            .commit()
-        //if the objects getCurrentUser is not null
-        //means user is already logged in
-        if(mFirebaseAuth.currentUser != null){
-            //if user is logged in go to HomeActvity - "Home or Map Screen"
-            val intent = Intent(this, MainActivity::class.java)
-            startActivity(intent)
-        }
-        else {
-            val handler = Handler()
-            handler.postDelayed({
-                run {
-                    //go to FirstFragment, if user not logged in
-                    supportFragmentManager.beginTransaction().replace(
-                        R.id.fragment_container,
-                        firstFragment)
-                        .addToBackStack(null )
-                        .commit()
-                }
-
-            },3000)}
+        replaceFragment(splashScreenFragment)
+        //check if user already logged in
+        observeAuthenticationState()
     }
 
     //FirstFragment listeners:
@@ -92,12 +67,19 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
         startActivity(intent)
     }
 
+    override fun onButtonGoPlogginClick() {
+        val intent = Intent(this, MainActivity::class.java)
+        startActivity(intent)
+    }
+
+    //function used for fragment replacement
     private fun replaceFragment(fragment: Fragment){
-        Log.i("TAG", fragment.toString())
+        // fragment manager can help when switching to the other fragment is needed
         supportFragmentManager.beginTransaction()
             .replace(R.id.fragment_container, fragment)
             .addToBackStack(null)
             .commit()
+        hideSystemUI()
     }
 
     override fun onRequestPermissionsResult(
@@ -110,18 +92,50 @@ class AuthActivity : AppCompatActivity(), FirstFragment.FirstFragmentListener,
                 //if request is cancelled, the result array is empty
                 if (grantResults.isNotEmpty() && grantResults[0] == PackageManager.PERMISSION_GRANTED) {
                     //permission granted
+                    //TODO permissions accepted, continue as normal
                 }
                 else{
                     //permission denied
+                    //TODO permissions denied
                 }
             }
         }
     }
 
-    override fun onStart() {
-        super.onStart()
-        //hide status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
+    //function check if user already logged in or not (observer)
+    private fun observeAuthenticationState() {
+        loginViewModel.authenticationState.observe(this, Observer {
+            when (it) {
+                LoginViewModel.AuthenticationState.AUTHENTICATED -> {
+                    val handler = Handler()
+                    handler.postDelayed({
+                        run {
+                            //go to FirstFragment, if user not logged in
+                            val intent = Intent(this, MainActivity::class.java)
+                            startActivity(intent)
+                        }
+                    },3000)
+                }
+                else -> {
+                    val handler = Handler()
+                    handler.postDelayed({
+                        run {
+                            //go to FirstFragment, if user not logged in
+                            replaceFragment(firstFragment)
+                        }
+                    },3000)}
+                }
 
-}
+            })
+        }
+
+    private fun hideSystemUI() {
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
+                or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
+                or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
+                or View.SYSTEM_UI_FLAG_HIDE_NAVIGATION
+                or View.SYSTEM_UI_FLAG_FULLSCREEN)
+        }
+    }

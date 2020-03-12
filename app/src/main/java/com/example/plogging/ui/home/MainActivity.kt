@@ -4,10 +4,10 @@ import android.content.Context
 import android.content.Intent
 import android.net.ConnectivityManager
 import android.net.NetworkCapabilities
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.View
+import android.view.WindowManager
 import androidx.appcompat.app.AppCompatActivity
 import androidx.fragment.app.Fragment
 import com.example.plogging.R
@@ -19,39 +19,42 @@ import kotlinx.android.synthetic.main.activity_main.*
 
 
 class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopActivityListener,
-    HomeFragment.HomeFragmentListener, PloggingActivityFragment.PloggingActivityListener,
-    PointFragment.PointActivityListener, ProfileFragment.ProfileFragmentListener,
-    NoInternetFragment.NoInternetFragmentListener{
+    HomeFragment.HomeFragmentListener, PointFragment.PointActivityListener,
+    ProfileFragment.ProfileFragmentListener, NoInternetFragment.NoInternetFragmentListener {
 
     //firebase auth object
-    lateinit var mFirebaseAuth: FirebaseAuth
+    private var mFirebaseAuth = FirebaseAuth.getInstance()
     //Create a new Fragment to be placed in the activity layout
     private val noInternetFragment = NoInternetFragment()
     private val homeFragment = HomeFragment()
-    private val ploggingActivityFragment = PloggingActivityFragment()
     private val afterStopActivityFragment = AfterStopActivityFragment()
     private val pointFragment = PointFragment()
     private val profileFragment = ProfileFragment()
+
 
     // bundle needs for communication between two fragments
     private val bundle = Bundle()
 
     //Bottom navigation click listener
-    //TODO maybe take this logic to a new file
     private val bottomNavigationOnClickListener = BottomNavigationView.OnNavigationItemSelectedListener { item ->
         when (item.itemId) {
             R.id.weather -> {
                 Log.i("TAG", "${item.title} pressed")
                 if (isNetworkAvailable(this)) {
-                replaceFragment(WeatherFragment()) }
-                else {
+                    replaceFragment(WeatherFragment())
+                } else {
                     replaceFragment(noInternetFragment)
                 }
                 return@OnNavigationItemSelectedListener true
             }
             R.id.leaderboard -> {
                 Log.i("TAG", "${item.title} pressed")
-                replaceFragment(LeaderBoardFragment())
+                if (isNetworkAvailable(this)){
+                    replaceFragment(LeaderBoardFragment())
+                } else {
+                    replaceFragment(noInternetFragment)
+                }
+
                 return@OnNavigationItemSelectedListener true
             }
             R.id.home -> {
@@ -61,7 +64,14 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
             }
             R.id.profile -> {
                 Log.i("TAG", "${item.title} pressed")
-                replaceFragment(ProfileFragment())
+
+                if(mFirebaseAuth.currentUser != null){
+                    replaceFragment(ProfileFragment())
+                }
+                else {
+                    val intent = Intent(this, NotRegisteredActivity::class.java)
+                    startActivity(intent)
+                }
                 return@OnNavigationItemSelectedListener true
             }
         }
@@ -71,45 +81,36 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-        //hideSystemUI()
-
+        //hide status bar
+        window.setFlags(
+            WindowManager.LayoutParams.FLAG_FULLSCREEN,
+            WindowManager.LayoutParams.FLAG_FULLSCREEN)
         //Set listener to bottom navigation
         bottom_navigation.setOnNavigationItemSelectedListener(bottomNavigationOnClickListener)
-
-        supportFragmentManager
-            .beginTransaction()
-            .add(R.id.fragment_container, homeFragment)
-            .commit()
+        replaceFragment(homeFragment)
     }
 
-    override fun onStart() {
-        super.onStart()
-        //hide status bar
-        window.decorView.systemUiVisibility = View.SYSTEM_UI_FLAG_FULLSCREEN
-    }
 
     //when user click button LOGOUT
     override fun onButtonLogOutClick() {
-        mFirebaseAuth = FirebaseAuth.getInstance()
+        //user logout
         mFirebaseAuth.signOut()
         //start new Activity - go to FirstScreen/LogIn, SighUp screen
         val intent = Intent(this, AuthActivity::class.java)
         startActivity(intent)
     }
+
+    override fun onStart() {
+        super.onStart()
+        hideSystemUI()
+    }
+
     //HomeFragment listener
     //when button "Start activity" clicked from HomeFragment
     override fun onButtonStartActivityClick() {
         hideBottomNavigation()
-        ploggingActivityFragment.resetStepCounter()
-        replaceFragment(ploggingActivityFragment)
-    }
-
-    //PloggingActivityFragment listener
-    //when button "Stop activity" clicked from PloggingActivityFragment
-    override fun onButtonStopActivityClick() {
-        replaceFragment(afterStopActivityFragment)
+        homeFragment.resetStepCounter()
+       // replaceFragment(ploggingActivityFragment)
     }
 
     //PointActivityFragment listener
@@ -127,6 +128,11 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         showBottomNavigation()
     }
 
+    override fun onButtonPloggingResultClick() {
+        replaceFragment(afterStopActivityFragment)
+    }
+    //HomeFragment listener
+    //when button "Plogging Result" clicked from HomeFragment
     private fun replaceFragment(fragment: Fragment) {
         //if fragment is homeFragment, display bottom navigation
         if (fragment == homeFragment) {
@@ -136,6 +142,7 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
         .replace(R.id.fragment_container, fragment)
         .addToBackStack(null)
         .commit()
+        hideSystemUI()
     }
 
     private fun isNetworkAvailable(context: Context): Boolean {
@@ -164,7 +171,8 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
     private fun hideSystemUI() {
-        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE
+        window.setFlags(WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS, WindowManager.LayoutParams.FLAG_LAYOUT_NO_LIMITS)
+        window.decorView.systemUiVisibility = (View.SYSTEM_UI_FLAG_IMMERSIVE_STICKY
                 or View.SYSTEM_UI_FLAG_LAYOUT_STABLE
                 or View.SYSTEM_UI_FLAG_LAYOUT_HIDE_NAVIGATION
                 or View.SYSTEM_UI_FLAG_LAYOUT_FULLSCREEN
@@ -181,6 +189,14 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
     override fun getRoute(): MutableList<LatLng> {
-        return ploggingActivityFragment.routePoints
+        return homeFragment.routePoints
+    }
+
+    override fun getRouteLength(): Double {
+        return homeFragment.routeLength
+    }
+
+    override fun getRouteTime(): Int {
+        return homeFragment.seconds
     }
 }

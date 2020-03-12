@@ -9,6 +9,7 @@
 
     <ImageView
         android:id="@+id/background_picture"
+        android:contentDescription="@null"
         android:layout_width="0dp"
         android:layout_height="0dp"
         android:scaleType="centerCrop"
@@ -22,34 +23,51 @@
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_up"
+        android:contentDescription="@string/txt_sign_up"
         style="@style/Widget.MaterialComponents.Button.OutlinedButton"
-        android:layout_width="300dp"
+        android:layout_width="130dp"
         android:layout_height="60dp"
         android:layout_marginStart="64dp"
-        android:layout_marginEnd="64dp"
-        android:layout_marginBottom="105dp"
+        android:layout_marginBottom="45dp"
+        android:text="@string/txt_sign_up"
         android:textColor="#FFFFFF"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/btn_sign_in"
+        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:strokeColor="@color/colorPrimary"
-        app:strokeWidth="3dp"
-        android:text="@string/txt_sign_up" />
+        app:strokeWidth="3dp" />
 
     <com.google.android.material.button.MaterialButton
         android:id="@+id/btn_sign_in"
+        android:contentDescription="@string/txt_log_in"
         style="@style/Widget.MaterialComponents.Button"
-        android:layout_width="300dp"
+        android:layout_width="130dp"
+        android:layout_height="60dp"
+        android:layout_marginEnd="64dp"
+        android:layout_marginBottom="45dp"
+        android:text="@string/txt_log_in"
+        android:textColor="#FFFFFF"
+        app:backgroundTint="@color/colorPrimary"
+        app:cornerRadius="8dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent" />
+
+    <com.google.android.material.button.MaterialButton
+        android:id="@+id/btn_go_plogging"
+        android:layout_width="0dp"
         android:layout_height="60dp"
         android:layout_marginStart="64dp"
         android:layout_marginEnd="64dp"
-        android:layout_marginBottom="40dp"
+        android:layout_marginBottom="124dp"
+        android:text="@string/txt_go_plogging"
         android:textColor="#FFFFFF"
         app:backgroundTint="@color/colorPrimary"
         app:cornerRadius="8dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/txt_log_in" />
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent" />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

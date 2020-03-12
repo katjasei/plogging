@@ -5,24 +5,23 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.view.animation.AnimationUtils
+import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import com.example.plogging.R
-import kotlinx.android.synthetic.main.fragment_splash_screen.*
 
 class SplashScreenFragment: DialogFragment() {
 
+    //FUNCTIONS:
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_splash_screen, container, false)
-    }
-
-    override fun onActivityCreated(savedInstanceState: Bundle?) {
-        super.onActivityCreated(savedInstanceState)
+        val view = inflater.inflate(R.layout.fragment_splash_screen, container, false)
+        val backgroundImage = view.findViewById<ImageView>(R.id.background_image)
         val animation = AnimationUtils.loadAnimation(this.context,
             R.anim.fade_in
         )
         //set the animation for imageView
-        background_image.startAnimation(animation)
+        backgroundImage.startAnimation(animation)
+        return view
     }
 
 }

@@ -2,6 +2,7 @@ package com.example.plogging.ui.home
 
 import android.annotation.SuppressLint
 import android.app.Activity.RESULT_OK
+import android.app.AlertDialog
 import android.content.Context
 import android.content.Intent
 import android.graphics.Bitmap
@@ -10,45 +11,49 @@ import android.net.ConnectivityManager
 import android.net.Uri
 import android.os.AsyncTask
 import android.os.Bundle
+import android.os.Environment
+import android.provider.MediaStore
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.ImageView
 import android.widget.TextView
-import android.widget.Toast
-import androidx.core.content.ContextCompat.getSystemService
+import androidx.core.content.FileProvider
 import androidx.fragment.app.Fragment
+import androidx.recyclerview.widget.RecyclerView
 import com.example.plogging.R
+import com.example.plogging.utils.*
 import com.google.firebase.auth.FirebaseAuth
-import com.google.firebase.auth.UserProfileChangeRequest
 import com.google.firebase.database.DataSnapshot
 import com.google.firebase.database.DatabaseError
 import com.google.firebase.database.FirebaseDatabase
 import com.google.firebase.database.ValueEventListener
-import com.google.firebase.storage.FirebaseStorage
 import kotlinx.android.synthetic.main.fragment_profile.*
+import java.io.File
 import java.io.InputStream
 import java.lang.Exception
 import java.net.HttpURLConnection
-import java.net.URI
 import java.net.URL
-import java.util.*
 
 
 class ProfileFragment: Fragment(){
 
-    var mFirebaseDB =  FirebaseDatabase.getInstance().reference
-    val REQUESTCODE = 1
-    lateinit var pickedImageURI: Uri
-    val currentUserID = FirebaseAuth.getInstance().currentUser?.uid
+    //VARIABLES:
+    private val REQUEST_IMAGE_CAPTURE = 99
+    private val REQUESTCODE = 1
+    private var mCurrentPhotoPath = ""
+    private var mFirebaseDB =  FirebaseDatabase.getInstance().reference
     private var activityCallBack: ProfileFragmentListener? = null
+    private val alertItems = arrayOf("Open camera","Choose from library")
+    private lateinit var userID: String
+    private lateinit var imageView: ImageView
+    private lateinit var recyclerViewTrash: RecyclerView
 
+    //FUNCTIONS AND INTERFACES
     interface ProfileFragmentListener {
         fun onButtonLogOutClick()
-
     }
-
     override fun onAttach(context: Context)   {
         super.onAttach(context)
         activityCallBack =  context as ProfileFragmentListener
@@ -57,6 +62,7 @@ class ProfileFragment: Fragment(){
     data class  URLparams(val url: URL)
     data class FinalBitmap(val bitmap: Bitmap)
 
+    @SuppressLint("StaticFieldLeak")
     inner class GetConn : AsyncTask<URLparams, Unit, FinalBitmap>() {
         override fun doInBackground(vararg params: URLparams): FinalBitmap {
             lateinit var result: FinalBitmap
@@ -65,14 +71,13 @@ class ProfileFragment: Fragment(){
                 val istream: InputStream = myConn.inputStream
                 val image = BitmapFactory.decodeStream(istream)
                 result = FinalBitmap(image)
-
             } catch (e: Exception) {
                 Log.e("Connection", "Reading error", e)
             }
             return result
         }
         override fun onPostExecute(result: FinalBitmap) {
-                profile_image.setImageBitmap(result.bitmap)
+                imageView.setImageBitmap(result.bitmap)
         }
     }
 
@@ -81,82 +86,61 @@ class ProfileFragment: Fragment(){
         container: ViewGroup?,
         savedInstanceState: Bundle?
     ): View? {
-
         // Inflate the layout for this fragment
-        //val REQUEST_IMAGE_CAPTURE = 100
         val view = inflater.inflate(R.layout.fragment_profile, container, false)
-        val usernameTextView = view.findViewById<TextView>(R.id.value_user_name_profile)
-        val totalPoints = view.findViewById<TextView>(R.id.value_points_profile)
-        val totalPet = view.findViewById<TextView>(R.id.value_pet_bottles)
-        val totalCans = view.findViewById<TextView>(R.id.value_iron_cans)
-        val totalCardBoard = view.findViewById<TextView>(R.id.value_cardboard)
-        val totalCigarettes = view.findViewById<TextView>(R.id.value_cigarettes)
-        val totalOther = view.findViewById<TextView>(R.id.value_other)
-        val userID = FirebaseAuth.getInstance().currentUser?.uid
-
-        mFirebaseDB.child("users")
-            .child(userID!!)
-            .addValueEventListener(object: ValueEventListener {
-                @SuppressLint("SetTextI18n")
-                override fun onDataChange(p0: DataSnapshot) {
-
-                    var total = 0
-                    var totalPB = 0
-                    var totalIC = 0
-                    var totalCB = 0
-                    var totalC = 0
-                    var totalO = 0
-                    var username = ""
-
-                        Log.d("p0.value", p0.value.toString())
-                           if(p0.child("profile_image").value != null){
-                               if (isNetworkAvailable()){
-                                   val myURLparams = URLparams(URL(p0.child("profile_image").value.toString()))
-                                   GetConn().execute(myURLparams)
-                               }
-                           }
-
-                            username = p0.child("username").value.toString()
-                            usernameTextView.text = username
-                        if (p0.child("trash").value != null) {
-                        val trash = p0.child("trash").children
-                            trash.forEach{
-                                total += Integer.parseInt(it.child("total").value.toString())
-                                totalPB += Integer.parseInt(it.child("pet_bottles").value.toString())
-                                totalIC += Integer.parseInt(it.child("iron_cans").value.toString())
-                                totalCB += Integer.parseInt(it.child("cardboard").value.toString())
-                                totalC += Integer.parseInt(it.child("cigarettes").value.toString())
-                                totalO += Integer.parseInt(it.child("other").value.toString())
-                                Log.d("Total1", it.child("total").value.toString())
-                            }
-                            Log.d("Total", total.toString())
-                            totalPoints.text = total.toString()
-                            totalPet.text = totalPB.toString()
-                            totalCans.text = totalIC.toString()
-                            totalCardBoard.text = totalCB.toString()
-                            totalCigarettes.text = totalC.toString()
-                            totalOther.text = totalO.toString()
-                    }
-                }
-                override fun onCancelled(p0: DatabaseError) {
-                    // Failed to read value
-                    Log.d("Failed to read value.", "")
-                }
-            }
-            )
-
+        recyclerViewTrash = view.findViewById(R.id.recycler_view_trash)
+        val username = view.findViewById<TextView>(R.id.value_user_name_profile)
+        val points = view.findViewById<TextView>(R.id.value_points_profile)
+        val distance = view.findViewById<TextView>(R.id.value_kilometers)
+        val time = view.findViewById<TextView>(R.id.value_time)
+        userID = FirebaseAuth.getInstance().currentUser!!.uid
+        imageView = view.findViewById(R.id.profile_image)
+        getUnitTrashInfoForUser(userID,recyclerViewTrash,context!!)
+        getUserNameFromDataBase(userID, username)
+        getTotalPointsFromDataBase(userID, points)
+        getTotalDistanceFromDatabase(userID, distance)
+        getTotalTimeFromDatabase(userID, time)
+        getProfilePictureFromDataBase(userID)
         return view
     }
 
-    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
-        super.onViewCreated(view, savedInstanceState)
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        //profile image click listener, when user click profile image -> they can choose
+        //photo from library or use camera
         profile_image.setOnClickListener {
-            openGallery()
+            showAlertDialog()
         }
         //if user click button "LogOut" they move to FirstScreen
         btn_logout.setOnClickListener{
             activityCallBack!!.onButtonLogOutClick()
         }
+
+    }
+
+    //FUNCTIONS FOR UPLOADING PROFILE PICTURE
+    //Alert dialog with to choices: Open camera or Choice from library
+    private fun showAlertDialog(){
+        val builder = AlertDialog.Builder(this.context)
+        builder.setTitle("Upload profile picture")
+        builder.setSingleChoiceItems(
+            alertItems,
+            -1
+        ) { _, which ->
+            if(which == 0){
+                openCamera()
+            } else {
+                openGallery()
+            }
+        }
+        builder.setPositiveButton(
+            "OK"
+        ) { _, _ ->
+
+        }
+        val dialog = builder.create()
+        // Display the alert dialog on interface
+        dialog.show()
     }
 
     private fun openGallery(){
@@ -164,39 +148,65 @@ class ProfileFragment: Fragment(){
         val galleryIntent = Intent(Intent.ACTION_GET_CONTENT)
         galleryIntent.type = "image/*"
         startActivityForResult(galleryIntent, REQUESTCODE)
-
     }
 
-    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        super.onActivityResult(requestCode, resultCode, data)
-
-        if(resultCode == RESULT_OK && requestCode ==REQUESTCODE && data != null ){
-            //the user has successfully picked an image
-            //we need to save its reference to a URI variable
-            pickedImageURI = data.data!!
-            profile_image.setImageURI(pickedImageURI)//upload user photo to firebase storage and get url
-
-            val mStorage = FirebaseStorage.getInstance().reference.child("$currentUserID.jpg")
-
-            val imageFilePath = mStorage.child(pickedImageURI.lastPathSegment!!)
-            imageFilePath
-                .putFile(pickedImageURI)
-                .addOnSuccessListener {
-                    imageFilePath.downloadUrl.addOnSuccessListener {
-                        val downloadURL = it.toString()
-                        mFirebaseDB.child("users")
-                            .child(currentUserID!!)
-                            .child("profile_image")
-                            .setValue(downloadURL)
-                    }
-                    Toast.makeText(activity,"Uploaded",Toast.LENGTH_SHORT).show()
-                }.addOnFailureListener {
-                    Toast.makeText(activity, "Failed$it",Toast.LENGTH_SHORT).show()
-                }
+    private fun openCamera(){
+        val fileName = "temp_photo"
+        val imgPath = context!!.getExternalFilesDir(Environment.DIRECTORY_PICTURES)
+        val imageFile: File?
+        imageFile = File.createTempFile(fileName, ".jpg", imgPath)
+        val photoURI: Uri =
+            FileProvider.getUriForFile(this.context!!, "com.example.plogging", imageFile)
+        mCurrentPhotoPath = imageFile!!.absolutePath
+        val myIntent = Intent(MediaStore.ACTION_IMAGE_CAPTURE)
+        if (myIntent.resolveActivity(context!!.packageManager) != null) {
+            myIntent.putExtra(MediaStore.EXTRA_OUTPUT, photoURI)
+            startActivityForResult(myIntent, REQUEST_IMAGE_CAPTURE)
         }
     }
 
-    private fun isNetworkAvailable(): Boolean {
+
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if(resultCode == RESULT_OK && requestCode == REQUESTCODE && data != null ){
+            //the user has successfully picked an image
+            //we need to save its reference to a URI variable
+            val pickedImageURI = data.data!!
+            profile_image.setImageURI(pickedImageURI)
+            //upload user photo to firebase storage and get url
+            uploadFileToFirebaseStorage(pickedImageURI, userID, activity!!)
+        }
+        if (requestCode == REQUEST_IMAGE_CAPTURE && resultCode == RESULT_OK) {
+            val imageBitmap = BitmapFactory.decodeFile(mCurrentPhotoPath)
+            uploadFileToFirebaseStorage(Uri.fromFile(File(mCurrentPhotoPath)), userID, activity!!)
+            profile_image.setImageBitmap(imageBitmap)
+        }
+    }
+
+    private fun getProfilePictureFromDataBase(userID:String){
+
+        mFirebaseDB.child("users")
+            .child(userID)
+            .addValueEventListener(object:ValueEventListener{
+                override fun onDataChange(p0: DataSnapshot) {
+                    Log.d("p0", p0.child("profile_image").value.toString())
+                    if (p0.child("profile_image").value != null) {
+                        if (isNetworkAvailable()) {
+                            val myURLparams =
+                                URLparams(URL(p0.child("profile_image").value.toString()))
+                            GetConn().execute(myURLparams)
+
+                        }
+                    }
+                }
+                override fun onCancelled(p0: DatabaseError) {
+                    // Failed to read value
+                    Log.d("Failed to read value.", "")
+                }
+            })
+    }
+
+   private fun isNetworkAvailable(): Boolean {
         val connectivityManager = activity!!.getSystemService(
             Context.CONNECTIVITY_SERVICE
         ) as ConnectivityManager
