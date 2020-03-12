@@ -2,7 +2,7 @@
 
 # Overview
 
-App records the number of picking up trash, location, distance and the time spent during the activity.
+App records the number of picked up trash, location, distance and the time spent during the activity.
 
 # Project requirements
 
@@ -26,6 +26,15 @@ App records the number of picking up trash, location, distance and the time spen
   + WorkManager/Worker
   
 # App features
+
++ Firebase authentication 
++ Firebase database (user data, activity data and collected garbage data)
++ Firebase storage 
++ Activity tracking with location and track route on map
++ Calculate distance traveled during activity
++ Stepcounter
++ Leaderboard (number of picked up trash)
++ Local temperature and weather
 
 # API Reference
 + Minimum SDK: 16
