@@ -25,7 +25,6 @@
 
     <EditText
         android:id="@+id/value_email"
-        android:contentDescription="@string/txt_email"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -33,10 +32,12 @@
         android:layout_marginEnd="32dp"
         android:alpha="0.7"
         android:background="@drawable/rounded_edittext"
+        android:contentDescription="@string/txt_email"
         android:ems="10"
         android:gravity="start|center"
         android:hint="@string/txt_email"
         android:inputType="textMultiLine"
+        android:textColorHint="@color/textBlack"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
@@ -44,7 +45,6 @@
 
     <EditText
         android:id="@+id/value_password"
-        android:contentDescription="@string/txt_password"
         android:layout_width="300dp"
         android:layout_height="50dp"
         android:layout_marginStart="32dp"
@@ -52,10 +52,12 @@
         android:layout_marginEnd="32dp"
         android:alpha="0.7"
         android:background="@drawable/rounded_edittext"
+        android:contentDescription="@string/txt_password"
         android:ems="10"
         android:gravity="start|center"
         android:hint="@string/txt_password"
         android:inputType="textPassword"
+        android:textColorHint="@color/textBlack"
         android:textSize="20sp"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"

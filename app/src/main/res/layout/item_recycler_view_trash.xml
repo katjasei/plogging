@@ -39,7 +39,7 @@
                 android:gravity="center"
                 android:text="@string/txt_trash_name"
                 android:textAlignment="center"
-                android:textColor="@android:color/black"
+                android:textColor="@color/textBlack"
                 android:textSize="18sp"
                 android:textStyle="normal" />
 
@@ -53,7 +53,7 @@
                 android:ems="10"
                 android:gravity="center"
                 android:text="@string/default_value_trash"
-                android:textColor="@android:color/tertiary_text_light"
+                android:textColor="@color/textBlack"
                 android:textColorHint="@android:color/tertiary_text_light"
                 android:textSize="18sp"
                 tools:text="@string/default_value_trash" />
