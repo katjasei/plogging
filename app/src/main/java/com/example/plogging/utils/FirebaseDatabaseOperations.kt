@@ -10,10 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.plogging.R
 import com.example.plogging.adapters.LeaderBoardAdapter
 import com.example.plogging.adapters.TrashAdapter
-import com.example.plogging.data.model.ClassTrash
-import com.example.plogging.data.model.ClassUser
-import com.example.plogging.data.model.ClassUserTrash
-import com.example.plogging.data.model.UnitTrash
+import com.example.plogging.data.model.*
 import com.google.android.gms.maps.model.LatLng
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.auth.FirebaseUser
@@ -61,18 +58,22 @@ import com.google.firebase.database.ValueEventListener
         .setValue(user)
 }
 
-    //function for adding route to Firebase DB
-    fun addRouteToDB(route: MutableList<LatLng>){
+//function for adding route to Firebase DB
+fun addRouteToDB(distance: Double, route: MutableList<LatLng>, time: Int) {
     val userID = FirebaseAuth.getInstance().currentUser?.uid
-    if (route.size != 0) {
+
+    val finalRoute = ClassRoute(distance, route, time)
+
+    if (route.size > 1) {
         mFirebaseDB.child("users")
             .child(userID!!)
             .child("routes")
             .push()
-            .setValue(route)
-        Log.i("database", "Route upload successful! Uploaded: $route")
+            .setValue(finalRoute)
+        Log.i("database", "Route upload succesful! Uploaded: " + finalRoute)
+        Log.i("database", "Time uploaded: " + finalRoute.time)
     } else {
-        Log.e("database", "Route was empty, not saved to database")
+        Log.e("database", "Route was empty or other error, not saved to database")
     }
 }
     //function for adding trash to Firebase DB, in order to count number of points

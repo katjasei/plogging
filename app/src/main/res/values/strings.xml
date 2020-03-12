@@ -94,6 +94,7 @@
     <!--Profile-->
     <string name="desc_profile_image">Your profile image</string>
     <string name="desc_logout">Log out</string>
+    <string name="desc_icon">Trash icon</string>
 
     <!--SplashScreen-->
     <string name="desc_splash">Loading</string>

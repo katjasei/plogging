@@ -26,6 +26,7 @@
 
             <ImageView
                 android:id="@+id/img_trash"
+                android:contentDescription="@string/desc_icon"
                 android:layout_width="120dp"
                 android:layout_height="50dp"
                 android:layout_gravity="center" />

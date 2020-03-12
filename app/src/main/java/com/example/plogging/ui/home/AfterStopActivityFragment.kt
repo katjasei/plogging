@@ -80,7 +80,7 @@ class AfterStopActivityFragment: Fragment(){
                 valueOther
             )
 
-            addRouteToDB(route)
+            addRouteToDB(distance, route, time)
         }
         return view
     }
@@ -95,8 +95,8 @@ class AfterStopActivityFragment: Fragment(){
     }
     //if no value in Edit text, it value by default 0
     private fun checkTrashUnitValue(editText: EditText) {
-            if(editText.text.toString()==""){
-                editText.setText("0")
-            }
+        if(editText.text.toString()==""){
+            editText.setText("0")
         }
+    }
 }

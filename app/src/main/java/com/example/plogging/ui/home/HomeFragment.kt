@@ -42,9 +42,9 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
     private var activityCallBack: HomeFragmentListener? = null
     private lateinit var  fusedLocationProviderClient: FusedLocationProviderClient
     private var running= false
-    private var seconds = 0
+    var seconds = 0
     private val step = 0.0007 //(km)
-    private var routeLength: Double = 0.0
+    var routeLength: Double = 0.0
     private lateinit var startPoint: LatLng
     var routePoints = mutableListOf<LatLng>()
     private lateinit var marker: MarkerOptions
@@ -145,6 +145,7 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
 
                     //add point to list
                     routePoints.add(lastLocationLatLng)
+                    Log.i("location", "Route points: "+routePoints)
 
                     //add polyline between locations
                     locationMap?.addPolyline(
@@ -153,7 +154,6 @@ class HomeFragment: Fragment(), OnMapReadyCallback, SensorEventListener  {
                             .width(20f).color(Color.parseColor("#801B60FE")).geodesic(true)
                     )
                 }
-
             }
         }
         createLocationRequest()

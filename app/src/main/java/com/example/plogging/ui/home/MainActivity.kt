@@ -190,14 +190,14 @@ class MainActivity : AppCompatActivity(), AfterStopActivityFragment.AfterStopAct
     }
 
     override fun getRoute(): MutableList<LatLng> {
-        return ploggingActivityFragment.routePoints
+        return homeFragment.routePoints
     }
 
     override fun getRouteLength(): Double {
-        return ploggingActivityFragment.routeLength
+        return homeFragment.routeLength
     }
 
     override fun getRouteTime(): Int {
-        return ploggingActivityFragment.time
+        return homeFragment.seconds
     }
 }
